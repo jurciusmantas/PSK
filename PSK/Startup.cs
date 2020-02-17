@@ -4,13 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleInjector;
 
 namespace PSK
 {
     public class Startup
     {
+        private Container container = new Container();
+
         public Startup(IConfiguration configuration)
         {
+            container.Options.ResolveUnregisteredConcreteTypes = false;
+
             Configuration = configuration;
         }
 
@@ -26,11 +31,30 @@ namespace PSK
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddLogging();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddSimpleInjector(container, options =>
+            {
+                options.AddAspNetCore()
+                    .AddControllerActivation()
+                    .AddViewComponentActivation();
+                    //.AddPageModelActivation()
+                    //.AddTagHelperActivation();
+
+                options.AddLogging();
+                options.AddLocalization();
+            });
+
+            InitializeContainer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSimpleInjector(container);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,6 +83,13 @@ namespace PSK
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            container.Verify();
+        }
+
+        private void InitializeContainer()
+        {
+            PSK.Model.ObjectContainer.InitializeContainer(container);
         }
     }
 }
