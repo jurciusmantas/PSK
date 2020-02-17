@@ -1,4 +1,5 @@
 ﻿using PSK.Model.Entities;
+using System;
 
 namespace PSK.Model.Services
 {
@@ -6,26 +7,39 @@ namespace PSK.Model.Services
     {
         public ServerResult<User> Login(LoginArgs args)
         {
-            if (args.Login == "admin" && args.Password == "admin")
-                return new ServerResult<User>
-                {
-                    Success = true,
-                    Data = new User
-                    {
-                        Login = "admin",
-                        FirstName = "admin",
-                        LastName = "admin",
-                    },
-                };
+            try
+            {
+                if (args == null)
+                    throw new Exception("Arguments are empty");
 
-            else
+                if (args.Login == "admin" && args.Password == "admin")
+                    return new ServerResult<User>
+                    {
+                        Success = true,
+                        Data = new User
+                        {
+                            Login = "admin",
+                            FirstName = "admin",
+                            LastName = "admin",
+                        },
+                    };
+
+                else
+                    return new ServerResult<User>
+                    {
+                        Success = false,
+                        Message = "bad credentials",
+                        Data = null,
+                    };
+            }
+            catch (Exception e)
+            {
                 return new ServerResult<User>
                 {
                     Success = false,
-                    Message = "bad credentials",
-                    Data = null,
+                    Message = e.Message,
                 };
-
+            }
         }
     }
 }

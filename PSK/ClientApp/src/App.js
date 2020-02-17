@@ -1,19 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router';
 import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
-import LoginPage from './components/pages/loginPage';
-
-// export default () => (
-//   <Layout>
-//     <Route exact path='/' component={Home} />
-//     <Route path='/counter' component={Counter} />
-//     <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-//   </Layout>
-// );
+import LoginPage from './components/Login/LoginPage';
+import Home from './components/Home/Home';
 
 export default () => (
-    <LoginPage/>
-)
+  <Layout>
+    <Route exact path='/' component={LoginPage} />
+    <Route path='/home' component={Home} />
+  </Layout>
+);
