@@ -1,5 +1,5 @@
 export function post(url, params = {}){
-    return fetch('http://localhost:55107/api/' + url, {
+    return fetch('./api/' + url, {
         method: 'post',
         headers: { 
             'Content-Type': 'application/json'

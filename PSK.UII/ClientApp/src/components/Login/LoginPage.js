@@ -1,7 +1,8 @@
 import React from 'react';
 import { post } from '../../helpers/request'
-import './LoginPage.css';
 import { connect } from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.css';
+import './LoginPage.css';
 
 class LoginPage extends React.Component{
     constructor(props){
