@@ -14,16 +14,16 @@ Pirmo susitikimo rezultatas. Jei kažkas nepatinka arba ne taip, galima koreguot
 ### Rolės
 
 | Rolė | Ką daro | Kam priskyrėm |
-| -------------------- | ----------------------------------------------------------------------- | -------- |
-| Lyderis              | Nervina vėluojančius                                                    | Lukas    |
-| Plano vadovas        | Sprendžia kada ką darom, žiūri reikalavimus                             | Mantas   |
-| Projektavimo vadovas | Žiūri komponentų ir sistemos struktūrą                                  | Andrius  |
-| Testavimo vadovas    | Žiūri kad viskas veiktų, kad būtų įgyvendinti nefunkciniai reikalavimai | Rimvydas |
-| Kokybės vadovas      | Žiūri kodo grožį, dokumentaciją ir dar ką nors ką vėliau atrasim        | Toma     |
+| ------------------------ | ----------------------------------------------------------------------- | -------- |
+| **Lyderis**              | Nervina vėluojančius                                                    | Lukas    |
+| **Plano vadovas**        | Sprendžia kada ką darom, žiūri reikalavimus                             | Mantas   |
+| **Projektavimo vadovas** | Žiūri komponentų ir sistemos struktūrą                                  | Andrius  |
+| **Testavimo vadovas**    | Žiūri kad viskas veiktų, kad būtų įgyvendinti nefunkciniai reikalavimai | Rimvydas |
+| **Kokybės vadovas**      | Žiūri kodo grožį, dokumentaciją ir dar ką nors ką vėliau atrasim        | Toma     |
 
 ### Susitikimai
 
-Nutarėm susitikimus daryti pirmadieniais tarp paskaitų ir antradieniais po Ragaišio.
+Nutarėm susitikimus daryti pirmadieniais tarp paskaitų ir antradieniais po Ragaišio. Kai Ragaišis pasibaigs galima bus pakeist kažką :D
 
 ## Strategija
 
