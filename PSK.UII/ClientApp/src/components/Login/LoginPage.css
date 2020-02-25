@@ -1,6 +1,6 @@
 .login-wrapper{
     position: absolute;
-    top: calc(50% - 20px);
+    top: calc(50% - 100px);
     width: 100%;
     text-align: center;
 }

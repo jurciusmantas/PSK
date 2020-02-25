@@ -3,7 +3,6 @@ import {
 } from '../constans';
 
 export function loginSuccess(currentUser){
-    console.log("currentUserActions - currentUser - " + JSON.stringify(currentUser));
     return {
         type: LOGIN_SUCCESS,
         login: currentUser.login,

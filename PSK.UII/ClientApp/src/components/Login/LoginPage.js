@@ -1,7 +1,6 @@
 import React from 'react';
 import { post } from '../../helpers/request'
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
@@ -43,7 +42,6 @@ class LoginPage extends React.Component{
         })
             .then(res => res.json())
             .then(res => {
-                console.log("login - response - " + JSON.stringify(res));
                 if (res.success){
                     this.props.history.push('/home');
                     this.props.login(res.data);
