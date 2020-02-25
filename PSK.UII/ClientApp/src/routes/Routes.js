@@ -8,17 +8,14 @@ class Routes extends React.Component{
         super(props);
     }
 
-    login = () => <LoginPage/>;
-
-
     render(){
         const { currentUser } = this.props;
 
-        if (!currentUser)
+        if (!currentUser || !currentUser.login)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
-                        <Route component={this.login} path='/' />
+                        <Route component={LoginPage}/>
                     </Switch>
                 </BrowserRouter>
             )
@@ -27,7 +24,7 @@ class Routes extends React.Component{
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        //currentUser: state.currentUser
+        currentUser: state.currentUser
     }
 }
 

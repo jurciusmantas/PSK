@@ -1,6 +1,8 @@
 import React from 'react';
 import { post } from '../../helpers/request'
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
 
@@ -12,6 +14,17 @@ class LoginPage extends React.Component{
             login: null,
             password: null,
         };
+
+        this.handleKeyPress = this.handleKeyPress(this);
+    }
+
+    componentDidMount(){
+        window.addEventListener("keypress", this.handleKeyPress);
+    }
+
+    handleKeyPress(e){
+        if (e.key === "Enter")
+            this.login();
     }
 
     login(){
@@ -22,6 +35,7 @@ class LoginPage extends React.Component{
 
         if (!login || !password)
             return;
+        //TODO: Else - to show "no input"
 
         post('login/login', {
             login: login,
@@ -29,8 +43,12 @@ class LoginPage extends React.Component{
         })
             .then(res => res.json())
             .then(res => {
-                if (res.success)
+                console.log("login - response - " + JSON.stringify(res));
+                if (res.success){
                     this.props.history.push('/home');
+                    this.props.login(res.data);
+                }
+                //TODO: Else - to show "bad credentials"
             })
             .catch(error => {
                 console.log(error);
@@ -70,13 +88,13 @@ class LoginPage extends React.Component{
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        //currentUser: state.currentUser
+        currentUser: state.currentUser
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
     }
 }
 
