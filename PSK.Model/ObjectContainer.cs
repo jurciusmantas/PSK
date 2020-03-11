@@ -1,4 +1,5 @@
-﻿using PSK.Model.Services;
+﻿using PSK.Model.DBConnection;
+using PSK.Model.Services;
 using SimpleInjector;
 
 namespace PSK.Model
@@ -8,6 +9,7 @@ namespace PSK.Model
         public static void InitializeContainer(Container container)
         {
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
+            container.Register<IDBConnection, MockDBConnection>(Lifestyle.Singleton);
         }
     }
 }
