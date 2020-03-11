@@ -1,9 +1,8 @@
-﻿using PSK.Model.BusinessEntities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PSK.Model.BussinessEntities
+namespace PSK.Model.BusinessEntities
 {
     public class Employee
     {
