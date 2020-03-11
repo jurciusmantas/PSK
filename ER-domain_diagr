@@ -48,8 +48,6 @@ class Recommendation {
   createdBy : Employee
 }
 
-Employee -d- Topic
-
 Recommendation -> Topic
 AssignedTopic -> Employee
 AssignedTopic -> Topic
