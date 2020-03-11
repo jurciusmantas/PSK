@@ -1,0 +1,64 @@
+@startuml
+
+hide empty members
+
+class Employee {
+  name : string
+  email : string
+  passHash : string
+  leader : Employee
+  personalRestrictions : Restriction*
+}
+
+class Restriction {
+  consecutiveDays: int
+  maxDaysPerYear : int
+  maxDaysPerQuarter : int
+  maxDaysPerMonth : int
+  global : bool
+  employee : Employee
+}
+
+class EmployeeRestriction{
+  employee : Employee
+  restriction : Restriction
+}
+
+class Plan {
+  date : Date
+  assignedTopic: AssignedTopic
+}
+
+class AssignedTopic {
+    isCompleted : bool
+    completedOn : Date
+    topic : Topic
+    employee : Employee
+}
+
+class Topic {
+  name : string
+  description : string
+  parentTopic : Topic
+}
+
+class Recommendation {
+  topic : Topic
+  recommendedTo : Employee
+  createdBy : Employee
+}
+
+Employee -d- Topic
+
+Recommendation -> Topic
+AssignedTopic -> Employee
+AssignedTopic -> Topic
+Plan -> AssignedTopic
+Employee <- Employee
+Employee <- EmployeeRestriction
+EmployeeRestriction -> Restriction
+Recommendation -> Employee
+Recommendation -> Employee
+Topic <- Topic
+
+@enduml
