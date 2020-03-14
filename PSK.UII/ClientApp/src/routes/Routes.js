@@ -1,33 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
+import HomePage from '../components/Home/HomePage';
+import NotFoundPage from '../components/NotFound/NotFoundPage';
 
 class Routes extends React.Component{
     constructor(props){
         super(props);
+
+        this.state = {
+            components: [
+                { component: HomePage, path: "/home" },
+            ]
+        }
     }
-
-    login = () => <LoginPage/>;
-
 
     render(){
         const { currentUser } = this.props;
 
-        if (!currentUser)
+        //TODO: change .login to .token later?
+        if (!currentUser || !currentUser.login)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
-                        <Route component={this.login} path='/' />
+                        <Route path='/' exact component={LoginPage}/>
+                        <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
             )
+
+        return (
+            <BrowserRouter basename={'MegstuKumpi'}>
+                <Switch>
+                    {   
+                        this.state.components.map((comp, i) => {
+                            let wrappedComponent = () =>
+                                <Layout>
+                                    <comp.component/>
+                                </Layout>;
+                            
+                            return (
+                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`}/>
+                            )
+                        })
+                    }
+                    <Route component={NotFoundPage}/>
+                </Switch>
+            </BrowserRouter>
+        )
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        //currentUser: state.currentUser
+        currentUser: state.currentUser
     }
 }
 

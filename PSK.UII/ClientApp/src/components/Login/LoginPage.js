@@ -1,6 +1,7 @@
 import React from 'react';
 import { post } from '../../helpers/request'
 import { connect } from 'react-redux';
+import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
 
@@ -12,6 +13,23 @@ class LoginPage extends React.Component{
             login: null,
             password: null,
         };
+
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    componentDidMount(){
+        window.addEventListener("keypress", this.handleKeyPress);
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener("keypress", this.handleKeyPress);
+    }
+
+    handleKeyPress(e){
+        e.preventDefault();
+        
+        if (e.key === "Enter")
+            this.login();
     }
 
     login(){
@@ -22,6 +40,7 @@ class LoginPage extends React.Component{
 
         if (!login || !password)
             return;
+        //TODO: Else - to show "no input"
 
         post('login/login', {
             login: login,
@@ -29,8 +48,11 @@ class LoginPage extends React.Component{
         })
             .then(res => res.json())
             .then(res => {
-                if (res.success)
+                if (res.success){
                     this.props.history.push('/home');
+                    this.props.login(res.data);
+                }
+                //TODO: Else - to show "bad credentials"
             })
             .catch(error => {
                 console.log(error);
@@ -45,14 +67,16 @@ class LoginPage extends React.Component{
                         <label>Login:</label>
                         <input 
                             type='text'
-                            onChange={e => this.setState({ login: e.target.value })}    
+                            onChange={e => this.setState({ login: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
                         <label>Password:</label>
                         <input 
                             type='password'
-                            onChange={e => this.setState({ password: e.target.value })}    
+                            onChange={e => this.setState({ password: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
@@ -70,13 +94,13 @@ class LoginPage extends React.Component{
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        //currentUser: state.currentUser
+        currentUser: state.currentUser
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
     }
 }
 
