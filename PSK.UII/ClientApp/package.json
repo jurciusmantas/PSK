@@ -16,7 +16,8 @@
     "reactstrap": "^6.3.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "universal-cookie": "^4.0.3"
   },
   "devDependencies": {
     "ajv": "^6.9.1",
