@@ -1,0 +1,19 @@
+.weekday-column{
+    display: inline-block;
+    width: calc(100% / 7);
+}
+
+.calendar-day-item{
+    height: 13vh;
+    border: 2px solid black;
+    margin: 5px 5px 5px 5px;
+}
+
+.calendar-day-item > div{
+    position: absolute;
+}
+
+.skipper{
+    height: 13vh;
+    margin: 5px 5px;
+}
