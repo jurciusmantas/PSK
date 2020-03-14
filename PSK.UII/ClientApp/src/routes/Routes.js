@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
+import NotFoundPage from '../components/NotFound/NotFoundPage';
 
 class Routes extends React.Component{
     constructor(props){
@@ -24,7 +25,8 @@ class Routes extends React.Component{
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
-                        <Route component={LoginPage}/>
+                        <Route path='/' exact component={LoginPage}/>
+                        <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
             )
@@ -44,6 +46,7 @@ class Routes extends React.Component{
                             )
                         })
                     }
+                    <Route component={NotFoundPage}/>
                 </Switch>
             </BrowserRouter>
         )

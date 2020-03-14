@@ -14,7 +14,7 @@ class LoginPage extends React.Component{
             password: null,
         };
 
-        this.handleKeyPress = this.handleKeyPress(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentDidMount(){
@@ -26,6 +26,8 @@ class LoginPage extends React.Component{
     }
 
     handleKeyPress(e){
+        e.preventDefault();
+        
         if (e.key === "Enter")
             this.login();
     }
@@ -65,14 +67,16 @@ class LoginPage extends React.Component{
                         <label>Login:</label>
                         <input 
                             type='text'
-                            onChange={e => this.setState({ login: e.target.value })}    
+                            onChange={e => this.setState({ login: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
                         <label>Password:</label>
                         <input 
                             type='password'
-                            onChange={e => this.setState({ password: e.target.value })}    
+                            onChange={e => this.setState({ password: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
