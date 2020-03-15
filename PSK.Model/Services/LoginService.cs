@@ -21,6 +21,7 @@ namespace PSK.Model.Services
                             Login = "admin",
                             FirstName = "admin",
                             LastName = "admin",
+                            Token = GetToken(),
                         },
                     };
 
@@ -40,6 +41,50 @@ namespace PSK.Model.Services
                     Message = e.Message,
                 };
             }
+        }
+
+        public ServerResult<User> LoginToken(string token)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                    throw new Exception("Token cannot be empty");
+
+                if (token == "Pacman")
+                    return new ServerResult<User>
+                    {
+                        Success = true,
+                        Data = new User
+                        {
+                            Login = "admin",
+                            FirstName = "admin",
+                            LastName = "admin",
+                            Token = token,
+                        },
+                    };
+
+                else
+                    return new ServerResult<User>
+                    {
+                        Success = false,
+                        Message = "token expired",
+                        Data = null,
+                    };
+            }
+            catch(Exception e)
+            {
+                return new ServerResult<User>
+                {
+                    Success = false,
+                    Message = e.Message,
+                };
+            }
+        }
+
+        private string GetToken()
+        {
+            //return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            return "Pacman";
         }
     }
 }

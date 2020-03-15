@@ -8,5 +8,6 @@ export function loginSuccess(currentUser){
         login: currentUser.login,
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
+        token: currentUser.token,
     }
 }

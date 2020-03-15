@@ -20,5 +20,12 @@ namespace PSK.UI.Controllers
         {
             return _loginService.Login(args);
         }
+
+        [HttpPost]
+        [Route("login_token")]
+        public ServerResult<User> LoginFromToken([FromBody]string token)
+        {
+            return _loginService.LoginToken(token);
+        }
     }
 }

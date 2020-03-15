@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
+import { setCookie } from '../../helpers/cookie';
 
 class LoginPage extends React.Component{
     constructor(props){
@@ -49,6 +50,7 @@ class LoginPage extends React.Component{
             .then(res => res.json())
             .then(res => {
                 if (res.success){
+                    setCookie(res.data.token);
                     this.props.history.push('/home');
                     this.props.login(res.data);
                 }

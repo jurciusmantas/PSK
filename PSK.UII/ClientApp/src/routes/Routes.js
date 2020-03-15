@@ -1,10 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { post } from '../helpers/request';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { getCookie } from '../helpers/cookie';
+import * as currentUserActions from '../redux/actions/currentUserActions';
+
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
+
+const NotFoundPageWraped = () =>
+    <Layout>
+        <NotFoundPage/>
+    </Layout>;
 
 class Routes extends React.Component{
     constructor(props){
@@ -17,11 +26,28 @@ class Routes extends React.Component{
         }
     }
 
+    componentDidMount(){
+        let token = getCookie('AuthToken');
+        if (token)
+            post('login/login_token', token)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success)
+                        this.props.login(res.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+    }
+
     render(){
         const { currentUser } = this.props;
 
-        //TODO: change .login to .token later?
-        if (!currentUser || !currentUser.login)
+        /* Do not show login page when logging-in with token */
+        if (!currentUser.token && getCookie('AuthToken'))
+            return <div/>;
+
+        if (!currentUser || !currentUser.token)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
@@ -46,7 +72,7 @@ class Routes extends React.Component{
                             )
                         })
                     }
-                    <Route component={NotFoundPage}/>
+                    <Route component={NotFoundPageWraped}/>
                 </Switch>
             </BrowserRouter>
         )
@@ -61,7 +87,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
     }
 }
 

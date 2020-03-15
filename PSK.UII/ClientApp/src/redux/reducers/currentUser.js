@@ -6,6 +6,7 @@ const initialState = {
     login: null,
     firstName: null,
     lastName: null,
+    token: null,
 }
 
 export default (state = initialState, action) => {
@@ -14,6 +15,7 @@ export default (state = initialState, action) => {
             state.login = action.login;
             state.firstName = action.firstName;
             state.lastName = action.lastName;
+            state.token = action.token;
             return { ...state };
         }
         default:
