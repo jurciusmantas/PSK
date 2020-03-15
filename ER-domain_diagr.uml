@@ -2,12 +2,25 @@
 
 hide empty members
 
+together {
 class Employee {
   name : string
   email : string
   passHash : string
   leader : Employee
   personalRestrictions : Restriction*
+}
+
+class Plan {
+  date : Date
+  assignedTopic: AssignedTopic
+}
+
+class Recommendation {
+  topic : Topic
+  recommendedTo : Employee
+  createdBy : Employee
+}
 }
 
 class Restriction {
@@ -24,11 +37,6 @@ class EmployeeRestriction{
   restriction : Restriction
 }
 
-class Plan {
-  date : Date
-  assignedTopic: AssignedTopic
-}
-
 class AssignedTopic {
     isCompleted : bool
     completedOn : Date
@@ -42,19 +50,14 @@ class Topic {
   parentTopic : Topic
 }
 
-class Recommendation {
-  topic : Topic
-  recommendedTo : Employee
-  createdBy : Employee
-}
 
-Recommendation -> Topic
-AssignedTopic -> Employee
-AssignedTopic -> Topic
-Plan -> AssignedTopic
+Recommendation -d> Topic
+AssignedTopic -u> Employee
+AssignedTopic -d> Topic
+AssignedTopic <-d- Plan
 Employee <- Employee
-Employee <- EmployeeRestriction
-EmployeeRestriction -> Restriction
+Employee <-d- EmployeeRestriction
+EmployeeRestriction -u> Restriction
 Recommendation -> Employee
 Recommendation -> Employee
 Topic <- Topic
