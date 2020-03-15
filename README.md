@@ -9,7 +9,7 @@ Pirmo susitikimo rezultatas. Jei kažkas nepatinka arba ne taip, galima koreguot
 ### Tikslai
 
 - nevėluoti pačių išsikeltų deadline'ų
-- įgyvendinti 75% papildomų poreikių
+- įgyvendinti bent 75% papildomų poreikių
 
 ### Rolės
 
