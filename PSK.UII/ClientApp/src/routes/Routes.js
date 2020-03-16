@@ -8,6 +8,7 @@ import * as currentUserActions from '../redux/actions/currentUserActions';
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
+import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 
 const NotFoundPageWraped = () =>
@@ -22,6 +23,7 @@ class Routes extends React.Component{
         this.state = {
             components: [
                 { component: HomePage, path: "/home" },
+                { component: TopicPage, path: "/topic" },
             ]
         }
     }
