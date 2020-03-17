@@ -53,7 +53,8 @@ class Routes extends React.Component{
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
-                        <Route path='/' exact component={LoginPage}/>
+                        <Route path='/' exact component={LoginPage} />
+                        <Route path='/invite' exact component={InvitePage} />
                         <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
