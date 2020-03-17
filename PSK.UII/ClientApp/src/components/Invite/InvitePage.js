@@ -13,18 +13,37 @@ class InvitePage extends React.Component {
         this.onSubmit = this.handleSubmit.bind(this)
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
+        const {
+            email
+        } = this.state;
+
+        if (!email) {
+            return;
+        }
+
         post('invite', {
-            email: this.state.email
+            email: email
         })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+
+                    this.setState({
+                        email: ''
+                    });
+                }
+            })
             .catch(error => {
                 console.log(error);
             })
     }
 
-    onChange = e => this.setState({
-        data: {...this.state.data, [e.target.name]: e.target.value }
-    })
+    handleKeyPress(e) {
+        if (e.key === "Enter") 
+            this.handleSubmit(e);
+    }
 
     render() {
         return (
@@ -33,13 +52,14 @@ class InvitePage extends React.Component {
                 <div className="row">
                     <label>Email:</label>
                     <input
-                        type="email"
-                        onChange={e => this.setState({ email: e.target.value })}
+                            type="email"
+                            name="email"
+                            onChange={e => this.setState({ email: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
                     />
                 </div>
                 <div className="row">
-                    <button className="btn btn-dark" type="button"
-                            onClick={() => this.handleSubmit()}> Submit</button>
+                        <button className="btn btn-dark" type="submit">Submit</button>
                     </div>
                 </div>
             </form>
