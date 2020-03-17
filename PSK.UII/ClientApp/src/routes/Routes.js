@@ -9,6 +9,7 @@ import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
+import InvitePage from '../components/Invite/InvitePage';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -22,6 +23,7 @@ class Routes extends React.Component{
         this.state = {
             components: [
                 { component: HomePage, path: "/home" },
+                { component: InvitePage, path: "/invite" }
             ]
         }
     }
