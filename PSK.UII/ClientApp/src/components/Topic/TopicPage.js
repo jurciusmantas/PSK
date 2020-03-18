@@ -23,13 +23,15 @@ export default class TopicPage extends React.Component {
     }
 
     topicList() {
-        const listItems = this.state.data.map((d) => <li key={d.name}>{d.name} - {d.description}</li>);
-
-        return (
-            <ol>
-                { listItems }
-            </ol>
-        )
+        return this.state.data.map((d, index) => {
+            const {name, description} = d
+            return (
+                <tr key={"topic-list-item-" + index}>
+                    <td>{name}</td>
+                    <td>{description}</td>
+                </tr>
+            )
+        })
     }
 
     render() {
@@ -41,9 +43,11 @@ export default class TopicPage extends React.Component {
                         loading...
                     </div>
                     :
-                    <div>
-                        { this.topicList() }
-                    </div>
+                    <table>
+                        <tbody>
+                            { this.topicList() }
+                        </tbody>
+                    </table>
                 }
             </div>
         );
