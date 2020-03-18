@@ -10,6 +10,7 @@ import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
+import InvitePage from '../components/Invite/InvitePage';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -24,6 +25,7 @@ class Routes extends React.Component{
             components: [
                 { component: HomePage, path: "/home" },
                 { component: TopicPage, path: "/topic" },
+                { component: InvitePage, path: "/invite" }
             ]
         }
     }
@@ -53,7 +55,8 @@ class Routes extends React.Component{
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
-                        <Route path='/' exact component={LoginPage}/>
+                        <Route path='/' exact component={LoginPage} />
+                        <Route path='/invite' exact component={InvitePage} />
                         <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
