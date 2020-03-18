@@ -27,8 +27,6 @@ class LoginPage extends React.Component{
     }
 
     handleKeyPress(e){
-        e.preventDefault();
-        
         if (e.key === "Enter")
             this.login();
     }
