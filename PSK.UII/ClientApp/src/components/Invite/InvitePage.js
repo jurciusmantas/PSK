@@ -54,6 +54,7 @@ class InvitePage extends React.Component {
                     <input
                             type="email"
                             name="email"
+                            value={this.state.email}
                             onChange={e => this.setState({ email: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                     />

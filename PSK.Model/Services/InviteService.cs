@@ -1,6 +1,7 @@
 ﻿using PSK.Model.DBConnection;
 using PSK.Model.Entities;
 using System;
+using System.Configuration;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,13 +10,18 @@ namespace PSK.Model.Services
 {
     public class InviteService : IInviteService
     {
-        MockDBConnection db = new MockDBConnection();
+        private readonly IDBConnection _db;
+
+        public InviteService(IDBConnection db)
+        {
+            _db = db;
+        }
 
         public ServerResult<InviteArgs> Invite(InviteArgs args)
         {
             try
             {
-                db.CreateEmployee("", args.Email, "", 0);
+                _db.CreateEmployee("", args.Email, "", 0);
 
                 SendInviteMail(args.Email);
 
@@ -40,13 +46,20 @@ namespace PSK.Model.Services
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
-            mail.From = new MailAddress("noreply.megstamkumpi@gmail.com");
+            string mailAdr = ConfigurationManager.AppSettings["NoreplyEmailAddress"];
+            string password = ConfigurationManager.AppSettings["Password"];
+
+            Console.WriteLine("mail: " + mailAdr);
+            Console.WriteLine("pass: " + password);
+
+
+            mail.From = new MailAddress(mailAdr);
             mail.To.Add(receiverEmail);
-            mail.Subject = "Test";
+            mail.Subject = "Registration link";
             mail.Body = GenerateToken();
 
             SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("noreply.megstamkumpi@gmail.com", "labai5l4pt45");
+            SmtpServer.Credentials = new System.Net.NetworkCredential(mailAdr, password);
             SmtpServer.EnableSsl = true;
 
             try
