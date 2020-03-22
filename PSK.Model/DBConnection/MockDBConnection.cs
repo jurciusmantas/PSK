@@ -1,4 +1,5 @@
 ﻿using PSK.Model.BusinessEntities;
+using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +9,12 @@ namespace PSK.Model.DBConnection
     {
         private static readonly List<Employee> _employees = new List<Employee>();
         private static readonly List<Topic> _topics = new List<Topic>();
+        private readonly ILogger _logger; // I do not know if we need to do this here
+
+        public MockDBConnection(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public void CreateEmployee(string name, string email, string password, int leaderId)
         {
@@ -36,7 +43,8 @@ namespace PSK.Model.DBConnection
 
         public Employee GetEmployeeById(int id)
         {
-            return _employees.FirstOrDefault(employee => employee.Id == id);
+            Employee employee = _employees.FirstOrDefault(employee => employee.Id == id);
+            return employee;
         }
 
         public List<Topic> GetSubTopics(int parentTopicId)

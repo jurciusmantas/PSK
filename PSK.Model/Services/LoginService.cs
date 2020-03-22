@@ -1,12 +1,19 @@
 ﻿using PSK.Model.Entities;
+using Serilog;
 using System;
 
 namespace PSK.Model.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly ILogger _logger;
+        public LoginService(ILogger logger)
+        {
+            _logger = logger;
+        }
         public ServerResult<User> Login(LoginArgs args)
         {
+            _logger.Debug("Button login");
             try
             {
                 if (args == null)
@@ -45,6 +52,7 @@ namespace PSK.Model.Services
 
         public ServerResult<User> LoginToken(string token)
         {
+            _logger.Debug("Token login");
             try
             {
                 if (string.IsNullOrWhiteSpace(token))
