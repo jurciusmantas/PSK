@@ -8,7 +8,6 @@ namespace PSK.UI.Controllers
     public class LoginController : Controller
     {
         private readonly ILoginService _loginService;
-
         public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
