@@ -15,7 +15,7 @@ namespace PSK.Model
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File("log.log")
-                .MinimumLevel.Verbose()
+                .MinimumLevel.Verbose() // dev only
                 .CreateLogger();
             container.RegisterInstance(Log.Logger);
         }
