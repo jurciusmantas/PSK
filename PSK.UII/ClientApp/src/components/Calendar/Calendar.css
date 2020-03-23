@@ -1,0 +1,32 @@
+.calendar-navbar *{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.calendar-navbar > .btn:focus {
+    box-shadow: none !important;
+}
+
+.weekday-column{
+    display: inline-block;
+    width: calc(100% / 7);
+}
+
+.calendar-day-item{
+    height: 13vh;
+    border: 2px solid #343a40;
+    margin: 5px 5px 5px 5px;
+}
+
+.calendar-day-item:hover{
+    border: 3px solid #3f474e;
+}
+
+.calendar-day-item > div{
+    position: absolute;
+}
+
+.skipper{
+    height: 13vh;
+    margin: 5px 5px;
+}
