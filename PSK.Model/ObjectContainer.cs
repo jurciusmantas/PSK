@@ -12,6 +12,7 @@ namespace PSK.Model
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<IDBConnection, MockDBConnection>(Lifestyle.Singleton);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
+            container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
         }
     }
 }
