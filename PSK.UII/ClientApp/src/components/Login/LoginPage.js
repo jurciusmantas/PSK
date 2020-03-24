@@ -18,6 +18,7 @@ class LoginPage extends React.Component{
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
+    // These cause double login request when Enter is pressed while focus is on the Login button
     //componentDidMount(){
     //    window.addEventListener("keypress", this.handleKeyPress);
     //}
