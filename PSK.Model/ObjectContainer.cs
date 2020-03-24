@@ -1,4 +1,5 @@
 ﻿using PSK.Model.DBConnection;
+using PSK.Model.Logging;
 using PSK.Model.Services;
 using Serilog;
 using SimpleInjector;
@@ -18,6 +19,8 @@ namespace PSK.Model
                 .MinimumLevel.Verbose() // dev only
                 .CreateLogger();
             container.RegisterInstance(Log.Logger);
+
+            container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
         }
     }
 }

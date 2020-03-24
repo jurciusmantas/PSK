@@ -6,18 +6,12 @@ namespace PSK.Model.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly ILogger _logger;
-        public LoginService(ILogger logger)
-        {
-            _logger = logger;
-        }
         public ServerResult<User> Login(LoginArgs args)
         {
-            _logger.Debug("Button login");
             try
             {
                 if (args == null)
-                    throw new Exception("Arguments are empty");
+                    throw new ArgumentNullException("Arguments are empty");
 
                 if (args.Login == "admin" && args.Password == "admin")
                     return new ServerResult<User>
@@ -52,11 +46,10 @@ namespace PSK.Model.Services
 
         public ServerResult<User> LoginToken(string token)
         {
-            _logger.Debug("Token login");
             try
             {
                 if (string.IsNullOrWhiteSpace(token))
-                    throw new Exception("Token cannot be empty");
+                    throw new ArgumentNullException("Token cannot be empty");
 
                 if (token == "Pacman")
                     return new ServerResult<User>
