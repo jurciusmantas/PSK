@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
+import { Link } from 'react-router-dom';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -24,11 +25,12 @@ export default class TopicPage extends React.Component {
 
     topicList() {
         return this.state.data.map((d, index) => {
-            const {name, description} = d
+            const {name, description} = d           
             return (
                 <tr key={"topic-list-item-" + index}>
-                    <td>{name}</td>
-                    <td>{description}</td>
+                    <td>
+                        <Link to={{ pathname: "/topic/" + index }} > {name} </Link>
+                    </td>
                 </tr>
             )
         })
