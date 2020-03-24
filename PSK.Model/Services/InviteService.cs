@@ -9,13 +9,17 @@ namespace PSK.Model.Services
 {
     public class InviteService : IInviteService
     {
-        MockDBConnection db = new MockDBConnection();
+        private readonly IDBConnection _db;
+        public InviteService(IDBConnection db)
+        {
+            _db = db;
+        }
 
         public ServerResult<InviteArgs> Invite(InviteArgs args)
         {
             try
             {
-                db.CreateEmployee("", args.Email, "", 0);
+                _db.CreateEmployee("", args.Email, "", 0);
 
                 SendInviteMail(args.Email);
 
