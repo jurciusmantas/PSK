@@ -24,9 +24,8 @@ export default class TopicPage extends React.Component {
     }
 
     topicList() {
-        return this.state.data.map((d, index) => {
-            const {id, name, description} = d   
-            console.log("topic-list-item-" + id)        
+        return this.state.data.map((d) => {
+            const {id, name} = d          
             return (
                 <tr key={"topic-list-item-" + id}>
                     <td>
