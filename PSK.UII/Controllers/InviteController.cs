@@ -14,11 +14,6 @@ namespace PSK.UI.Controllers
             _inviteService = inviteService;
         }
 
-        [HttpGet]
-        public void GetInviteArgs()
-        {
-        }
-
         [HttpPost]
         public ServerResult<InviteArgs> 
             Invite([FromBody]InviteArgs args)

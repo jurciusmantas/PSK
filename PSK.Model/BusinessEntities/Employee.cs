@@ -12,5 +12,6 @@ namespace PSK.Model.BusinessEntities
         public String Password { set; get; }
         public Employee Leader { set; get; }
         public List<Restriction> Restrictions { set; get; }
+        public String Token { set; get; }
     }
 }

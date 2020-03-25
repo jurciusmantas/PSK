@@ -16,10 +16,10 @@ namespace PSK.Model.DBConnection
             _logger = logger;
         }
 
-        public void CreateEmployee(string name, string email, string password, int leaderId)
+        public void CreateEmployee(string name, string email, string password, int leaderId, string token)
         {
             Employee leader = GetEmployeeById(leaderId);
-            Employee employee = new Employee { Id = _employees.Count, Name = name, Email = email, Password = password, Leader = leader };
+            Employee employee = new Employee { Id = _employees.Count, Name = name, Email = email, Password = password, Leader = leader,  Token = token};
             _employees.Add(employee);
         }
 
@@ -61,5 +61,26 @@ namespace PSK.Model.DBConnection
         {
             return _employees.FirstOrDefault(employee => employee.Email == email && employee.Password == password);
         }
+
+        public Employee GetEmployeeByToken(string token)
+        {
+            return _employees.FirstOrDefault(employee => (employee.Token).Equals(token));
+        }
+
+        public void UpdateEmployee(Employee emp)
+        {
+            Employee empToBeUpdated = _employees.Find(employee => employee.Id == emp.Id);
+            empToBeUpdated.Name = emp.Name;
+            empToBeUpdated.Email = emp.Email;
+            empToBeUpdated.Password = emp.Password;
+            empToBeUpdated.Leader = emp.Leader;
+            empToBeUpdated.Token = emp.Token;
+        }
     }
+
+
+
 }
+
+
+

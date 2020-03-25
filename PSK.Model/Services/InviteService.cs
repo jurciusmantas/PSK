@@ -1,6 +1,7 @@
 ﻿using PSK.Model.DBConnection;
 using PSK.Model.Entities;
 using System;
+using System.Configuration;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,9 +20,11 @@ namespace PSK.Model.Services
         {
             try
             {
-                _db.CreateEmployee("", args.Email, "", 0);
+                var token = GenerateToken();
 
-                SendInviteMail(args.Email);
+                _db.CreateEmployee("", args.Email, "", 0, token);
+
+                SendInviteMail(args.Email, token);
 
                 return new ServerResult<InviteArgs>
                 {
@@ -39,18 +42,21 @@ namespace PSK.Model.Services
             }
         }
 
-        public void SendInviteMail(string receiverEmail)
+        private void SendInviteMail(string receiverEmail, string token)
         {
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
-            mail.From = new MailAddress("noreply.megstamkumpi@gmail.com");
+            string mailAdr = ConfigurationManager.AppSettings["NoreplyEmailAddress"];
+            string password = ConfigurationManager.AppSettings["Password"];
+
+            mail.From = new MailAddress(mailAdr);
             mail.To.Add(receiverEmail);
-            mail.Subject = "Test";
-            mail.Body = GenerateToken();
+            mail.Subject = "Registration link";
+            mail.Body = "https://localhost:44395/registration/" + token;
 
             SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("noreply.megstamkumpi@gmail.com", "labai5l4pt45");
+            SmtpServer.Credentials = new System.Net.NetworkCredential(mailAdr, password);
             SmtpServer.EnableSsl = true;
 
             try
