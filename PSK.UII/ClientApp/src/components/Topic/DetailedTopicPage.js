@@ -13,14 +13,12 @@ export default class DetailedTopicPage extends React.Component {
 
     componentDidMount() {
 
-          let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //+1 only for mock id
+        let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
 
         get('topic/detailedtopic?id=' + id).then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })
-                    console.log(this.state);
-                    console.log(this.state.data.name)
                 }
             })
             .catch(error => {
@@ -54,17 +52,17 @@ export default class DetailedTopicPage extends React.Component {
                         <table>
                             <tbody>
                                 { 
-                                    this.state.data.subTopicList.map((d, index) => {
-                                        const {name, description} = d
+                                this.state.data.subTopicList.map((d, index) => {
+                                    const {id, name, description} = d
                                     
-                                        return (
-                                            <tr key={"subtopic-list-item-" + index}>
+                                    return (
+                                        <tr key={"subtopic-list-item-" + id}>
         
-                                                <td> {name} </td>
-                                                <td> {description} </td>
-                                            </tr>
-                                        )
-                                    })
+                                            <td> {name} </td>
+                                            <td> {description} </td>
+                                        </tr>
+                                    )
+                                })
                                 }
                             </tbody>
                         </table>

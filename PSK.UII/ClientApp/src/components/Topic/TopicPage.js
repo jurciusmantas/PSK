@@ -25,11 +25,12 @@ export default class TopicPage extends React.Component {
 
     topicList() {
         return this.state.data.map((d, index) => {
-            const {name, description} = d           
+            const {id, name, description} = d   
+            console.log("topic-list-item-" + id)        
             return (
-                <tr key={"topic-list-item-" + index}>
+                <tr key={"topic-list-item-" + id}>
                     <td>
-                        <Link to={{ pathname: "/topic/" + index }} > {name} </Link>
+                        <Link to={{ pathname: "/topic/" + id }} > {name} </Link>
                     </td>
                 </tr>
             )
