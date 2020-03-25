@@ -15,5 +15,6 @@ namespace PSK.Model.DBConnection
         public List<Topic> GetAllTopics();
         public List<Topic> GetSubTopics(int parentTopicId);
         public Employee GetEmployeeByToken(string token);
+        public void UpdateEmployee(Employee emp);
     }
 }

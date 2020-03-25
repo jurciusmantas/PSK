@@ -58,6 +58,16 @@ namespace PSK.Model.DBConnection
         {
             return _employees.FirstOrDefault(employee => (employee.Token).Equals(token));
         }
+
+        public void UpdateEmployee(Employee emp)
+        {
+            Employee empToBeUpdated = _employees.Find(employee => employee.Id == emp.Id);
+            empToBeUpdated.Name = emp.Name;
+            empToBeUpdated.Email = emp.Email;
+            empToBeUpdated.Password = emp.Password;
+            empToBeUpdated.Leader = emp.Leader;
+            empToBeUpdated.Token = emp.Token;
+        }
     }
 
 

@@ -30,9 +30,9 @@ namespace PSK.Model.Services
 
                 emp.Name = string.Concat(args.FirstName, " ", args.LastName);
                 emp.Password = HashPassword(args.Password);
-                emp.Token = null;
+                emp.Token = "";
 
-                //TODO: update employee
+                _db.UpdateEmployee(emp);
 
                 return new ServerResult
                 {
@@ -52,6 +52,7 @@ namespace PSK.Model.Services
         public ServerResult<string> GetEmailFromToken(string token)
         {
             Employee emp = _db.GetEmployeeByToken(token);
+
             if (emp != null)
                 return new ServerResult<string>
                 {

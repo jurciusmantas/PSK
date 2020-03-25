@@ -1,5 +1,5 @@
 ﻿import React from "react"
-import '../Invite/InvitePage.css';
+import './RegistrationPage.css';
 
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'

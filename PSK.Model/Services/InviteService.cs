@@ -51,10 +51,6 @@ namespace PSK.Model.Services
             string mailAdr = ConfigurationManager.AppSettings["NoreplyEmailAddress"];
             string password = ConfigurationManager.AppSettings["Password"];
 
-            Console.WriteLine("mail: " + mailAdr);
-            Console.WriteLine("pass: " + password);
-
-
             mail.From = new MailAddress(mailAdr);
             mail.To.Add(receiverEmail);
             mail.Subject = "Registration link";

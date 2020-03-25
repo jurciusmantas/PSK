@@ -59,7 +59,6 @@ class Routes extends React.Component{
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/invite' component={InvitePage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
-                        <Route path='/*' component={NotFoundPage} />
                         <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
