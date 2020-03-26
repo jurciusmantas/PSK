@@ -1,0 +1,9 @@
+<!--Create app.config and paste this with correct email address and password to send invites-->
+
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="NoreplyEmailAddress" value="EL.PASTAS"/>
+    <add key="Password" value="SLAPTAZODIS" />
+  </appSettings>
+</configuration>

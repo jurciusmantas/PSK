@@ -8,3 +8,12 @@ export function post(url, params = {}){
         body: JSON.stringify(params)
     })
 }
+
+export function get(url) {
+    return fetch('./api/' + url, {
+        method: 'get',
+        headers: { 
+            'Content-Type': 'application/json'
+        }
+    })
+}
