@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSK.Model", "PSK.Model\PSK.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSK.UI", "PSK.UII\PSK.UI.csproj", "{A6EB0AF8-F702-45C6-A8B2-116BCC7E00F2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSK.DB", "PSK.DB\PSK.DB.csproj", "{81922D79-9536-49AF-A3DF-654F21A12796}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A6EB0AF8-F702-45C6-A8B2-116BCC7E00F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6EB0AF8-F702-45C6-A8B2-116BCC7E00F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6EB0AF8-F702-45C6-A8B2-116BCC7E00F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81922D79-9536-49AF-A3DF-654F21A12796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81922D79-9536-49AF-A3DF-654F21A12796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81922D79-9536-49AF-A3DF-654F21A12796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81922D79-9536-49AF-A3DF-654F21A12796}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

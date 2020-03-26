@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PSK.DB;
+using PSK.DB.Contexts;
+using PSK.DB.SqlRepository;
+using PSK.Model.Repository;
 using SimpleInjector;
 
 namespace PSK.UI
@@ -46,6 +51,7 @@ namespace PSK.UI
                 options.AddLogging();
                 options.AddLocalization();
             });
+           
 
             InitializeContainer();
         }
