@@ -1,0 +1,39 @@
+﻿using PSK.Model.BusinessEntities;
+using PSK.Model.Repository;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PSK.DB.MockRepository
+{
+    public class EmployeeMockRepository : IEmployeeRepository
+    {
+        private static List<Employee> _employees = new List<Employee>();
+        public Employee Add(Employee employee)
+        {
+            employee.Id = _employees.Count;
+            _employees.Add(employee);
+            return employee;
+        }
+
+        public Employee Delete(int id)
+        {
+            Employee employee = _employees.Find(assignedTopic => assignedTopic.Id == id);
+            if (employee != null)
+            {
+                _employees.Remove(employee);
+            }
+            return employee;
+        }
+
+        public Employee GetEmployee(int id)
+        {
+            return _employees.Find(employee => employee.Id == id);
+        }
+
+        public Employee Update(Employee updatedEmployee)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
