@@ -28,7 +28,7 @@ namespace PSK.Model.Services
             {
                 Employee emp = _db.GetEmployeeByToken(args.Token);
 
-                emp.Name = string.Concat(args.FirstName, " ", args.LastName);
+                emp.Name = args.FullName;
                 emp.Password = HashPassword(args.Password);
                 emp.Token = "";
 

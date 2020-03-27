@@ -33,8 +33,7 @@ class RegistrationPage extends React.Component {
         } = this.state;
 
         post('registration', {
-            firstName: firstName,
-            lastName: lastName,
+            fullName: firstName + " " + lastName,
             password: password,
             repeatedPassword: repeatedPassword,
             email: email,
