@@ -1,24 +1,46 @@
 import React, { Component } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { 
+  Button, 
+  Collapse, 
+  Container, 
+  Navbar, 
+  NavbarBrand, 
+  NavbarToggler, 
+  NavItem, 
+  NavLink 
+} from 'reactstrap';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as currentUserActions from '../../redux/actions/currentUserActions';
+import { removeCookie } from '../../helpers/cookie';
 import './NavMenu.css';
 
-export class NavMenu extends Component {
+class NavMenu extends Component {
   static displayName = NavMenu.name;
 
   constructor (props) {
     super(props);
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       collapsed: true
     };
+
+    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   toggleNavbar () {
     this.setState({
       collapsed: !this.state.collapsed
     });
+  }
+
+  logout(){
+    this.props.logout();
+    removeCookie('AuthToken');
+    this.props.history.push('/');
+    //TODO: fetch to back to delete token
+    //this.forceUpdate();
   }
 
   render () {
@@ -31,11 +53,14 @@ export class NavMenu extends Component {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/home">Home</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
                     <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
+                </NavItem>
+                <NavItem>
+                  <Button className="btn btn-dark" onClick={(e) => this.logout()}>Logout</Button>
                 </NavItem>
               </ul>
             </Collapse>
@@ -45,3 +70,20 @@ export class NavMenu extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+      
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+      logout: () => dispatch(currentUserActions.logout())
+  }
+}
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavMenu));

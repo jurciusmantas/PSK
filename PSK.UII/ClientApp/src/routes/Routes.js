@@ -23,7 +23,7 @@ class Routes extends React.Component{
 
         this.state = {
             components: [
-                { component: HomePage, path: "/home" },
+                { component: HomePage, path: "/" },
                 { component: InvitePage, path: "/invite" },
                 { component: TopicPage, path: "/topic" },
             ]
@@ -42,6 +42,9 @@ class Routes extends React.Component{
                 .catch(error => {
                     console.log(error);
                 })
+
+        else if (this.props.currentUser)
+            this.props.logout();
     }
 
     render(){
@@ -87,7 +90,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser)),
+        logout: () => dispatch(currentUserActions.logout())
     }
 }
 
