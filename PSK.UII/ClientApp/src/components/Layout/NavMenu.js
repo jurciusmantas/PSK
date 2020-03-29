@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import { removeCookie } from '../../helpers/cookie';
 import { get } from '../../helpers/request';
+import '../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 import './NavMenu.css';
 
 class NavMenu extends Component {
@@ -60,7 +61,9 @@ class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="btn btn-dark" onClick={(e) => this.logout()}>Logout</Button>
+                  <Button className="sign-out-button" onClick={(e) => this.logout()}>
+                    <i class="fas fa-sign-out-alt"></i>
+                  </Button>
                 </NavItem>
               </ul>
             </Collapse>
