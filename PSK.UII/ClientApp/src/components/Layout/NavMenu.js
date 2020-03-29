@@ -13,6 +13,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import { removeCookie } from '../../helpers/cookie';
+import { get } from '../../helpers/request';
 import './NavMenu.css';
 
 class NavMenu extends Component {
@@ -39,8 +40,7 @@ class NavMenu extends Component {
     this.props.logout();
     removeCookie('AuthToken');
     this.props.history.push('/');
-    //TODO: fetch to back to delete token
-    //this.forceUpdate();
+    get("login/logout");
   }
 
   render () {
