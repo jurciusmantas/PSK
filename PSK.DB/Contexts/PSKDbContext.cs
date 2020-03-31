@@ -11,7 +11,6 @@ namespace PSK.DB.Contexts
         public PSKDbContext(DbContextOptions<PSKDbContext> options) : base(options)
         {
         }
-
         public DbSet<AssignedTopic> AssignedTopics { set; get; }
         public DbSet<Employee> Employees { set; get; }
         public DbSet<IncomingEmployee> IncomingEmployees { set; get; }

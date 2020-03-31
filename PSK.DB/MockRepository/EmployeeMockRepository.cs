@@ -1,4 +1,5 @@
 ﻿using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,11 @@ namespace PSK.DB.MockRepository
         public Employee GetEmployee(int id)
         {
             return _employees.Find(employee => employee.Id == id);
+        }
+
+        public Employee Login(LoginArgs loginArgs)
+        {
+            throw new NotImplementedException();
         }
 
         public Employee Update(Employee updatedEmployee)

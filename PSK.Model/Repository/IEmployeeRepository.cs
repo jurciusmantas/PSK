@@ -1,4 +1,5 @@
 ﻿using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,6 @@ namespace PSK.Model.Repository
         public Employee GetEmployee(int id);
         public Employee Update(Employee updatedEmployee);
         public Employee Delete(int id);
+        public Employee Login(LoginArgs loginArgs);
     }
 }

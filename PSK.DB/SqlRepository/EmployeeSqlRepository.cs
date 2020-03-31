@@ -1,7 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,6 +37,11 @@ namespace PSK.DB.SqlRepository
         public Employee GetEmployee(int id)
         {
             return context.Employees.Find(id);
+        }
+
+        public Employee Login(LoginArgs loginArgs)
+        {
+            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login && employee.Password == loginArgs.Password);
         }
 
         public Employee Update(Employee updatedEmployee)
