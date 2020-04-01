@@ -97,7 +97,6 @@ namespace PSK.UI
         private void InitializeContainer()
         {
             Model.ObjectContainer.InitializeContainer(container);
-            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
         }
     }
 }
