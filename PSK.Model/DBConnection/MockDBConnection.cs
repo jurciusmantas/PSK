@@ -9,12 +9,6 @@ namespace PSK.Model.DBConnection
     {
         private static readonly List<Employee> _employees = new List<Employee>();
         private static readonly List<Topic> _topics = new List<Topic>();
-        private readonly ILogger _logger; // I do not know if we need to do this here
-
-        public MockDBConnection(ILogger logger)
-        {
-            _logger = logger;
-        }
 
         public void CreateEmployee(string name, string email, string password, int leaderId, string token)
         {
@@ -43,8 +37,7 @@ namespace PSK.Model.DBConnection
 
         public Employee GetEmployeeById(int id)
         {
-            Employee employee = _employees.FirstOrDefault(employee => employee.Id == id);
-            return employee;
+            return _employees.FirstOrDefault(employee => employee.Id == id);
         }
 
         public List<Topic> GetSubTopics(int parentTopicId)
