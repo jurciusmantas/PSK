@@ -34,7 +34,7 @@ namespace PSK.DB.SqlRepository
             return employee;
         }
 
-        public Employee GetEmployee(int id)
+        public Employee Get(int id)
         {
             return context.Employees.Find(id);
         }

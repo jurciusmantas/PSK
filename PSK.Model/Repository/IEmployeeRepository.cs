@@ -6,12 +6,8 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository : IRepository<Employee>
     {
-        public Employee Add(Employee employee);
-        public Employee GetEmployee(int id);
-        public Employee Update(Employee updatedEmployee);
-        public Employee Delete(int id);
         public Employee Login(LoginArgs loginArgs);
     }
 }

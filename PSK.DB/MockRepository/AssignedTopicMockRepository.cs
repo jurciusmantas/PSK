@@ -27,7 +27,7 @@ namespace PSK.DB.MockRepository
             return assignedTopic;
         }
 
-        public AssignedTopic GetAssignedTopic(int id)
+        public AssignedTopic Get(int id)
         {
             return _assignedTopics.Find(assignedTopic => assignedTopic.Id == id);
         }

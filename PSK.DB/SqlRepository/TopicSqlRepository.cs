@@ -33,12 +33,12 @@ namespace PSK.DB.SqlRepository
             return topic;
         }
 
-        public Topic GetTopic(int id)
+        public Topic Get(int id)
         {
             return context.Topics.Find(id);
         }
 
-        public Topic UpdateTopic(Topic updatedTopic)
+        public Topic Update(Topic updatedTopic)
         {
             var topic = context.Topics.Attach(updatedTopic);
             topic.State = Microsoft.EntityFrameworkCore.EntityState.Modified;

@@ -33,7 +33,7 @@ namespace PSK.DB.SqlRepository
             return incomingEmployee;
         }
 
-        public IncomingEmployee GetIncomingEmployee(int id)
+        public IncomingEmployee Get(int id)
         {
             return context.IncomingEmployees.Find(id);
         }
