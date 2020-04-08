@@ -8,11 +8,11 @@ namespace PSK.Model.DBConnection
     {
         private static readonly List<Employee> _employees = new List<Employee>();
         private static readonly List<Topic> _topics = new List<Topic>();
+        private static readonly List<IncomingEmployee> _incomingEmployees = new List<IncomingEmployee>();
 
-        public void CreateEmployee(string name, string email, string password, int leaderId, string token)
+        public void CreateEmployee(string name, string email, string password, int leaderId, Employee leader)
         {
-            Employee leader = GetEmployeeById(leaderId);
-            Employee employee = new Employee { Id = _employees.Count, Name = name, Email = email, Password = password, Leader = leader,  Token = token};
+            Employee employee = new Employee { Id = _employees.Count, Name = name, Email = email, Password = password, Leader = leader};
             _employees.Add(employee);
         }
 
@@ -54,24 +54,22 @@ namespace PSK.Model.DBConnection
             return _employees.FirstOrDefault(employee => employee.Email == email && employee.Password == password);
         }
 
-        public Employee GetEmployeeByToken(string token)
+        public void CreateIncomingEmployee(string email, string token, int leaderId, Employee leader)
         {
-            return _employees.FirstOrDefault(employee => (employee.Token).Equals(token));
+            IncomingEmployee employee = new IncomingEmployee { Id = _incomingEmployees.Count, Email = email, Token = token, LeaderId = leaderId, Leader = leader };
+            _incomingEmployees.Add(employee);
         }
 
-        public void UpdateEmployee(Employee emp)
+        public IncomingEmployee GetIncomingEmployeeByToken(string token)
         {
-            Employee empToBeUpdated = _employees.Find(employee => employee.Id == emp.Id);
-            empToBeUpdated.Name = emp.Name;
-            empToBeUpdated.Email = emp.Email;
-            empToBeUpdated.Password = emp.Password;
-            empToBeUpdated.Leader = emp.Leader;
-            empToBeUpdated.Token = emp.Token;
+            return _incomingEmployees.FirstOrDefault(employee => (employee.Token).Equals(token));
+        }
+
+        public void DeleteIncomingEmployee(IncomingEmployee emp)
+        {
+            _incomingEmployees.Remove(emp);
         }
     }
-
-
-
 }
 
 

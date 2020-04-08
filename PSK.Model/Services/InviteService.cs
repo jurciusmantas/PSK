@@ -23,7 +23,7 @@ namespace PSK.Model.Services
             {
                 var token = GenerateToken();
 
-                _db.CreateEmployee("", args.Email, "", 0, token);
+                _db.CreateIncomingEmployee(args.Email, token, 0, null);
 
                 SendInviteMail(args.Email, token);
 

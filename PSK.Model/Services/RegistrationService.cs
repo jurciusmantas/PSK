@@ -19,13 +19,9 @@ namespace PSK.Model.Services
         {
             try
             {
-                Employee emp = _db.GetEmployeeByToken(args.Token);
-
-                emp.Name = args.FullName;
-                emp.Password = HashPassword(args.Password);
-                emp.Token = "";
-
-                _db.UpdateEmployee(emp);
+                IncomingEmployee emp = _db.GetIncomingEmployeeByToken(args.Token);
+                _db.CreateEmployee(args.FullName, emp.Email, HashPassword(args.Password), 0, null);
+                _db.DeleteIncomingEmployee(emp);
 
                 return new ServerResult
                 {
@@ -44,7 +40,7 @@ namespace PSK.Model.Services
 
         public ServerResult<string> GetEmailFromToken(string token)
         {
-            Employee emp = _db.GetEmployeeByToken(token);
+            IncomingEmployee emp = _db.GetIncomingEmployeeByToken(token);
 
             if (emp != null)
                 return new ServerResult<string>
