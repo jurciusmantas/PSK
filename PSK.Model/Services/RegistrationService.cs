@@ -17,13 +17,6 @@ namespace PSK.Model.Services
 
         public ServerResult AddNewUser(RegistrationArgs args)
         {
-            if (args.Password != args.RepeatedPassword)
-                return new ServerResult
-                {
-                    Success = false,
-                    Message = "Passwords do not match"
-                };
-
             try
             {
                 Employee emp = _db.GetEmployeeByToken(args.Token);

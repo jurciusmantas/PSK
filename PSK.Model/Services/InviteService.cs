@@ -54,7 +54,7 @@ namespace PSK.Model.Services
             mail.From = new MailAddress(mailAdr);
             mail.To.Add(receiverEmail);
             mail.Subject = "Registration link";
-            mail.Body = "https://localhost:44395/registration/" + token;
+            mail.Body = ConfigurationManager.AppSettings["Url"] + "registration/" + token;
 
             SmtpServer.Port = 587;
             SmtpServer.Credentials = new System.Net.NetworkCredential(mailAdr, password);
