@@ -5,17 +5,14 @@ using System.Text;
 
 namespace PSK.Model.BusinessEntities
 {
-    public class Employee
+    public class IncomingEmployee
     {
         public int Id { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Name { set; get; }
+        public string Email { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Email { set; get; }
-        [Column(TypeName = "varchar(255)")]
-        public String Password { set; get; }
-        public int LeaderId { get; set; }
+        public string Token { set; get; }
+        public int LeaderId { set; get; }
         public Employee Leader { set; get; }
-        public virtual ICollection<EmployeeRestriction> EmployeeRestrictions { set; get; }
     }
 }

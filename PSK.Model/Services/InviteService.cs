@@ -1,5 +1,6 @@
-﻿using PSK.Model.DBConnection;
+﻿using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
+using PSK.Model.Repository;
 using System;
 using System.Configuration;
 using System.Net.Mail;
@@ -10,9 +11,9 @@ namespace PSK.Model.Services
 {
     public class InviteService : IInviteService
     {
-        private readonly IDBConnection _db;
+        private readonly IIncomingEmployeeRepository _db;
 
-        public InviteService(IDBConnection db)
+        public InviteService(IIncomingEmployeeRepository db)
         {
             _db = db;
         }
@@ -21,7 +22,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                _db.CreateEmployee("", args.Email, "", 0);
+                _db.Add(new IncomingEmployee {Email = args.Email, Token = "", LeaderId = 0 });
 
                 SendInviteMail(args.Email);
 
