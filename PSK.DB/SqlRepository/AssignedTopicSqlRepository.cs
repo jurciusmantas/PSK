@@ -33,7 +33,7 @@ namespace PSK.DB.SqlRepository
             return assignedTopic;
         }
 
-        public AssignedTopic GetAssignedTopic(int id)
+        public AssignedTopic Get(int id)
         {
             return context.AssignedTopics.Find(id);
         }

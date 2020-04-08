@@ -34,7 +34,7 @@ namespace PSK.DB.SqlRepository
             return plan;
         }
 
-        public Plan GetPlan(int id)
+        public Plan Get(int id)
         {
             return context.Plans.Find(id);
         }

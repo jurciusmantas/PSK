@@ -18,7 +18,7 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public IncomingEmployee GetIncomingEmployee(int id)
+        public IncomingEmployee Get(int id)
         {
             throw new NotImplementedException();
         }

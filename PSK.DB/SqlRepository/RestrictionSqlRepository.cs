@@ -33,12 +33,12 @@ namespace PSK.DB.SqlRepository
             return restriction;
         }
 
-        public Restriction GetRestriction(int id)
+        public Restriction Get(int id)
         {
             return context.Restrictions.Find(id);
         }
 
-        public Restriction UpdateRestriction(Restriction updatedRestriction)
+        public Restriction Update(Restriction updatedRestriction)
         {
             var restriction = context.Restrictions.Attach(updatedRestriction);
             restriction.State = Microsoft.EntityFrameworkCore.EntityState.Modified;

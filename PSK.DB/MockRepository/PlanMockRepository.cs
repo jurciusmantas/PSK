@@ -18,7 +18,7 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public Plan GetPlan(int id)
+        public Plan Get(int id)
         {
             throw new NotImplementedException();
         }

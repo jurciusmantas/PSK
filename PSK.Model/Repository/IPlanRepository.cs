@@ -5,11 +5,7 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IPlanRepository
+    public interface IPlanRepository : IRepository<Plan>
     {
-        public Plan Add(Plan plan);
-        public Plan GetPlan(int id);
-        public Plan Update(Plan updatedPlan);
-        public Plan Delete(int id);
     }
 }
