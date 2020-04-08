@@ -8,6 +8,7 @@ namespace PSK.Model.DBConnection
     {
         private static readonly List<Employee> _employees = new List<Employee>();
         private static readonly List<Topic> _topics = new List<Topic>();
+        private static readonly List<Recommendation> _recommendations = new List<Recommendation>();
 
         public void CreateEmployee(string name, string email, string password, int leaderId)
         {
@@ -53,5 +54,47 @@ namespace PSK.Model.DBConnection
         {
             return _employees.FirstOrDefault(employee => employee.Email == email && employee.Password == password);
         }
+
+        public Employee GetEmployeeByName(string name)
+        {
+            return _employees.FirstOrDefault(employee => (employee.Name).Equals(name));
+        }
+
+        public void CreateRecommendation(int topicId, int recommendedToId, int createdById)
+        {
+            Recommendation recommendation = new Recommendation
+            {
+                Id = _recommendations.Count,
+                Topic = GetTopicById(topicId),
+                RecommendedTo = GetEmployeeById(recommendedToId),
+                CreatedBy = GetEmployeeById(createdById)
+            };
+            _recommendations.Add(recommendation);
+        }
+        public List<Recommendation> GetAllRecommendations()
+        {
+            return _recommendations;
+        }
+
+        public Recommendation GetRecommendationById(int id)
+        {
+            return _recommendations.FirstOrDefault(recommendation => recommendation.Id == id);
+        }
+
+        public void UpdateRecommendation(int id, int topicId, int recommendedToId)
+        {
+            Recommendation recommendation = GetRecommendationById(id);
+            Topic topic = GetTopicById(topicId);
+            Employee emp = GetEmployeeById(recommendedToId);
+            recommendation.Topic = topic;
+            recommendation.RecommendedTo = emp;
+        }
+
+        public void DeleteRecommendation(int id)
+        {
+            _recommendations.Remove(GetRecommendationById(id));
+        }
+
+
     }
 }

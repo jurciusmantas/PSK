@@ -14,5 +14,11 @@ namespace PSK.Model.DBConnection
         public Topic GetTopicById(int id);
         public List<Topic> GetAllTopics();
         public List<Topic> GetSubTopics(int parentTopicId);
+        public Employee GetEmployeeByName(string name);
+        public void CreateRecommendation(int topicId, int recommendedToId, int createdById);
+        public List<Recommendation> GetAllRecommendations();
+        public Recommendation GetRecommendationById(int id);
+        public void UpdateRecommendation(int id, int topicId, int recommendedToId);
+        public void DeleteRecommendation(int id);
     }
 }

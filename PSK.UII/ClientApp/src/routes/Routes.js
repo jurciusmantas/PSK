@@ -11,6 +11,9 @@ import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
+import RecommendationsPage from '../components/Recommendations/RecommendationsPage';
+import AddRecommendationPage from '../components/Recommendations/AddRecommendationPage';
+import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -26,6 +29,9 @@ class Routes extends React.Component{
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
                 { component: TopicPage, path: "/topic" },
+                { component: RecommendationsPage, path: "/recommendations" },
+                { component: AddRecommendationPage, path: "/add-recommendation" },
+                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" }
             ]
         }
     }
