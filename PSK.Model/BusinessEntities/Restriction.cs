@@ -12,6 +12,9 @@ namespace PSK.Model.BusinessEntities
         public int MaxDaysPerQuarter { set; get; }
         public int MaxDaysPerMonth { set; get; }
         public bool Global { set; get; }
+        public DateTime CreationDate { set; get; }
+        public int CreatorId { set; get; }
+        public Employee Creator { set; get; }
         public virtual ICollection<EmployeeRestriction> RestrictionEmployees { set; get; }
     }
 }
