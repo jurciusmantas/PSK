@@ -15,7 +15,7 @@ export default class DetailedTopicPage extends React.Component {
 
         let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //Takes id from the URL
 
-        get(`topic/detailedtopic?id=${id}`).then(res => res.json())
+        get(`topic/topic/${id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })
