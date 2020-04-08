@@ -110,91 +110,78 @@ namespace PSK.DB.Contexts
                     CreatorId = 1
                 }
                 );
-            modelBuilder.Entity<AssignedTopic>().HasData(
-                new AssignedTopic
+            modelBuilder.Entity<TopicCompletion>().HasData(
+                new TopicCompletion
                 {
                     Id = 1,
-                    IsCompleted = false,
-                    TopicId = 1,
-                    EmploeeId = 2
-                },
-                new AssignedTopic
-                {
-                    Id = 2,
-                    IsCompleted = false,
-                    TopicId = 2,
-                    EmploeeId = 4
-                },
-                new AssignedTopic
-                {
-                    Id = 3,
-                    IsCompleted = true,
                     CompletedOn = new DateTime(2020, 4, 7),
                     TopicId = 3,
-                    EmploeeId = 5
-                },
-                new AssignedTopic
-                {
-                    Id = 4,
-                    IsCompleted = false,
-                    TopicId = 4,
-                    EmploeeId = 4
+                    EmployeeId = 5
                 }
-                ) ;
-            modelBuilder.Entity<Plan>().HasData(
-                new Plan
+                );
+            modelBuilder.Entity<Day>().HasData(
+                new Day
                 {
                     Id = 1,
-                    WorkDate = new DateTime(2020, 5, 11),
-                    AssignedTopicId = 1
+                    Date = new DateTime(2020, 5, 11),
+                    TopicId = 1,
+                    EmployeeId = 2,   
                 },
-                new Plan
+                new Day
                 {
                     Id = 2,
-                    WorkDate = new DateTime(2020, 5, 12),
-                    AssignedTopicId = 1
+                    Date = new DateTime(2020, 5, 12),
+                    TopicId = 1,
+                    EmployeeId = 3,
                 },
-                new Plan
+                new Day
                 {
                     Id = 3,
-                    WorkDate = new DateTime(2020, 5, 14),
-                    AssignedTopicId = 1
+                    Date = new DateTime(2020, 5, 14),
+                    TopicId = 1,
+                    EmployeeId = 3
                 },
-                new Plan
+                new Day
                 {
                     Id = 4,
-                    WorkDate = new DateTime(2020, 5, 18),
-                    AssignedTopicId = 1
+                    Date = new DateTime(2020, 5, 18),
+                    TopicId = 1,
+                    EmployeeId = 3
                 },
-                new Plan
+                new Day
                 {
                     Id = 5,
-                    WorkDate = new DateTime(2020, 5, 11),
-                    AssignedTopicId = 2
+                    Date = new DateTime(2020, 5, 11),
+                    TopicId = 2,
+                    EmployeeId = 4
                 },
-                new Plan
+                new Day
                 {
                     Id = 6,
-                    WorkDate = new DateTime(2020, 5, 12),
-                    AssignedTopicId = 2
+                    Date = new DateTime(2020, 5, 12),
+                    TopicId = 2,
+                    EmployeeId = 4
                 },
-                new Plan
+                new Day
                 {
                     Id = 7,
-                    WorkDate = new DateTime(2020, 5, 13),
-                    AssignedTopicId = 2
+                    Date = new DateTime(2020, 5, 13),
+                    TopicId = 2,
+                    EmployeeId = 4
                 },
-                new Plan
+                new Day
                 {
                     Id = 8,
-                    WorkDate = new DateTime(2020, 6, 8),
-                    AssignedTopicId = 4
+                    Date = new DateTime(2020, 6, 8),
+                    TopicId = 4,
+                    EmployeeId = 5
                 },
-                new Plan
+                new Day
                 {
                     Id = 9,
-                    WorkDate = new DateTime(2020, 6, 9),
-                    AssignedTopicId = 4
+                    Date = new DateTime(2020, 6, 9),
+                    TopicId = 4,
+                    EmployeeId = 5
                 }
                 );
         }

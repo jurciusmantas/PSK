@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PSK.DB.MockRepository
 {
-    public class PlanMockRepository : ITopicCompletionRepository
+    public class TopicCompletionMockRepository : ITopicCompletionRepository
     {
         public TopicCompletion Add(TopicCompletion entity)
         {
