@@ -18,5 +18,10 @@ namespace PSK.DB.Contexts
         public DbSet<Recommendation> Recommendations { set; get; }
         public DbSet<Restriction> Restrictions { set; get; }
         public DbSet<Topic> Topics { set; get; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Seed();
+        }
     }
 }

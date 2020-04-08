@@ -8,7 +8,7 @@ namespace PSK.Model.BusinessEntities
     {
         public int Id { set; get; }
         public bool IsCompleted { set; get; }
-        public DateTime CompletedOn { set; get; }
+        public DateTime? CompletedOn { set; get; }
         public int TopicId { set; get; }
         public Topic Topic { set; get; }
         public int EmploeeId { get; set; }
