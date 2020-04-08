@@ -71,14 +71,14 @@ namespace PSK.DB.Contexts
                     Id = 2,
                     Name = "Java EE JPA",
                     Description = "Java EE JPA course: https://www.javaworld.com/article/3379043/what-is-jpa-introduction-to-the-java-persistence-api.html",
-                    ParentId = 1
+                    ParentTopicId = 1
                 },
                 new Topic
                 {
                     Id = 3,
                     Name = "Java EE CDI",
                     Description = "Java EE CDI course: https://www.baeldung.com/java-ee-cdi",
-                    ParentId = 1
+                    ParentTopicId = 1
                 },
                 new Topic
                 {

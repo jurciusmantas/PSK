@@ -12,7 +12,7 @@ namespace PSK.Model.BusinessEntities
         public String Name { set; get; }
         [Column(TypeName = "varchar(12000)")]
         public String Description { set; get; }
-        public int? ParentId { get; set; }
+        public int? ParentTopicId { get; set; }
         public Topic ParentTopic { set; get; }
     }
 }
