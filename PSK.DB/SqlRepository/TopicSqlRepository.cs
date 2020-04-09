@@ -38,6 +38,16 @@ namespace PSK.DB.SqlRepository
             return context.Topics.Find(id);
         }
 
+        public List<Topic> GetSubtopics(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Topic> GetTopics()
+        {
+            throw new NotImplementedException();
+        }
+
         public Topic Update(Topic updatedTopic)
         {
             var topic = context.Topics.Attach(updatedTopic);

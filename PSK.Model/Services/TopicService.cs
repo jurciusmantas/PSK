@@ -1,4 +1,5 @@
 ﻿using PSK.Model.Entities;
+using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ namespace PSK.Model.Services
 {
     public class TopicService : ITopicService
     {
+        private ITopicRepository _topicRepository;
+
         private List<Topic> _topicList;
 
         public TopicService()
