@@ -82,6 +82,14 @@ namespace PSK.Model.Services
             }
         }
 
+        public void Logout()
+        {
+            //TODO:
+            //Once authorization will be implemented (with _sessionData as service
+            //with lifestyle session to have the currently logged in user) -
+            //remove its token (call to DB too!).
+        }
+
         private string GetToken()
         {
             //return Convert.ToBase64String(Guid.NewGuid().ToByteArray());

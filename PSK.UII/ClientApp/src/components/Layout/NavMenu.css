@@ -16,3 +16,16 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+
+.sign-out-button{
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.sign-out-button > i {
+  color: #343A40;
+}
+
+.sign-out-button > i:hover {
+  color: #56606A;
+}

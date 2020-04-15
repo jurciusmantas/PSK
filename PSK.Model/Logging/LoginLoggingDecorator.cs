@@ -56,5 +56,19 @@ namespace PSK.Model.Logging
                 throw;
             }
         }
+
+        public void Logout()
+        {
+            try
+            {
+                _decoratee.Logout();
+                _logger.Information("{Timestamp} {Login}: {DecorateeClassName}.LoginToken success", null, _decorateeClassName);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{Timestamp}: {DecorateeClassName}.LoginToken failed {Newline} {Exception}", _decorateeClassName, e);
+                throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
+            }
+        }
     }
 }
