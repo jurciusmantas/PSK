@@ -4,14 +4,13 @@ using System.Text;
 
 namespace PSK.Model.BusinessEntities
 {
-    public class AssignedTopic
+    public class TopicCompletion
     {
         public int Id { set; get; }
-        public bool IsCompleted { set; get; }
-        public DateTime CompletedOn { set; get; }
         public int TopicId { set; get; }
-        public Topic Topic { set; get; }
-        public int EmploeeId { get; set; }
+        public Topic Topic {set; get;}
+        public int EmployeeId { set; get; }
         public Employee Employee { set; get; }
+        public DateTime CompletedOn { set; get; }
     }
 }

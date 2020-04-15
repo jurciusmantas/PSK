@@ -5,7 +5,9 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IPlanRepository : IRepository<Plan>
+    public interface IDayRepository : IRepository<Day>
     {
+        
+
     }
 }

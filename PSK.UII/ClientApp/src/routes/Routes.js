@@ -49,16 +49,11 @@ class Routes extends React.Component{
     render(){
         const { currentUser } = this.props;
 
-        /* Do not show login page when logging-in with token */
-        if (!currentUser.token && getCookie('AuthToken'))
-            return <div/>;
-
         if (!currentUser || !currentUser.token)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
-                        <Route path='/invite' component={InvitePage} />
                         <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>

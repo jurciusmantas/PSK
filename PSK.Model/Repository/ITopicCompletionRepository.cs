@@ -5,9 +5,7 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IAssignedTopicRepository : IRepository<AssignedTopic>
+    public interface ITopicCompletionRepository : IRepository<TopicCompletion>
     {
-        
-
     }
 }
