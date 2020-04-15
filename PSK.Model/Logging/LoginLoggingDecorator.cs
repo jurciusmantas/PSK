@@ -17,19 +17,23 @@ namespace PSK.Model.Logging
             _logger = logger;
             _decorateeClassName = decoratee.ToString();
         }
-        // get called twice for some reason...
         public ServerResult<User> Login(LoginArgs args)
         {
             try
             {
                 ServerResult<User> result = _decoratee.Login(args);
-                _logger.Information("{Timestamp} {Login}: {DecorateeClassName}.Login success", result.Data.Login, _decorateeClassName);
+                _logger.Information("User {Login}: {DecorateeClassName}.Login() successful", result.Data.Login, _decorateeClassName);
                 return result;
             }
             catch (ArgumentNullException e)
             {
                 _logger.Information(e, "{Timestamp} {Login}: {DecorateeClassName}.Login failed {Newline} {Exception}", args.Login, _decorateeClassName);
                 throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
+            }
+            catch(Exception e)
+            {
+                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}");
+                throw;
             }
         }
 
@@ -45,6 +49,11 @@ namespace PSK.Model.Logging
             {
                 _logger.Information(e, "{Timestamp}: {DecorateeClassName}.LoginToken failed {Newline} {Exception}", _decorateeClassName);
                 throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
+            }
+            catch(Exception e)
+            {
+                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}");
+                throw;
             }
         }
 
