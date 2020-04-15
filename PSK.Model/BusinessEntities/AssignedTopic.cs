@@ -11,7 +11,7 @@ namespace PSK.Model.BusinessEntities
         public DateTime CompletedOn { set; get; }
         public int TopicId { set; get; }
         public Topic Topic { set; get; }
-        public int EmploeeId { get; set; }
+        public int EmployeeId { get; set; }
         public Employee Employee { set; get; }
     }
 }

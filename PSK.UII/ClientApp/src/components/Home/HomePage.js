@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Calendar from '../Calendar/Calendar';
 
-export default class HomePage extends React.Component{
-    constructor(props){
+export default class HomePage extends React.Component {
+    constructor(props) {
         super(props);
     }
 
-    render(){
+    render() {
         return (
             <React.Fragment>
-                <Calendar/>
+                <Calendar />
             </React.Fragment>
         )
     }

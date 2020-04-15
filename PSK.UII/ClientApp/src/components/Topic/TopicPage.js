@@ -11,7 +11,7 @@ export default class TopicPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topic/topic').then(res => res.json())
+        get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })

@@ -15,8 +15,7 @@ namespace PSK.UI.Controllers
         }
 
         [HttpPost]
-        public ServerResult<InviteArgs> 
-            Invite([FromBody]InviteArgs args)
+        public ServerResult<InviteArgs> Invite([FromBody]InviteArgs args)
         {
             return _inviteService.Invite(args);
         }

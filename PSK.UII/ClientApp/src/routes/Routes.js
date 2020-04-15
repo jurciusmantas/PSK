@@ -11,14 +11,15 @@ import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
+import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 
 const NotFoundPageWraped = () =>
     <Layout>
-        <NotFoundPage/>
+        <NotFoundPage />
     </Layout>;
 
-class Routes extends React.Component{
-    constructor(props){
+class Routes extends React.Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -26,14 +27,15 @@ class Routes extends React.Component{
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
                 { component: TopicPage, path: "/topic" },
+                { component: NewLearningDayPage, path: "/addDay" },
             ]
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let token = getCookie('AuthToken');
         if (token)
-            post('login/login_token', token)
+            post('login?token=true', { token })
                 .then(res => res.json())
                 .then(res => {
                     if (res.success)
@@ -44,12 +46,12 @@ class Routes extends React.Component{
                 })
     }
 
-    render(){
+    render() {
         const { currentUser } = this.props;
 
         /* Do not show login page when logging-in with token */
         if (!currentUser.token && getCookie('AuthToken'))
-            return <div/>;
+            return <div />;
 
         if (!currentUser || !currentUser.token)
             return (
@@ -57,7 +59,7 @@ class Routes extends React.Component{
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/invite' component={InvitePage} />
-                        <Route component={NotFoundPage}/>
+                        <Route component={NotFoundPage} />
                     </Switch>
                 </BrowserRouter>
             )
@@ -65,19 +67,19 @@ class Routes extends React.Component{
         return (
             <BrowserRouter basename={'MegstuKumpi'}>
                 <Switch>
-                    {   
+                    {
                         this.state.components.map((comp, i) => {
                             let wrappedComponent = () =>
                                 <Layout>
-                                    <comp.component/>
+                                    <comp.component />
                                 </Layout>;
-                            
+
                             return (
-                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`}/>
+                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`} />
                             )
                         })
                     }
-                    <Route component={NotFoundPageWraped}/>
+                    <Route component={NotFoundPageWraped} />
                 </Switch>
             </BrowserRouter>
         )

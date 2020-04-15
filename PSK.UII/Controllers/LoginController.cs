@@ -15,17 +15,13 @@ namespace PSK.UI.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
-        public ServerResult<User> Login([FromBody]LoginArgs args)
+        public ServerResult<User> Login([FromBody] LoginArgs args, [FromQuery] bool token = false)
         {
+            if(token)
+            {
+                return _loginService.LoginToken(args.Token);
+            }
             return _loginService.Login(args);
-        }
-
-        [HttpPost]
-        [Route("login_token")]
-        public ServerResult<User> LoginFromToken([FromBody]string token)
-        {
-            return _loginService.LoginToken(token);
         }
     }
 }

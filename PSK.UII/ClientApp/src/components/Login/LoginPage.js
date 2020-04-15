@@ -6,8 +6,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
 import { setCookie } from '../../helpers/cookie';
 
-class LoginPage extends React.Component{
-    constructor(props){
+class LoginPage extends React.Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -18,20 +18,20 @@ class LoginPage extends React.Component{
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         window.addEventListener("keypress", this.handleKeyPress);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         window.removeEventListener("keypress", this.handleKeyPress);
     }
 
-    handleKeyPress(e){
+    handleKeyPress(e) {
         if (e.key === "Enter")
             this.login();
     }
 
-    login(){
+    login() {
         const {
             login,
             password
@@ -41,13 +41,13 @@ class LoginPage extends React.Component{
             return;
         //TODO: Else - to show "no input"
 
-        post('login/login', {
+        post('login', {
             login: login,
             password: password,
         })
             .then(res => res.json())
             .then(res => {
-                if (res.success){
+                if (res.success) {
                     setCookie(res.data.token);
                     this.props.history.push('/home');
                     this.props.login(res.data);
@@ -59,13 +59,13 @@ class LoginPage extends React.Component{
             })
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className='login-wrapper'>
                 <div className='login-holder'>
                     <div className='row'>
                         <label>Login:</label>
-                        <input 
+                        <input
                             type='text'
                             onChange={e => this.setState({ login: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
@@ -73,7 +73,7 @@ class LoginPage extends React.Component{
                     </div>
                     <div className='row'>
                         <label>Password:</label>
-                        <input 
+                        <input
                             type='password'
                             onChange={e => this.setState({ password: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
@@ -81,7 +81,7 @@ class LoginPage extends React.Component{
                     </div>
                     <div className='row'>
                         <button
-                            type="button" 
+                            type="button"
                             className="btn btn-dark"
                             onClick={() => this.login()}
                         >Login</button>

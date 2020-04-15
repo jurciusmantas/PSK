@@ -4,9 +4,9 @@ import Routes from './routes/Routes';
 import store from './redux/store';
 
 const App = () => (
-  <Provider store={store}>
-    <Routes/>
-  </Provider>
+    <Provider store={store}>
+        <Routes />
+    </Provider>
 );
 
 export default App;
