@@ -3,6 +3,7 @@ using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PSK.DB.SqlRepository
@@ -40,12 +41,12 @@ namespace PSK.DB.SqlRepository
 
         public List<Topic> GetSubtopics(int id)
         {
-            throw new NotImplementedException();
+            return context.Topics.Where(m => m.ParentTopicId == id).ToList();
         }
 
         public List<Topic> GetTopics()
         {
-            throw new NotImplementedException();
+            return context.Topics.ToList();
         }
 
         public Topic Update(Topic updatedTopic)

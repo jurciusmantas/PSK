@@ -8,44 +8,56 @@ namespace PSK.Model.Services
 {
     public class TopicService : ITopicService
     {
-        private ITopicRepository _topicRepository;
+        private readonly ITopicRepository _topicRepository;
+        private List<Topic> _topicTree;
 
-        private List<Topic> _topicList;
-
-        public TopicService()
+        public TopicService(ITopicRepository topicRepository)
         {
-            var list = new List<Topic>();   //just mock
-
-            list.Add(new Topic { Id = 1, Name = "TopicName1", Description = "TopicDescription1" });
-            list.Add(new Topic { Id = 2, Name = "TopicName2", Description = "TopicDescription2" });
-            list.Add(new Topic { Id = 3, Name = "TopicName3", Description = "TopicDescription3" });
-
-            int i = 3;
-
-            foreach (var topic in list)
-            {
-                var subtopicList = new List<Topic>();
-
-                subtopicList.Add(new Topic { Id = ++i, Name = $"SubTopicName{i}", Description = $"SubTopicDescription{i}" });
-                subtopicList.Add(new Topic { Id = ++i, Name = $"SubTopicName{i}", Description = $"SubTopicDescription{i}" });
-                subtopicList.Add(new Topic { Id = ++i, Name = $"SubTopicName{i}", Description = $"SubTopicDescription{i}" });
-
-                topic.SubTopicList = subtopicList;
-            }
-
-            _topicList = list;
+            _topicRepository = topicRepository;
+            var bTopicList = _topicRepository.GetTopics();
+            _topicTree = ConvertToTree(bTopicList);
         }
 
         public ServerResult<List<Topic>> GetTopics()
         {
-            return new ServerResult<List<Topic>> { Data = _topicList, Message = "Success", Success = true };
+
+            return new ServerResult<List<Topic>> { Data = _topicTree, Message = "Success", Success = true };
         }
 
         public ServerResult<Topic> GetTopic(int id)
         {
-            var topic = _topicList.Where(top => top.Id == id).FirstOrDefault();
+
+            var topic = _topicTree.Where(top => top.Id == id).FirstOrDefault();
 
             return new ServerResult<Topic> { Data = topic, Message = "Success", Success = true };
         }
+
+        public ServerResult<List<BusinessEntities.Topic>> GetSubtopics(int topicId)
+        {
+            var topicList = _topicRepository.GetSubtopics(topicId);
+
+            return new ServerResult<List<BusinessEntities.Topic>> { Data = topicList, Message = "Success", Success = true };
+        }
+
+        private List<Topic> ConvertToTree(List<BusinessEntities.Topic> topicList)
+        {
+            var topics = new List<Topic>();
+
+            foreach (var item in topicList)
+            {
+                var topic = new Topic { Id = item.Id, Description = item.Description, Name = item.Name, ParentId = item.ParentTopicId };
+                topics.Add(topic);
+            }
+
+            foreach (var topic in topics)
+            {
+                topic.SubTopicList = topics.Where(x => x.ParentId.HasValue && x.ParentId == topic.Id).ToList();
+            }
+
+            var tree = topics.Where(x => !x.ParentId.HasValue).ToList();
+
+            return tree;
+        }
+
     }
 }

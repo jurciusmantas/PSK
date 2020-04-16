@@ -1,20 +1,20 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
-
+import { Link } from 'react-router-dom';
 
 export default class DetailedTopicPage extends React.Component {
     constructor(props) {
         super();
         this.state = {
             loading: true,
-            data: null
+            data: null           
         }
     }
 
     componentDidMount() {
 
         let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //Takes id from the URL
-
+       
         get(`topic/topic/${id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -30,7 +30,49 @@ export default class DetailedTopicPage extends React.Component {
         alert("Assigned");
       }
 
-    render() {
+    showSubtopics() {
+        if (!this.state.data.subTopicList)
+        {
+            console.log(this.state.data.subTopicList)
+            return (
+                <div>
+                    Subtopic not found
+                </div>
+            )
+        }
+        else if (Array.isArray(this.state.data.subTopicList) && this.state.data.subTopicList.length === 0)
+        {
+            return (
+                <div>
+                    No subtopics
+                </div>
+            )
+        }
+        return (
+            <div>
+                <h5>Subtopics</h5>
+                <table>
+                    <tbody>
+                        { 
+                        this.state.data.subTopicList.map((d) => {
+                            const {id, name} = d
+
+                            return (
+                                <tr key={ `subtopic-list-item-${id}` }>
+                                    <td> 
+                                        <Link to={{ pathname: `/topic/${id}` }} > {name} </Link>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        }
+                    </tbody>
+                </table>
+            </div>
+        )      
+    }
+
+      render() {
         if (this.state.loading)
         {
             return (
@@ -55,25 +97,7 @@ export default class DetailedTopicPage extends React.Component {
             <p>{ this.state.data.description }</p>
             <button onClick={ this.assign }>Assign!</button>
 
-            <h5>Subtopics</h5>
-
-            <table>
-                <tbody>
-                    { 
-                    this.state.data.subTopicList.map((d) => {
-                        const {id, name, description} = d
-                        
-                        return (
-                            <tr key={ `subtopic-list-item-${id}` }>
-                                <td> {name} </td>
-                                <td> {description} </td>
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </table>
-
+            {this.showSubtopics()}
         </div>
         )
     }

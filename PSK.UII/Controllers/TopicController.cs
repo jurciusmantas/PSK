@@ -26,7 +26,15 @@ namespace PSK.UI.Controllers
         [Route("topic/{id}")]
         public ServerResult<Topic> GetDetailedTopic(int id)
         {
+            var smth = _topicService.GetTopic(id);
             return _topicService.GetTopic(id);
+        }
+
+        [HttpGet]
+        [Route("subtopics/{id}")]
+        public ServerResult<List<Model.BusinessEntities.Topic>> Subtopics(int id)
+        {
+            return _topicService.GetSubtopics(id);
         }
     }
 }
