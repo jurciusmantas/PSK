@@ -9,34 +9,35 @@ namespace PSK.Model.Services
     public class TopicService : ITopicService
     {
         private readonly ITopicRepository _topicRepository;
-        private List<Topic> _topicTree;
 
         public TopicService(ITopicRepository topicRepository)
         {
             _topicRepository = topicRepository;
-            var bTopicList = _topicRepository.GetTopics();
-            _topicTree = ConvertToTree(bTopicList);
         }
 
         public ServerResult<List<Topic>> GetTopics()
         {
+            var topicTree = ConvertToTree(_topicRepository.GetTopics());
 
-            return new ServerResult<List<Topic>> { Data = _topicTree, Message = "Success", Success = true };
+            return new ServerResult<List<Topic>> { Data = topicTree, Message = "Success", Success = true };
         }
 
         public ServerResult<Topic> GetTopic(int id)
         {
+            var bTopic = _topicRepository.Get(id);
+            var bSubtopic = _topicRepository.GetSubtopics(id);
 
-            var topic = _topicTree.Where(top => top.Id == id).FirstOrDefault();
+            var subtopics = new List<Topic>();
+
+            foreach (var top in bSubtopic )
+            {
+                var subtop = new Topic { Id = top.Id, Description = top.Description, Name = top.Name };
+                subtopics.Add(subtop);
+            }
+
+            var topic = new Topic { Id = bTopic.Id, Description = bTopic.Description, Name = bTopic.Name, SubTopicList = subtopics };
 
             return new ServerResult<Topic> { Data = topic, Message = "Success", Success = true };
-        }
-
-        public ServerResult<List<BusinessEntities.Topic>> GetSubtopics(int topicId)
-        {
-            var topicList = _topicRepository.GetSubtopics(topicId);
-
-            return new ServerResult<List<BusinessEntities.Topic>> { Data = topicList, Message = "Success", Success = true };
         }
 
         private List<Topic> ConvertToTree(List<BusinessEntities.Topic> topicList)
