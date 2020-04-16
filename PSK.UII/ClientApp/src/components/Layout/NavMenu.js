@@ -14,7 +14,8 @@ import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import { removeCookie } from '../../helpers/cookie';
 import { get } from '../../helpers/request';
-import '../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import './NavMenu.css';
 
 class NavMenu extends Component {
@@ -49,20 +50,22 @@ class NavMenu extends Component {
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
           <Container>
-            <NavbarBrand tag={Link} to="/">PSK.UI</NavbarBrand>
+            <NavbarBrand tag={Link} to="/home">PSK.UI</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/home">Home</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
+                </NavItem>
+                <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="sign-out-button" onClick={(e) => this.logout()}>
-                    <i class="fas fa-sign-out-alt"></i>
+                  <Button className="sign-out-button" onClick={() => this.logout()}>
+                    <FontAwesomeIcon icon={faSignOutAlt} />
                   </Button>
                 </NavItem>
               </ul>

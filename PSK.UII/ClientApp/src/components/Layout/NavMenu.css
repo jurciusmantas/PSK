@@ -22,10 +22,12 @@ html {
   border: none !important;
 }
 
-.sign-out-button > i {
+.sign-out-button > svg {
   color: #343A40;
+  font-size: 25px;
 }
 
-.sign-out-button > i:hover {
+.sign-out-button > svg:hover {
   color: #56606A;
+  font-size: 25px;
 }
