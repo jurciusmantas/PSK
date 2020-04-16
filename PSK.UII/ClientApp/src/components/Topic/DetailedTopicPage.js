@@ -7,12 +7,21 @@ export default class DetailedTopicPage extends React.Component {
         super();
         this.state = {
             loading: true,
+            smth: true,
             data: null           
         }
     }
 
     componentDidMount() {
 
+        this.setDetails();
+    }
+
+    assign() {
+        alert("Assigned");
+      }
+
+    setDetails() {
         let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //Takes id from the URL
        
         get(`topic/topic/${id}`).then(res => res.json())
@@ -26,9 +35,10 @@ export default class DetailedTopicPage extends React.Component {
             })
     }
 
-    assign() {
-        alert("Assigned");
-      }
+    componentWillReceiveProps(){
+        this.setDetails();
+        this.forceUpdate();  
+    }
 
     showSubtopics() {
         if (!this.state.data.subTopicList)
@@ -60,7 +70,7 @@ export default class DetailedTopicPage extends React.Component {
                             return (
                                 <tr key={ `subtopic-list-item-${id}` }>
                                     <td> 
-                                        <Link to={{ pathname: `/topic/${id}` }} > {name} </Link>
+                                        <Link to={{ pathname: `/topic/${id}`}} > {name} </Link>
                                     </td>
                                 </tr>
                             )
