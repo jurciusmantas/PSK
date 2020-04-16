@@ -1,6 +1,5 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.DBConnection;
-using PSK.Model.Entities;
+﻿using PSK.Model.Entities;
+using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,52 +8,42 @@ namespace PSK.Model.Services
 {
     public class RecommendationService : IRecommendationService
     {
-        private readonly IDBConnection _db;
-        public RecommendationService(IDBConnection db)
-        {
-            _db = db;
-        }
+        private readonly IRecommendationRepository _recommendationRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ITopicRepository _topicRepository;
 
-        //-------------------temporary-------------------------------
-        public ServerResult<List<BusinessEntities.Topic>> GetTopics()
+        public RecommendationService(IRecommendationRepository recommendationRepository, 
+            IEmployeeRepository employeeRepository,
+            ITopicRepository topicRepository)
         {
-            //-----------------TEMPORARY---------------------------
-            _db.CreateEmployee("Vardas", "pastas", "slapt", 1);
-            _db.CreateEmployee("Name", "mail", "slapt", 1);
-            _db.CreateTopic("TopicName1", "Description1");
-            _db.CreateSubTopic("SubTopic1_1", "SubTopicDesc1_1", 0);
-            _db.CreateTopic("TopicName2", "Description2");
-            _db.CreateSubTopic("SubTopic1_2", "SubTopicDesc1_2", 1);
-            _db.CreateSubTopic("SubTopic2_2", "SubTopicDesc2_2", 1);
-            _db.CreateTopic("TopicName3", "Description3");
-            //-----------------------------------------------------
-
-            try
-            {
-                return new ServerResult<List<BusinessEntities.Topic>>
-                {
-                    Data = _db.GetAllTopics(),
-                    Success = true
-                };
-            }
-            catch (Exception e)
-            {
-                return new ServerResult<List<BusinessEntities.Topic>>
-                {
-                    Success = false,
-                    Message = e.Message
-                };
-            }
+            _recommendationRepository = recommendationRepository;
+            _employeeRepository = employeeRepository;
+            _topicRepository = topicRepository;
         }
-        //------------------------------------------------------------
 
         public ServerResult<List<Recommendation>> GetRecommendations(int recommendedToId)
         {
             try
             {
+                List<Recommendation> recommendations = new List<Recommendation>();
+                BusinessEntities.Topic topic;
+                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindRecommended(recommendedToId).ToList();
+                foreach (var r in recFromDb)
+                {
+                    topic = _topicRepository.Get(r.TopicId);
+                    recommendations.Add(new Recommendation
+                    {
+                        Id = r.Id,
+                        TopicName = topic.Name,
+                        TopicId = topic.Id,
+                        CreatorName = _employeeRepository.Get(r.CreatorId).Name
+                    });
+
+                }
+
                 return new ServerResult<List<Recommendation>>
                 {
-                    Data = _db.GetAllRecommendations().Where(r => recommendedToId == r.RecommendedTo.Id).ToList(),
+                    Data = recommendations,
                     Success = true
                 };
             }
@@ -72,9 +61,22 @@ namespace PSK.Model.Services
         {
             try
             {
+                List<Recommendation> recommendations = new List<Recommendation>();
+                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindCreated(createdById).ToList();
+                foreach (var r in recFromDb)
+                {
+                    recommendations.Add(new Recommendation
+                    {
+                        Id = r.Id,
+                        TopicName = _topicRepository.Get(r.TopicId).Name,
+                        ReceiverName = _employeeRepository.Get(r.ReceiverId).Name,
+                        CreatorName = _employeeRepository.Get(r.CreatorId).Name
+                    });
+                }
+
                 return new ServerResult<List<Recommendation>>
                 {
-                    Data = _db.GetAllRecommendations().Where(r => createdById.Equals(r.CreatedBy.Id)).ToList(),
+                    Data = recommendations,
                     Success = true
                 };
             }
@@ -92,9 +94,17 @@ namespace PSK.Model.Services
         {
             try
             {
+                BusinessEntities.Recommendation recommendation = _recommendationRepository.Get(id);
+
                 return new ServerResult<Recommendation>
                 {
-                    Data = _db.GetRecommendationById(id),
+                    Data = new Recommendation
+                    {
+                        Id = recommendation.Id,
+                        TopicId = recommendation.TopicId,
+                        TopicName = _topicRepository.Get(recommendation.TopicId).Name,
+                        ReceiverName = _employeeRepository.Get(recommendation.ReceiverId).Name
+                    },
                     Success = true
                 };
             }
@@ -110,7 +120,7 @@ namespace PSK.Model.Services
 
         public ServerResult AddRecommendation(RecommendationArgs args)
         {
-            int recommendedToId = CheckIfEmployeeExists(args.RecommendedTo);
+            int recommendedToId = FindEmployee(args.RecommendedTo);
 
             if (recommendedToId == -1)
             {
@@ -121,9 +131,21 @@ namespace PSK.Model.Services
                 };
             }
 
+            if (CheckIfAbleToAssin(args.CreatedById, recommendedToId) == false)
+            {
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "You are not allowed to assign recommendation to this employee.\n" +
+                    "You can assign recommendations only to yourself and your team."
+                };
+            }
+
+            BusinessEntities.Recommendation newRecommendation = new BusinessEntities.Recommendation();
+
             try
             {
-                _db.CreateRecommendation(args.TopicId, recommendedToId, args.CreatedById);
+                _recommendationRepository.Add(new BusinessEntities.Recommendation { TopicId = args.TopicId, ReceiverId = recommendedToId, CreatorId = args.CreatedById });
 
                 return new ServerResult
                 {
@@ -143,8 +165,7 @@ namespace PSK.Model.Services
 
         public ServerResult ChangeRecommendation(int id, RecommendationArgs args)
         {
-            int recommendedToId = CheckIfEmployeeExists(args.RecommendedTo);
-            Console.WriteLine("id is " + id);
+            int recommendedToId = FindEmployee(args.RecommendedTo);
             if (recommendedToId == -1)
             {
                 return new ServerResult
@@ -154,9 +175,23 @@ namespace PSK.Model.Services
                 };
             }
 
+            if (CheckIfAbleToAssin(args.CreatedById, recommendedToId) == false)
+            {
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "You are not allowed to assign recommendation to this employee.\n" +
+                    "You can assign recommendations only to yourself and your team."
+                };
+            }
+
             try
             {
-                _db.UpdateRecommendation(id, args.TopicId, recommendedToId);
+                BusinessEntities.Recommendation recommendationToUpdate = _recommendationRepository.Get(id);
+                recommendationToUpdate.TopicId = args.TopicId;
+                recommendationToUpdate.ReceiverId = recommendedToId;
+                _recommendationRepository.Update(recommendationToUpdate);
+
                 return new ServerResult
                 {
                     Success = true
@@ -176,7 +211,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                _db.DeleteRecommendation(id);
+                _recommendationRepository.Delete(id);
                 return new ServerResult
                 {
                     Success = true
@@ -192,16 +227,32 @@ namespace PSK.Model.Services
             }
         }
 
-        private int CheckIfEmployeeExists(string name)
+        private int FindEmployee(string name)
         {
             try
             {
-                return _db.GetEmployeeByName(name).Id;
+                return _employeeRepository.FindByName(name).Id;
             }
             catch
             {
                 return -1;
             }
+        }
+
+        private bool CheckIfAbleToAssin(int createdById, int recommendedToId)
+        {
+            try
+            {
+                if ((_employeeRepository.Get(recommendedToId).LeaderId == createdById) || createdById == recommendedToId)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
     }

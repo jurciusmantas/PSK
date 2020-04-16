@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
 using PSK.Model.Services;
 
@@ -15,14 +14,6 @@ namespace PSK.UI.Controllers
         {
             _recommendationService = recommendationService;
         }
-
-        //------------Temporary, should get from topics controller---------------
-        [HttpGet, Route("topics")]
-        public ServerResult<List<Model.BusinessEntities.Topic>> GetAllTopics()
-        {
-            return _recommendationService.GetTopics();
-        }
-        //-----------------------------------------------------------------------
 
         [HttpGet, Route("recommendations/{recommendedTo}")]
         public ServerResult<List<Recommendation>> GetRecommendations(int recommendedTo)
@@ -51,7 +42,6 @@ namespace PSK.UI.Controllers
         [HttpPut, Route("update-recommendation/{id}")]
         public ServerResult ChangeRecommendation(int id, [FromBody]RecommendationArgs args)
         {
-            Console.WriteLine("in controller id " + id);
             return _recommendationService.ChangeRecommendation(id, args);
         }
 

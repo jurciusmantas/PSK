@@ -41,5 +41,10 @@ namespace PSK.DB.MockRepository
         {
             throw new NotImplementedException();
         }
+
+        public Employee FindByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

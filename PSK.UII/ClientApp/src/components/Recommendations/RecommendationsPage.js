@@ -1,8 +1,7 @@
 ﻿import React from "react"
-import '../Invite/InvitePage.css';
+import './RecommendationPage.css';
 
 import { get } from '../../helpers/request'
-
 import { Link } from "react-router-dom";
 
 class RecommendationsPage extends React.Component {
@@ -18,7 +17,7 @@ class RecommendationsPage extends React.Component {
     }
 
     componentDidMount() {
-        var employeeId = 0; //TODO get current user. 
+        var employeeId = 1; //TODO get current user. 
         get('recommendations/recommendations/' + employeeId)
             .then(res => res.json())
             .then(res => {
@@ -52,8 +51,9 @@ class RecommendationsPage extends React.Component {
         return this.state.recommendedToEmp.map((recommendation, index) => {
             return (
                 <tr key={index}>
-                    <td>{recommendation.topic.name}</td>
-                    <td>{recommendation.createdBy.name}</td>
+                    <td>{recommendation.topicName}</td>
+                    <td>{recommendation.creatorName}</td>
+                    <td><Link to={'topic/' + recommendation.topicId}>More</Link></td>
                 </tr>
             )
         })
@@ -63,8 +63,8 @@ class RecommendationsPage extends React.Component {
         return this.state.recommending.map((recommendation, index) => {
             return (
                 <tr key={index}>
-                    <td>{recommendation.topic.name}</td>
-                    <td>{recommendation.recommendedTo.name}</td>
+                    <td>{recommendation.topicName}</td>
+                    <td>{recommendation.receiverName}</td>
                     <td><Link to={'edit-recommendation/' + recommendation.id}>Edit</Link></td>
                 </tr>
             )
@@ -73,9 +73,9 @@ class RecommendationsPage extends React.Component {
 
     render() {
         return (
-            <div className="invite-wrapper">
+            <div className="wrapper">
                 <div className="row">
-                    <Link to='add-recommendation/'>Add recommendation</Link>
+                    <Link to='add-recommendation/' className="btn btn-dark">Add recommendation</Link>
                 </div>
                 <h3 className="row">Recommended topics to learn for you:</h3>
                 <div className="row">
@@ -84,14 +84,13 @@ class RecommendationsPage extends React.Component {
                             loading...
                     </div>
                         :
-                        <table>
+                        <table align="center">
                             <tbody>
                                 {this.showRecommendationList()}
                             </tbody>
                         </table>
                     }
                 </div>
-
                 <h3>Recommendations you have created:</h3>
                 <div className="row">
                     {this.state.loading2 || !this.state.recommending ?

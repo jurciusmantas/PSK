@@ -1,5 +1,5 @@
 ﻿import React from "react"
-import '../Invite/InvitePage.css';
+import './RecommendationPage.css';
 
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
@@ -12,19 +12,21 @@ class AddRecommendationPage extends React.Component {
         this.state = {
             topics: null,
             loading: true,
-            topicid: null,
+            topicid: "",
             recommendedTo: "",
-            createdById: 0 //TODO: get current user name/id
         }
 
         this.onSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
-        get('recommendations/topics').then(res => res.json())
+        get('topic/topic').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loading: false })
+                    if (this.topics != null) {
+                        this.setState({ topicid: res.data[0].id });
+                    }
                 }
             })
             .catch(error => {
@@ -49,8 +51,9 @@ class AddRecommendationPage extends React.Component {
         const {
             topicid,
             recommendedTo,
-            createdById
         } = this.state;
+
+        var createdById = 1;  //TODO: get current user id
 
         post('recommendations', {
             topicid: parseInt(topicid),
@@ -81,7 +84,7 @@ class AddRecommendationPage extends React.Component {
 
     render() {
         return (
-            <form className="invite-wrapper" onSubmit={this.onSubmit}>
+            <form className="wrapper" onSubmit={this.onSubmit}>
                 <h3>Add a recommendation</h3>
                 <div className="invite-holder">
                     <div className="row">
@@ -91,7 +94,9 @@ class AddRecommendationPage extends React.Component {
                                 loading...
                             </div>
                             :
-                            <select onChange={this.handleOnChange}>
+                            <select
+                                value={this.state.topicid}
+                                onChange={this.handleOnChange}>
                                 {this.showTopicOptions()}
                             </select>
                         }
@@ -103,13 +108,16 @@ class AddRecommendationPage extends React.Component {
                             name="recommendedTo"
                             value={this.state.recommendedTo}
                             onChange={e => this.setState({ recommendedTo: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)} />
+                            onKeyPress={e => this.handleKeyPress(e)}
+                            required/>
                     </div>
                     <div className="row">
                         <button className="btn btn-dark" type="submit">Submit</button>
                     </div>
                 </div>
-                <Link to="/recommendations">Return</Link>
+                <div className="row">
+                    <Link to="/recommendations" className="btn btn-dark">Return</Link>
+                </div>
             </form>
         )
     }

@@ -1,9 +1,8 @@
 ﻿import React from "react"
-import '../Invite/InvitePage.css';
+import './RecommendationPage.css';
 
-import { put } from '../../helpers/request'
-import { get } from '../../helpers/request'
-import { Link } from "react-router-dom";
+import { put, get } from '../../helpers/request'
+import { Link, withRouter } from "react-router-dom";
 
 class EditRecommendationsPage extends React.Component {
     constructor() {
@@ -16,7 +15,6 @@ class EditRecommendationsPage extends React.Component {
             loading2: true,
             topicid: "",
             recommendedTo: "",
-            createdById: 0, //TODO: get current user name/id
             id: window.location.pathname.split('/').pop()
         }
         this.onSubmit = this.handleSubmit.bind(this)
@@ -27,7 +25,7 @@ class EditRecommendationsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    this.setState({ recommendation: res.data, loading1: false, topicid: res.data.topic.id, recommendedTo: res.data.recommendedTo.name })
+                    this.setState({ recommendation: res.data, loading1: false, topicid: res.data.topicId, recommendedTo: res.data.receiverName })
                 }
                 else {
                     console.log(res.message);
@@ -37,7 +35,8 @@ class EditRecommendationsPage extends React.Component {
                 console.log(error);
             })
 
-        get('recommendations/topics').then(res => res.json())
+        get('topic/topic')
+            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loading2: false })
@@ -65,14 +64,16 @@ class EditRecommendationsPage extends React.Component {
         const {
             topicid,
             recommendedTo,
-            createdById,
         } = this.state;
+
+        var createdById = 1; //TODO: get current user id
 
         put('recommendations/update-recommendation/' + this.state.id, {
             topicid: parseInt(topicid),
             recommendedTo: recommendedTo,
             createdById: createdById
-        }).then(res => res.json())
+        })
+            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     alert("Recommendation changed successfully");
@@ -87,8 +88,6 @@ class EditRecommendationsPage extends React.Component {
     }
 
     deleteRecommendation(id, e) {
-        //TODO confirmation window
-
         fetch("./api/recommendations/delete/" + id, {
             method: "delete"
         })
@@ -96,6 +95,7 @@ class EditRecommendationsPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     alert("Recommendation deleted");
+                    this.props.history.push('/recommendations'); 
                 }
             })
             .catch(error => {
@@ -113,7 +113,7 @@ class EditRecommendationsPage extends React.Component {
 
     render() {
         return (
-            <form className="invite-wrapper" onSubmit={this.onSubmit}>
+            <form className="wrapper" onSubmit={this.onSubmit}>
                 <h3>Edit recommendation</h3>
                 <div className="row">
                     {this.state.loading1 || !this.state.recommendation ?
@@ -122,7 +122,7 @@ class EditRecommendationsPage extends React.Component {
                         </div>
                         :
                         <div>
-                            {this.state.recommendation.topic.name} {this.state.recommendation.recommendedTo.name}
+                            {this.state.recommendation.topicName} {this.state.recommendation.receiverName}
                         </div>
                     }
                 </div>
@@ -142,12 +142,13 @@ class EditRecommendationsPage extends React.Component {
                                 name="recommendedTo"
                                 defaultValue={this.state.recommendedTo}
                                 onChange={e => this.setState({ recommendedTo: e.target.value })}
-                                onKeyPress={e => this.handleKeyPress(e)} />
+                                onKeyPress={e => this.handleKeyPress(e)}
+                                required/>
                         </div>
                     }
                 </div>
                 <div className="row">
-                    <button className="btn btn-dark" type="button"><Link to="/recommendations">Return</Link></button>
+                    <Link to="/recommendations" className="btn btn-dark">Return</Link>
                     <button className="btn btn-dark" type="button" onClick={(e) => this.deleteRecommendation(this.state.id, e)}>Delete</button>
                     <button className="btn btn-dark" type="submit">Submit</button>
                 </div>
@@ -156,4 +157,4 @@ class EditRecommendationsPage extends React.Component {
     }
 }
 
-export default EditRecommendationsPage;
+export default withRouter(EditRecommendationsPage);
