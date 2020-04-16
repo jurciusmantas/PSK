@@ -1,5 +1,6 @@
-﻿using PSK.Model.DBConnection;
+﻿using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
+using PSK.Model.Repository;
 using System;
 using System.Configuration;
 using System.Net.Mail;
@@ -10,9 +11,9 @@ namespace PSK.Model.Services
 {
     public class InviteService : IInviteService
     {
-        private readonly IDBConnection _db;
+        private readonly IIncomingEmployeeRepository _db;
 
-        public InviteService(IDBConnection db)
+        public InviteService(IIncomingEmployeeRepository db)
         {
             _db = db;
         }
@@ -21,11 +22,9 @@ namespace PSK.Model.Services
         {
             try
             {
-                var token = GenerateToken();
+                _db.Add(new IncomingEmployee {Email = args.Email, Token = "", LeaderId = 0 });
 
-                _db.CreateIncomingEmployee(args.Email, token, 0, null);
-
-                SendInviteMail(args.Email, token);
+                SendInviteMail(args.Email);
 
                 return new ServerResult<InviteArgs>
                 {
@@ -43,7 +42,7 @@ namespace PSK.Model.Services
             }
         }
 
-        private void SendInviteMail(string receiverEmail, string token)
+        public void SendInviteMail(string receiverEmail)
         {
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
@@ -51,10 +50,14 @@ namespace PSK.Model.Services
             string mailAdr = ConfigurationManager.AppSettings["NoreplyEmailAddress"];
             string password = ConfigurationManager.AppSettings["Password"];
 
+            Console.WriteLine("mail: " + mailAdr);
+            Console.WriteLine("pass: " + password);
+
+
             mail.From = new MailAddress(mailAdr);
             mail.To.Add(receiverEmail);
             mail.Subject = "Registration link";
-            mail.Body = ConfigurationManager.AppSettings["Url"] + "registration/" + token;
+            mail.Body = GenerateToken();
 
             SmtpServer.Port = 587;
             SmtpServer.Credentials = new System.Net.NetworkCredential(mailAdr, password);

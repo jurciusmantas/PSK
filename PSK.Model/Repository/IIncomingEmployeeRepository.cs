@@ -5,11 +5,7 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IIncomingEmployeeRepository
+    public interface IIncomingEmployeeRepository : IRepository<IncomingEmployee>
     {
-        public IncomingEmployee Add(IncomingEmployee incomingEmployee);
-        public IncomingEmployee GetIncomingEmployee(int id);
-        public IncomingEmployee Update(IncomingEmployee updatedIncomingEmployee);
-        public IncomingEmployee Delete(int id);
     }
 }

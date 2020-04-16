@@ -2,32 +2,40 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSK.DB.Contexts;
 
 namespace PSK.DB.Migrations
 {
     [DbContext(typeof(PSKDbContext))]
-    partial class PSKDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200408125422_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("PSK.Model.BusinessEntities.Day", b =>
+            modelBuilder.Entity("PSK.Model.BusinessEntities.AssignedTopic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("CompletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("EmploeeId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
@@ -38,70 +46,36 @@ namespace PSK.DB.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Days");
+                    b.ToTable("AssignedTopics");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2020, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 2,
+                            EmploeeId = 2,
+                            IsCompleted = false,
                             TopicId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2020, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 3,
-                            TopicId = 1
+                            EmploeeId = 4,
+                            IsCompleted = false,
+                            TopicId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2020, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 3,
-                            TopicId = 1
+                            CompletedOn = new DateTime(2020, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmploeeId = 5,
+                            IsCompleted = true,
+                            TopicId = 3
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 3,
-                            TopicId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Date = new DateTime(2020, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 4,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Date = new DateTime(2020, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 4,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Date = new DateTime(2020, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 4,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Date = new DateTime(2020, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 5,
-                            TopicId = 4
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Date = new DateTime(2020, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 5,
+                            EmploeeId = 4,
+                            IsCompleted = false,
                             TopicId = 4
                         });
                 });
@@ -223,10 +197,88 @@ namespace PSK.DB.Migrations
                     b.ToTable("IncomingEmployees");
                 });
 
+            modelBuilder.Entity("PSK.Model.BusinessEntities.Plan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignedTopicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("WorkDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedTopicId");
+
+                    b.ToTable("Plans");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AssignedTopicId = 1,
+                            WorkDate = new DateTime(2020, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AssignedTopicId = 1,
+                            WorkDate = new DateTime(2020, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AssignedTopicId = 1,
+                            WorkDate = new DateTime(2020, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AssignedTopicId = 1,
+                            WorkDate = new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AssignedTopicId = 2,
+                            WorkDate = new DateTime(2020, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AssignedTopicId = 2,
+                            WorkDate = new DateTime(2020, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AssignedTopicId = 2,
+                            WorkDate = new DateTime(2020, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AssignedTopicId = 4,
+                            WorkDate = new DateTime(2020, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AssignedTopicId = 4,
+                            WorkDate = new DateTime(2020, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
             modelBuilder.Entity("PSK.Model.BusinessEntities.Recommendation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedById")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatorId")
@@ -235,14 +287,17 @@ namespace PSK.DB.Migrations
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RecommendedToId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("RecommendedToId");
 
                     b.HasIndex("TopicId");
 
@@ -281,12 +336,6 @@ namespace PSK.DB.Migrations
                     b.Property<int>("ConsecutiveDays")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Global")
                         .HasColumnType("tinyint(1)");
 
@@ -300,8 +349,6 @@ namespace PSK.DB.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
 
                     b.ToTable("Restrictions");
                 });
@@ -317,6 +364,9 @@ namespace PSK.DB.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ParentTopicId")
                         .HasColumnType("int");
@@ -339,14 +389,14 @@ namespace PSK.DB.Migrations
                             Id = 2,
                             Description = "Java EE JPA course: https://www.javaworld.com/article/3379043/what-is-jpa-introduction-to-the-java-persistence-api.html",
                             Name = "Java EE JPA",
-                            ParentTopicId = 1
+                            ParentId = 1
                         },
                         new
                         {
                             Id = 3,
                             Description = "Java EE CDI course: https://www.baeldung.com/java-ee-cdi",
                             Name = "Java EE CDI",
-                            ParentTopicId = 1
+                            ParentId = 1
                         },
                         new
                         {
@@ -356,46 +406,11 @@ namespace PSK.DB.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PSK.Model.BusinessEntities.TopicCompletion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CompletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("TopicId");
-
-                    b.ToTable("TopicCompletions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompletedOn = new DateTime(2020, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 5,
-                            TopicId = 3
-                        });
-                });
-
-            modelBuilder.Entity("PSK.Model.BusinessEntities.Day", b =>
+            modelBuilder.Entity("PSK.Model.BusinessEntities.AssignedTopic", b =>
                 {
                     b.HasOne("PSK.Model.BusinessEntities.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("PSK.Model.BusinessEntities.Topic", "Topic")
                         .WithMany()
@@ -435,32 +450,28 @@ namespace PSK.DB.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PSK.Model.BusinessEntities.Recommendation", b =>
+            modelBuilder.Entity("PSK.Model.BusinessEntities.Plan", b =>
                 {
-                    b.HasOne("PSK.Model.BusinessEntities.Employee", "Creator")
+                    b.HasOne("PSK.Model.BusinessEntities.AssignedTopic", "AssignedTopic")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSK.Model.BusinessEntities.Employee", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSK.Model.BusinessEntities.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicId")
+                        .HasForeignKey("AssignedTopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PSK.Model.BusinessEntities.Restriction", b =>
+            modelBuilder.Entity("PSK.Model.BusinessEntities.Recommendation", b =>
                 {
-                    b.HasOne("PSK.Model.BusinessEntities.Employee", "Creator")
+                    b.HasOne("PSK.Model.BusinessEntities.Employee", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("PSK.Model.BusinessEntities.Employee", "RecommendedTo")
+                        .WithMany()
+                        .HasForeignKey("RecommendedToId");
+
+                    b.HasOne("PSK.Model.BusinessEntities.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -470,21 +481,6 @@ namespace PSK.DB.Migrations
                     b.HasOne("PSK.Model.BusinessEntities.Topic", "ParentTopic")
                         .WithMany()
                         .HasForeignKey("ParentTopicId");
-                });
-
-            modelBuilder.Entity("PSK.Model.BusinessEntities.TopicCompletion", b =>
-                {
-                    b.HasOne("PSK.Model.BusinessEntities.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSK.Model.BusinessEntities.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
