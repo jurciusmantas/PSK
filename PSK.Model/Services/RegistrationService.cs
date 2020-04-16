@@ -1,27 +1,36 @@
 ﻿using System;
 using System.Security.Cryptography;
-using PSK.Model.DBConnection;
 using PSK.Model.Entities;
 using PSK.Model.BusinessEntities;
+using PSK.Model.Repository;
 
 namespace PSK.Model.Services
 {
     class RegistrationService : IRegistrationService
     {
-        private readonly IDBConnection _db;
+        private readonly IIncomingEmployeeRepository _incomingEmployeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public RegistrationService(IDBConnection db)
+        public RegistrationService(IIncomingEmployeeRepository incomingEmployeeRepository,
+            IEmployeeRepository employeeRepository)
         {
-            _db = db;
+            _incomingEmployeeRepository = incomingEmployeeRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public ServerResult AddNewUser(RegistrationArgs args)
         {
             try
             {
-                IncomingEmployee emp = _db.GetIncomingEmployeeByToken(args.Token);
-                _db.CreateEmployee(args.FullName, emp.Email, HashPassword(args.Password), 0, null);
-                _db.DeleteIncomingEmployee(emp);
+                IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
+                _employeeRepository.Add(new Employee
+                {
+                    Name = args.FullName,
+                    Email = emp.Email,
+                    Password = HashPassword(args.Password),
+                    LeaderId = 1,
+                });
+                _incomingEmployeeRepository.Delete(emp.Id);
 
                 return new ServerResult
                 {
@@ -40,7 +49,7 @@ namespace PSK.Model.Services
 
         public ServerResult<string> GetEmailFromToken(string token)
         {
-            IncomingEmployee emp = _db.GetIncomingEmployeeByToken(token);
+            IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(token);
 
             if (emp != null)
                 return new ServerResult<string>

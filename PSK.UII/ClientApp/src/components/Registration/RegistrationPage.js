@@ -84,7 +84,7 @@ class RegistrationPage extends React.Component {
         }
 
         return (
-            <form className="invite-wrapper" id="asd" onSubmit={this.onSubmit}>
+            <form className="invite-wrapper" onSubmit={this.onSubmit}>
                 <h3>Hello, {email}</h3>
                 
                 <div className="invite-holder">
