@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
+//Pages
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
@@ -25,7 +26,7 @@ class Routes extends React.Component{
 
         this.state = {
             components: [
-                { component: HomePage, path: "/" },
+                { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
                 { component: DetailedTopicPage, path: "/topic/:id"},
                 { component: TopicPage, path: "/topic" }
