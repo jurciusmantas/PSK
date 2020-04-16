@@ -7,7 +7,6 @@ export default class DetailedTopicPage extends React.Component {
         super();
         this.state = {
             loading: true,
-            smth: true,
             data: null           
         }
     }
@@ -43,7 +42,6 @@ export default class DetailedTopicPage extends React.Component {
     showSubtopics() {
         if (!this.state.data.subTopicList)
         {
-            console.log(this.state.data.subTopicList)
             return (
                 <div>
                     Subtopic not found
