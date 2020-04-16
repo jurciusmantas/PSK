@@ -18,7 +18,7 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public Recommendation GetRecommendation(int id)
+        public Recommendation Get(int id)
         {
             throw new NotImplementedException();
         }

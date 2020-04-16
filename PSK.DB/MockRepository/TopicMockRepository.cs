@@ -18,12 +18,12 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public Topic GetTopic(int id)
+        public Topic Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Topic UpdateTopic(Topic updatedTopic)
+        public Topic Update(Topic updatedTopic)
         {
             throw new NotImplementedException();
         }

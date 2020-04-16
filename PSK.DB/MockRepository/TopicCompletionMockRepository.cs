@@ -6,24 +6,24 @@ using System.Text;
 
 namespace PSK.DB.MockRepository
 {
-    public class PlanMockRepository : IPlanRepository
+    public class TopicCompletionMockRepository : ITopicCompletionRepository
     {
-        public Plan Add(Plan plan)
+        public TopicCompletion Add(TopicCompletion entity)
         {
             throw new NotImplementedException();
         }
 
-        public Plan Delete(int id)
+        public TopicCompletion Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Plan GetPlan(int id)
+        public TopicCompletion Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Plan Update(Plan updatedPlan)
+        public TopicCompletion Update(TopicCompletion entity)
         {
             throw new NotImplementedException();
         }

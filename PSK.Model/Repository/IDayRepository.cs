@@ -5,7 +5,9 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface IRestrictionRepository : IRepository<Restriction>
+    public interface IDayRepository : IRepository<Day>
     {
+        
+
     }
 }

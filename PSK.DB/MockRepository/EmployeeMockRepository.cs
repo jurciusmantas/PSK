@@ -27,7 +27,7 @@ namespace PSK.DB.MockRepository
             return employee;
         }
 
-        public Employee GetEmployee(int id)
+        public Employee Get(int id)
         {
             return _employees.Find(employee => employee.Id == id);
         }

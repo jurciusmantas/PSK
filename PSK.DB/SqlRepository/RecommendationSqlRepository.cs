@@ -33,7 +33,7 @@ namespace PSK.DB.SqlRepository
             return recommendation;
         }
 
-        public Recommendation GetRecommendation(int id)
+        public Recommendation Get(int id)
         {
             return context.Recommendations.Find(id);
         }
