@@ -1,4 +1,5 @@
 ﻿using PSK.Model.Entities;
+using Serilog;
 using System;
 
 namespace PSK.Model.Services
@@ -10,7 +11,7 @@ namespace PSK.Model.Services
             try
             {
                 if (args == null)
-                    throw new Exception("Arguments are empty");
+                    throw new ArgumentNullException("Arguments are empty");
 
                 if (args.Login == "admin" && args.Password == "admin")
                     return new ServerResult<User>
@@ -48,7 +49,7 @@ namespace PSK.Model.Services
             try
             {
                 if (string.IsNullOrWhiteSpace(token))
-                    throw new Exception("Token cannot be empty");
+                    throw new ArgumentNullException("Token cannot be empty");
 
                 if (token == "Pacman")
                     return new ServerResult<User>
