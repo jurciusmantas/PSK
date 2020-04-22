@@ -18,14 +18,6 @@ class LoginPage extends React.Component {
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
-    componentDidMount() {
-        window.addEventListener("keypress", this.handleKeyPress);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("keypress", this.handleKeyPress);
-    }
-
     handleKeyPress(e) {
         if (e.key === "Enter")
             this.login();

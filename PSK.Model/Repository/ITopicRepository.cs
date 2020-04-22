@@ -5,11 +5,7 @@ using System.Text;
 
 namespace PSK.Model.Repository
 {
-    public interface ITopicRepository
+    public interface ITopicRepository : IRepository<Topic>
     {
-        public Topic Add(Topic topic);
-        public Topic GetTopic(int id);
-        public Topic UpdateTopic(Topic updatedTopic);
-        public Topic Delete(int id);
     }
 }
