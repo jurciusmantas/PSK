@@ -22,17 +22,17 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.Login(args);
-                _logger.Information("User {Login}: {DecorateeClassName}.Login() successful", result.Data.Login, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.Login() successful", args.Login, _decorateeClassName);
                 return result;
             }
             catch (ArgumentNullException e)
             {
-                _logger.Information(e, "{Timestamp} {Login}: {DecorateeClassName}.Login failed {Newline} {Exception}", args.Login, _decorateeClassName);
+                _logger.Information(e, "{Login}: {DecorateeClassName}.Login failed {Newline} {Exception}", args.Login, _decorateeClassName);
                 throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
             }
             catch(Exception e)
             {
-                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}", args.Login, _decorateeClassName);
+                _logger.Error(e, "{Login}: {_decorateeClassName}.Login {NewLine} {Exception}", args.Login, _decorateeClassName);
                 throw;
             }
         }
@@ -42,12 +42,12 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.LoginToken(token);
-                _logger.Information("{Timestamp} {Login}: {DecorateeClassName}.LoginToken success", result.Data.Login, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.LoginToken success", result.Data.Login, _decorateeClassName);
                 return result;
             }
             catch (ArgumentNullException e)
             {
-                _logger.Information(e, "{Timestamp}: {DecorateeClassName}.LoginToken failed {Newline} {Exception}", _decorateeClassName);
+                _logger.Information(e, "{DecorateeClassName}.LoginToken failed {Newline} {Exception}", _decorateeClassName);
                 throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
             }
             catch(Exception e)
