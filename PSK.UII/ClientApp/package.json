@@ -19,9 +19,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rimraf": "^2.6.2",
-    "universal-cookie": "^4.0.3",
-    "react-datepicker": "^2.14.1",
-    "react-select": "^3.1.0"
+    "universal-cookie": "^4.0.3"
   },
   "devDependencies": {
     "ajv": "^6.9.1",

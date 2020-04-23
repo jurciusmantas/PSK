@@ -53,6 +53,7 @@ namespace PSK.UI
 
             services.AddDbContext<PSKDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             InitializeContainer();
+            InjectRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +97,12 @@ namespace PSK.UI
         private void InitializeContainer()
         {
             Model.ObjectContainer.InitializeContainer(container);
+        }
+
+        private void InjectRepositories()
+        {
             container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
+            container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
         }
     }
 }

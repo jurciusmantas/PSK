@@ -7,5 +7,5 @@ export function getCookie(name){
 
 export function setCookie(value){
     let cookies = new Cookies();
-    cookies.set('AuthToken', value, { path: '/' });
+    cookies.set('AuthToken', value, { path: '/', maxAge: 24*60*60 }); // set expiration after one day
 }

@@ -48,7 +48,6 @@ class Routes extends React.Component {
 
     render() {
         const { currentUser } = this.props;
-
         if (!currentUser || !currentUser.token)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
@@ -81,13 +80,13 @@ class Routes extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, _) => {
     return {
         currentUser: state.currentUser
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, _) => {
     return {
         login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
     }

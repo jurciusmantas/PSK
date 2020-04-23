@@ -24,7 +24,6 @@ class CalendarDayItem extends React.Component {
 
     openAddDay() {
         this.props.history.push(`/addDay?date=${this.props.currentMonth}-${this.props.monthDay}`);
-        alert(JSON.stringify(this.props.currentUser));
     }
 
     render() {
