@@ -1,4 +1,6 @@
-﻿using PSK.Model.Services;
+﻿using PSK.Model.Logging;
+using PSK.Model.Services;
+using Serilog;
 using SimpleInjector;
 
 namespace PSK.Model
@@ -11,6 +13,14 @@ namespace PSK.Model
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("log.log")
+                .MinimumLevel.Verbose() // dev only
+                .CreateLogger();
+            container.RegisterInstance(Log.Logger);
+
+            container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
         }
     }
 }
