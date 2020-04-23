@@ -1,37 +1,36 @@
 ﻿using System;
 using System.Security.Cryptography;
-using PSK.Model.DBConnection;
 using PSK.Model.Entities;
 using PSK.Model.BusinessEntities;
+using PSK.Model.Repository;
 
 namespace PSK.Model.Services
 {
     class RegistrationService : IRegistrationService
     {
-        private readonly IDBConnection _db;
-        public RegistrationService(IDBConnection db)
+        private readonly IIncomingEmployeeRepository _incomingEmployeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public RegistrationService(IIncomingEmployeeRepository incomingEmployeeRepository,
+            IEmployeeRepository employeeRepository)
         {
-            _db = db;
+            _incomingEmployeeRepository = incomingEmployeeRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public ServerResult AddNewUser(RegistrationArgs args)
         {
-            if (args.Password != args.RepeatedPassword)
-                return new ServerResult
-                {
-                    Success = false,
-                    Message = "Passwords do not match"
-                };
-
             try
             {
-                Employee emp = _db.GetEmployeeByToken(args.Token);
-
-                emp.Name = string.Concat(args.FirstName, " ", args.LastName);
-                emp.Password = HashPassword(args.Password);
-                emp.Token = "";
-
-                _db.UpdateEmployee(emp);
+                IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
+                _employeeRepository.Add(new Employee
+                {
+                    Name = args.FullName,
+                    Email = emp.Email,
+                    Password = HashPassword(args.Password),
+                    LeaderId = 1,
+                });
+                _incomingEmployeeRepository.Delete(emp.Id);
 
                 return new ServerResult
                 {
@@ -50,7 +49,7 @@ namespace PSK.Model.Services
 
         public ServerResult<string> GetEmailFromToken(string token)
         {
-            Employee emp = _db.GetEmployeeByToken(token);
+            IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(token);
 
             if (emp != null)
                 return new ServerResult<string>

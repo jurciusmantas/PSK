@@ -4,7 +4,6 @@ import './RegistrationPage.css';
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 
-
 class RegistrationPage extends React.Component {
     constructor() {
         super()
@@ -32,26 +31,29 @@ class RegistrationPage extends React.Component {
             email,
         } = this.state;
 
-        post('registration', {
-            firstName: firstName,
-            lastName: lastName,
-            password: password,
-            repeatedPassword: repeatedPassword,
-            email: email,
-            token: window.location.pathname.split('/').pop()
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    this.props.history.push('/');
-                }
-                else {
-                    console.log(res.message);
-                }
+        if (password !== repeatedPassword) {
+            alert("Passwords don't match");
+        }
+        else {
+            post('registration', {
+                fullName: firstName + " " + lastName,
+                password: password,
+                email: email,
+                token: window.location.pathname.split('/').pop()
             })
-            .catch(error => {
-                console.log(error);
-            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        this.props.history.push('/');
+                    }
+                    else {
+                        console.log(res.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
     }
 
     handleKeyPress(e) {
@@ -59,7 +61,7 @@ class RegistrationPage extends React.Component {
             this.handleSubmit(e);
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         var token = window.location.pathname.split('/').pop();
 
         get('registration/' + token )
@@ -82,7 +84,7 @@ class RegistrationPage extends React.Component {
         }
 
         return (
-            <form className="invite-wrapper" id="asd" onSubmit={this.onSubmit}>
+            <form className="invite-wrapper" onSubmit={this.onSubmit}>
                 <h3>Hello, {email}</h3>
                 
                 <div className="invite-holder">

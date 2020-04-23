@@ -32,7 +32,7 @@ namespace PSK.Model.Logging
             }
             catch(Exception e)
             {
-                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}");
+                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}", args.Login, _decorateeClassName);
                 throw;
             }
         }
@@ -52,7 +52,7 @@ namespace PSK.Model.Logging
             }
             catch(Exception e)
             {
-                _logger.Error(e, "{Timestamp} {Login}: {_decorateeClassName}.Login {NewLine} {Exception}");
+                _logger.Error(e, "{Timestamp} {_decorateeClassName}.LoginToken {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
