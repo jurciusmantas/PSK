@@ -64,9 +64,12 @@ class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="sign-out-button" onClick={() => this.logout()}>
-                    <FontAwesomeIcon icon={faSignOutAlt} />
-                  </Button>
+                    <NavLink tag={Link} className="text-dark" to="/recommendations">Recommendations</NavLink>
+                </NavItem>
+                <NavItem>
+                    <Button className="sign-out-button" onClick={() => this.logout()}>
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                    </Button>
                 </NavItem>
               </ul>
             </Collapse>
