@@ -11,6 +11,7 @@ import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
+import RegistrationPage from '../components/Registration/RegistrationPage';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -52,7 +53,8 @@ class Routes extends React.Component{
                 <BrowserRouter basename={'MegstuKumpi'}>
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
-                        <Route component={NotFoundPage}/>
+                        <Route path='/registration/:id' component={RegistrationPage} />
+                        <Route component={NotFoundPage} />
                     </Switch>
                 </BrowserRouter>
             )
