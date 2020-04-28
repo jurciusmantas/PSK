@@ -21,5 +21,12 @@ namespace PSK.UI.Controllers
         {
             return _topicService.GetTopics();
         }
+
+        [HttpPost]
+        [Route("createtopic")]
+        public ServerResult<Topic> CreateTopic([FromBody]Topic args)
+        {
+            return _topicService.CreateTopic(args);
+        }
     }
 }

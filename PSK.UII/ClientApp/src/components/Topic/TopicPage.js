@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
+import { Link } from 'react-router-dom';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -38,6 +39,7 @@ export default class TopicPage extends React.Component {
         return (
             <div>
                 <h3>Topics</h3>
+                <Link to={{ pathname: `/createtopic` }} > Add New Topic </Link>
                 { this.state.loading || !this.state.data ?
                     <div>
                         loading...

@@ -16,5 +16,10 @@ namespace PSK.Model.Services
 
             return new ServerResult<List<Topic>> { Data = list, Message = "Success", Success = true };
         }
+
+        public ServerResult<Topic> CreateTopic(Topic args)
+        {
+            return new ServerResult<Topic> { Data = null, Message = "success", Success = true };
+        }
     }
 }
