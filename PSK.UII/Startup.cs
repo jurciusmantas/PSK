@@ -102,6 +102,7 @@ namespace PSK.UI
         private void InjectRepositories()
         {
             container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
+            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
         }
     }

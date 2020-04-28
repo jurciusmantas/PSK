@@ -12,6 +12,7 @@ namespace PSK.Model
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
+            container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
             container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
 
             Log.Logger = new LoggerConfiguration()
