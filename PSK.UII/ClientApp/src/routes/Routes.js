@@ -1,17 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
+//Pages
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
+import DetailedTopicPage from '../components/Topic/DetailedTopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
 import RegistrationPage from '../components/Registration/RegistrationPage';
+import RecommendationsPage from '../components/Recommendations/RecommendationsPage';
+import AddRecommendationPage from '../components/Recommendations/AddRecommendationPage';
+import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -26,7 +31,11 @@ class Routes extends React.Component{
             components: [
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
+                { component: DetailedTopicPage, path: "/topic/:id"},
                 { component: TopicPage, path: "/topic" },
+                { component: RecommendationsPage, path: "/recommendations" },
+                { component: AddRecommendationPage, path: "/add-recommendation" },
+                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" }
             ]
         }
     }
@@ -43,6 +52,9 @@ class Routes extends React.Component{
                 .catch(error => {
                     console.log(error);
                 })
+
+        else if (this.props.currentUser)
+            this.props.logout();
     }
 
     render(){
@@ -54,7 +66,7 @@ class Routes extends React.Component{
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
-                        <Route component={NotFoundPage} />
+                        <Route component={NotFoundPage}/>
                     </Switch>
                 </BrowserRouter>
             )
@@ -89,7 +101,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser)),
+        logout: () => dispatch(currentUserActions.logout())
     }
 }
 
