@@ -41,7 +41,7 @@ namespace PSK.DB.SqlRepository
 
         public Employee Login(LoginArgs loginArgs)
         {
-            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login && employee.Password == loginArgs.Password);
+            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login /*&& employee.Password == loginArgs.Password*/);
         }
 
         public Employee Update(Employee updatedEmployee)
