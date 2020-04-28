@@ -1,6 +1,6 @@
-﻿namespace PSK.Model.Services
+﻿namespace PSK.Model.DTO
 {
-    public class DayArgs
+    public class Day
     {
         public string Date { get; set; }
         public int TopicId { get; set; }

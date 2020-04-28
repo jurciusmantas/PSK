@@ -23,6 +23,8 @@ export default class RecommendationsPage extends React.Component {
         get(`recommendations?to=${employeeId}`)
             .then(res => res.json())
             .then(res => {
+                console.log("To:");
+                console.log(res);
                 if (res.success) {
                     this.setState({ recommendedToEmp: res.data, loadingBy: false })
                 }
@@ -35,6 +37,8 @@ export default class RecommendationsPage extends React.Component {
         get(`recommendations?by=${employeeId}`)
             .then(res => res.json())
             .then(res => {
+                console.log("By:");
+                console.log(res);
                 if (res.success) {
                     this.setState({ recommending: res.data, loadingTo: false })
                 }
@@ -62,7 +66,7 @@ export default class RecommendationsPage extends React.Component {
                 <tr key={index}>
                     <td><Link to={`edit-recommendation?id=${recommendation.id}`}>{recommendation.topicName}</Link></td>
                     <td>for <Link to={''}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
-                    <td><Link onClick={() => this.deleteRecommendation(recommendation.id)}>X</Link></td>
+                    <td><button className="btn btn-dark" onClick={() => this.deleteRecommendation(recommendation.id)}>Delete</button></td>
                 </tr>
             )
         })

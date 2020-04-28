@@ -1,9 +1,8 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
