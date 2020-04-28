@@ -1,17 +1,16 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace PSK.DB.SqlRepository
 {
-    public class RecommendationSqlRepository : IRecommendationRepository
+    public class RecommendationsSqlRepository : IRecommendationsRepository
     {
         private readonly PSKDbContext context;
 
-        public RecommendationSqlRepository(PSKDbContext context)
+        public RecommendationsSqlRepository(PSKDbContext context)
         {
             this.context = context;
         }
@@ -36,6 +35,16 @@ namespace PSK.DB.SqlRepository
         public Recommendation Get(int id)
         {
             return context.Recommendations.Find(id);
+        }
+
+        public List<Recommendation> Get()
+        {
+            return context.Recommendations.AsQueryable().ToList();
+        }
+
+        public List<Recommendation> GetReceivedRecommendations(int userId)
+        {
+            return context.Recommendations.AsQueryable().Where(rec => rec.ReceiverId == userId).ToList();
         }
 
         public Recommendation Update(Recommendation updatedRecommendation)

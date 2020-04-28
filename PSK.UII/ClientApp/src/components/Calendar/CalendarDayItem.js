@@ -23,7 +23,7 @@ class CalendarDayItem extends React.Component {
     }
 
     openAddDay() {
-        this.props.history.push(`/addDay?date=${this.props.currentMonth}-${this.props.monthDay}`);
+        this.props.history.push(`/addDay?date=${this.props.currentMonth}-` + (this.props.monthDay < 10 ? "0" + this.props.monthDay : this.props.monthDay));
     }
 
     render() {

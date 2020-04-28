@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PSK.DB;
 using PSK.DB.Contexts;
+using PSK.DB.MockRepository;
 using PSK.DB.SqlRepository;
 using PSK.Model.Repository;
 using SimpleInjector;
@@ -103,6 +103,7 @@ namespace PSK.UI
         {
             container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
+            container.Register<IRecommendationsRepository, RecommendationsMockRepository>(Lifestyle.Singleton);
         }
     }
 }

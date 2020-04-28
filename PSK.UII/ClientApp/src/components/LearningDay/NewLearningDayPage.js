@@ -15,10 +15,12 @@ class NewLearningDayPage extends React.Component {
             selectedDate: queryArgs.date,
             topics: [],
             selectedTopic: {},
+            recommendations: [],
         };
         this.changeDate = this.changeDate.bind(this);
         this.changeTopic = this.changeTopic.bind(this);
         this.createDay = this.createDay.bind(this);
+        this.makeTopicOptionList = this.makeTopicOptionList.bind(this);
     }
 
     componentDidMount() {
@@ -26,13 +28,22 @@ class NewLearningDayPage extends React.Component {
             if (res.success)
                 this.setState({ topics: res.data });
         }).catch(err => {
-            console.error(`GET failed: ${err}`);
+            console.error(`GET /api/topics failed: ${err}`);
             this.setState({ topics: [] });
         });
+        // Use this when login returns user id:
+        // get(`recommendations?receiverId=${this.state.currentUser.id}`).then(res => res.json()).then(res => {
+        // for now hardcoded for use with mock repository
+        get(`recommendations?receiverId=3`).then(res => res.json()).then(res => {
+            if (res.success)
+                this.setState({ recommendations: res.data });
+        }).catch(err => {
+            console.error(`GET /api/recommendations failed: ${err}`);
+        })
     }
 
     changeDate(newDate) {
-        this.setState({ selectedDate: newDate });
+        this.setState({ selectedDate: newDate.target.value });
     }
 
     changeTopic(selectedTopic) {
@@ -50,6 +61,16 @@ class NewLearningDayPage extends React.Component {
         //    .then(() => {
         //        this.props.history.push('/home');
         //    });
+    }
+
+    makeTopicOptionList() {
+        const recommended = this.state.topics
+            .filter(t => this.state.recommendations.find(r => r.topicId === t.id) !== undefined)
+            .map(t => <option key={`topic-selection-${t.id}`} value={t.id}>{"\u2606"} {t.name}</option>);
+        const other = this.state.topics
+            .filter(t => this.state.recommendations.find(r => r.topicId === t.id) === undefined)
+            .map(t => <option key={`topic-selection-${t.id}`} value={t.id}>{t.name}</option>);
+        return [...recommended, ...other];
     }
 
     render() {
@@ -74,12 +95,7 @@ class NewLearningDayPage extends React.Component {
                             id="topics"
                             onChange={this.changeTopic}
                         >
-                            {
-                                this.state.topics.map(t => {
-                                    const { name, id } = t;
-                                    return <option key={`topic-selection-${id}`} value={id}>{name}</option>
-                                })
-                            }
+                            {this.makeTopicOptionList()}
                         </select>
                     </div>
                     <button type="submit" className="btn btn-dark" onClick={this.createDay}>Create</button>
