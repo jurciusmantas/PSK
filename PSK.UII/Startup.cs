@@ -37,7 +37,6 @@ namespace PSK.UI
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddSimpleInjector(container, options =>
@@ -98,6 +97,7 @@ namespace PSK.UI
         {
             Model.ObjectContainer.InitializeContainer(container);
             container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
+            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
         }
     }
 }
