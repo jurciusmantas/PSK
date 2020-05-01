@@ -24,7 +24,7 @@ class AddRecommendationPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loading: false })
-                    if (this.topics != null) {
+                    if (res.data != null) {
                         this.setState({ topicid: res.data[0].id });
                     }
                 }
@@ -82,6 +82,16 @@ class AddRecommendationPage extends React.Component {
         )
     }
 
+    showSubTopicOptions() {
+        return this.state.topics.map((topic) =>
+            topic.subTopicList.map((subTopic, index) =>
+                <option key={index} value={subTopic.id}>
+                    {subTopic.name}
+                </option>
+            )
+        )
+    }
+
     render() {
         return (
             <form className="wrapper" onSubmit={this.onSubmit}>
@@ -98,6 +108,7 @@ class AddRecommendationPage extends React.Component {
                                 value={this.state.topicid}
                                 onChange={this.handleOnChange}>
                                 {this.showTopicOptions()}
+                                {this.showSubTopicOptions()}
                             </select>
                         }
                     </div>

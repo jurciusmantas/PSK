@@ -11,14 +11,11 @@ import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
-<<<<<<< HEAD
 import RecommendationsPage from '../components/Recommendations/RecommendationsPage';
 import AddRecommendationPage from '../components/Recommendations/AddRecommendationPage';
 import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
-=======
 import RegistrationPage from '../components/Registration/RegistrationPage';
 import DetailedTopicPage from '../components/Topic/DetailedTopicPage';;
->>>>>>> origin/master
 
 const NotFoundPageWraped = () =>
     <Layout>
