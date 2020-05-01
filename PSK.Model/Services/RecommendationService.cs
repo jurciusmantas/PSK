@@ -2,7 +2,6 @@
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PSK.Model.Services
 {
@@ -27,7 +26,7 @@ namespace PSK.Model.Services
             {
                 List<Recommendation> recommendations = new List<Recommendation>();
                 BusinessEntities.Topic topic;
-                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindRecommended(recommendedToId).ToList();
+                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindRecommended(recommendedToId);
                 foreach (var r in recFromDb)
                 {
                     topic = _topicRepository.Get(r.TopicId);
@@ -62,7 +61,7 @@ namespace PSK.Model.Services
             try
             {
                 List<Recommendation> recommendations = new List<Recommendation>();
-                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindCreated(createdById).ToList();
+                List<BusinessEntities.Recommendation> recFromDb = _recommendationRepository.FindCreated(createdById);
                 foreach (var r in recFromDb)
                 {
                     recommendations.Add(new Recommendation
@@ -252,8 +251,6 @@ namespace PSK.Model.Services
             {
                 return false;
             }
-
         }
-
     }
 }

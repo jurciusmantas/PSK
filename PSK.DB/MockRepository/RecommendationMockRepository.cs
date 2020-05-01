@@ -28,12 +28,12 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Recommendation> FindRecommended(int receiverId)
+        public List<Recommendation> FindRecommended(int receiverId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Recommendation> FindCreated(int creatorId)
+        public List<Recommendation> FindCreated(int creatorId)
         {
             throw new NotImplementedException();
         }

@@ -111,6 +111,16 @@ class EditRecommendationsPage extends React.Component {
         )
     }
 
+    showSubTopicOptions() {
+        return this.state.topics.map((topic) =>
+            topic.subTopicList.map((subTopic, index) =>
+                <option key={index} value={subTopic.id}>
+                    {subTopic.name}
+                </option>
+            )
+        )
+    }
+
     render() {
         return (
             <form className="wrapper" onSubmit={this.onSubmit}>
@@ -136,6 +146,7 @@ class EditRecommendationsPage extends React.Component {
                                 value={this.state.topicid}
                                 onChange={this.handleOnChange} >
                                 {this.showTopicOptions()}
+                                {this.showSubTopicOptions()}
                             </select>
                             <input
                                 type="text"

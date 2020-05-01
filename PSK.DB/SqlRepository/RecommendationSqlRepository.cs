@@ -47,14 +47,14 @@ namespace PSK.DB.SqlRepository
             return updatedRecommendation;
         }
 
-        public IEnumerable<Recommendation> FindRecommended(int receiverId)
+        public List<Recommendation> FindRecommended(int receiverId)
         {
-            return context.Recommendations.Where(recommendation => recommendation.ReceiverId == receiverId);
+            return context.Recommendations.Where(recommendation => recommendation.ReceiverId == receiverId).ToList();
         }
 
-        public IEnumerable<Recommendation> FindCreated(int creatorId)
+        public List<Recommendation> FindCreated(int creatorId)
         {
-            return context.Recommendations.Where(recommendation => recommendation.CreatorId == creatorId);
+            return context.Recommendations.Where(recommendation => recommendation.CreatorId == creatorId).ToList();
         }
     }
 }
