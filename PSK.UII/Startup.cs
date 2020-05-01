@@ -37,7 +37,6 @@ namespace PSK.UI
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddSimpleInjector(container, options =>
