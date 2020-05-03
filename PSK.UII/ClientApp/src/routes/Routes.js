@@ -35,7 +35,7 @@ class Routes extends React.Component{
                 { component: TopicPage, path: "/topic" },
                 { component: RecommendationsPage, path: "/recommendations" },
                 { component: AddRecommendationPage, path: "/add-recommendation" },
-                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" }
+                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" },
                 { component: CreateTopicPage, path: "/createTopic" },
             ]
         }
