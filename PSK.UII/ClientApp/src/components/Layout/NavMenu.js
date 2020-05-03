@@ -58,10 +58,10 @@ class NavMenu extends Component {
                   <NavLink tag={Link} className="text-dark" to="/home">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
                 </NavItem>
                 <NavItem>
                   <Button className="sign-out-button" onClick={() => this.logout()}>

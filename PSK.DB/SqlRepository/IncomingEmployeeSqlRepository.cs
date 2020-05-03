@@ -3,6 +3,7 @@ using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PSK.DB.SqlRepository
@@ -44,6 +45,11 @@ namespace PSK.DB.SqlRepository
             incomingEmployee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedIncomingEmployee;
+        }
+
+        public IncomingEmployee FindByToken(string token)
+        {
+            return context.IncomingEmployees.FirstOrDefault(incomingEmployee => incomingEmployee.Token.Equals(token));
         }
     }
 }
