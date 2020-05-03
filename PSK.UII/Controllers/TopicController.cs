@@ -31,7 +31,7 @@ namespace PSK.UI.Controllers
 
         [HttpPost]
         [Route("createtopic")]
-        public ServerResult<Topic> CreateTopic([FromBody]Topic args)
+        public ServerResult CreateTopic([FromBody]Topic args)
         {
             return _topicService.CreateTopic(args);
         }

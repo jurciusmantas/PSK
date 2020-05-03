@@ -7,7 +7,8 @@ export default class DetailedTopicPage extends React.Component {
         super();
         this.state = {
             loading: true,
-            data: null           
+            data: null,
+            id: null
         }
     }
 
@@ -22,7 +23,12 @@ export default class DetailedTopicPage extends React.Component {
 
     setDetails() {
         let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //Takes id from the URL
-       
+        this.setState({
+            id: id
+        });
+
+        console.log(this.props)
+
         get(`topic/topic/${id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -56,9 +62,12 @@ export default class DetailedTopicPage extends React.Component {
                 </div>
             )
         }
+
         return (
             <div>
                 <h5>Subtopics</h5>
+                
+               
                 <table>
                     <tbody>
                         { 
@@ -99,16 +108,19 @@ export default class DetailedTopicPage extends React.Component {
         }
         return (
             <div>
-            <h3>{ this.state.data.name }</h3>
+                <h3>{ this.state.data.name }</h3>
 
-            <h5>Description</h5>
-            <p>{ this.state.data.description }</p>
-            <button onClick={ this.assign }>Assign!</button>
-
-            {this.showSubtopics()}
-        </div>
+                <h5>Description</h5>
+                <p>{ this.state.data.description }</p>
+                <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
+                <div>
+                    <Link className="btn btn-dark" to={{ pathname: `/createtopic/${this.state.id}` }} > Add New Subtopic </Link>
+                </div>
+            
+                {this.showSubtopics()}
+            </div>
         )
-    }
+      }
 }
 
 

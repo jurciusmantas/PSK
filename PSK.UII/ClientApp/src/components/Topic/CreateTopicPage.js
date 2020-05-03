@@ -8,11 +8,18 @@ export default class TopicPage extends React.Component {
         this.state = {
             name: null,
             description: null,
+            parentId: null
         };
     }
 
     componentDidMount() {
         window.addEventListener("keypress", this.handleKeyPress);
+
+        if (!isNaN(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))) {
+            this.setState({
+                parentId: parseInt(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -27,25 +34,30 @@ export default class TopicPage extends React.Component {
     create() {
         const {
             name,
-            description
+            description,
+            parentId
         } = this.state;
 
-        if (!name || !description)
-            alert("please fill empty fields")
+        
 
-        post('topic/createtopic', {
-            name: name,
-            description: description,
-        })
+        if (!name || !description) {
+            alert("please fill empty fields")
+        }
+        else {
+            post('topic/createtopic', {
+                name: name,
+                description: description,
+                parentId: parentId,
+            })
             .then(res => res.json())
             .then(res => {
-                if (res.success) {
-                    alert("Added successfully")
-                }
+                alert(res.message)
             })
             .catch(error => {
                 console.log(error);
             })
+        }   
+        
     }
 
     render() {

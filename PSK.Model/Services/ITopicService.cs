@@ -7,6 +7,6 @@ namespace PSK.Model.Services
     {
         ServerResult<List<Topic>> GetTopics();
         ServerResult<Topic> GetTopic(int id);
-        ServerResult<Topic> CreateTopic(Topic args);
+        ServerResult CreateTopic(Topic args);
     }
 }

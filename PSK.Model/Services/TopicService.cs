@@ -60,9 +60,26 @@ namespace PSK.Model.Services
             return tree;
         }
 
-        public ServerResult<Topic> CreateTopic(Topic args)
+        public ServerResult CreateTopic(Topic args)
         {
-            return new ServerResult<Topic> { Data = null, Message = "success", Success = true };
+            var newTopic = new BusinessEntities.Topic { Name = args.Name, Description = args.Description};
+
+            if (args.ParentId.HasValue)
+            {
+                var parentTopic = _topicRepository.Get(args.ParentId.Value);
+
+                if (parentTopic == null)
+                {
+                    return new ServerResult { Message = "Parent topic does not exist", Success = false };
+                }
+
+                newTopic.ParentTopic = parentTopic;
+                newTopic.ParentTopicId = args.ParentId.Value;
+            }
+
+            _topicRepository.Add(newTopic);
+
+            return new ServerResult { Message = "success", Success = true };
         }
     }
 }
