@@ -3,6 +3,7 @@ using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PSK.DB.SqlRepository
@@ -44,6 +45,16 @@ namespace PSK.DB.SqlRepository
             recommendation.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedRecommendation;
+        }
+
+        public List<Recommendation> FindRecommended(int receiverId)
+        {
+            return context.Recommendations.Where(recommendation => recommendation.ReceiverId == receiverId).ToList();
+        }
+
+        public List<Recommendation> FindCreated(int creatorId)
+        {
+            return context.Recommendations.Where(recommendation => recommendation.CreatorId == creatorId).ToList();
         }
     }
 }
