@@ -40,6 +40,7 @@ export default class TopicPage extends React.Component {
         return (
             <div>
                 <h3>Topics</h3>
+                <Link className="btn btn-dark" to={{ pathname: `/createtopic` }} > Add New Topic </Link>
                 { this.state.loading || !this.state.data ?
                     <div>
                         loading...
