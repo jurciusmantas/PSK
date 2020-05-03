@@ -11,6 +11,9 @@ import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
+import RecommendationsPage from '../components/Recommendations/RecommendationsPage';
+import AddRecommendationPage from '../components/Recommendations/AddRecommendationPage';
+import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
 import RegistrationPage from '../components/Registration/RegistrationPage';
 import DetailedTopicPage from '../components/Topic/DetailedTopicPage';;
 
@@ -29,6 +32,9 @@ class Routes extends React.Component{
                 { component: InvitePage, path: "/invite" },
                 { component: DetailedTopicPage, path: "/topic/:id" },
                 { component: TopicPage, path: "/topic" },
+                { component: RecommendationsPage, path: "/recommendations" },
+                { component: AddRecommendationPage, path: "/add-recommendation" },
+                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" }
             ]
         }
     }

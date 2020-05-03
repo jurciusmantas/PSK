@@ -51,5 +51,10 @@ namespace PSK.DB.SqlRepository
             context.SaveChanges();
             return updatedEmployee;
         }
+
+        public Employee FindByName(string name)
+        {
+            return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
+        }
     }
 }
