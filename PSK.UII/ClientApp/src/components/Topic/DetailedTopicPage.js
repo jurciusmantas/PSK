@@ -27,8 +27,6 @@ export default class DetailedTopicPage extends React.Component {
             id: id
         });
 
-        console.log(this.props)
-
         get(`topic/topic/${id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
