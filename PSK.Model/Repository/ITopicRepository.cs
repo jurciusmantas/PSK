@@ -7,5 +7,8 @@ namespace PSK.Model.Repository
 {
     public interface ITopicRepository : IRepository<Topic>
     {
+        List<Topic> GetTopics();
+
+        List<Topic> GetSubtopics(int id);
     }
 }

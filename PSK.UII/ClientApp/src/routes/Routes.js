@@ -13,6 +13,7 @@ import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
 import RegistrationPage from '../components/Registration/RegistrationPage';
 import CreateTopicPage from '../components/Topic/CreateTopicPage';
+import DetailedTopicPage from '../components/Topic/DetailedTopicPage';;
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -27,6 +28,7 @@ class Routes extends React.Component{
             components: [
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
+                { component: DetailedTopicPage, path: "/topic/:id" },
                 { component: TopicPage, path: "/topic" },
                 { component: CreateTopicPage, path: "/createTopic" },
             ]

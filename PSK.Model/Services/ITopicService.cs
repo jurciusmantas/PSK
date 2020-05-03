@@ -6,6 +6,7 @@ namespace PSK.Model.Services
     public interface ITopicService
     {
         ServerResult<List<Topic>> GetTopics();
+        ServerResult<Topic> GetTopic(int id);
         ServerResult<Topic> CreateTopic(Topic args);
     }
 }

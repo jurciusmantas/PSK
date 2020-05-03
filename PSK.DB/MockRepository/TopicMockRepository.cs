@@ -23,6 +23,16 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
+        public List<Topic> GetSubtopics(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Topic> GetTopics()
+        {
+            throw new NotImplementedException();
+        }
+
         public Topic Update(Topic updatedTopic)
         {
             throw new NotImplementedException();
