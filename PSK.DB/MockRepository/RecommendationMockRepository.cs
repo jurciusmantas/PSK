@@ -27,5 +27,15 @@ namespace PSK.DB.MockRepository
         {
             throw new NotImplementedException();
         }
+
+        public List<Recommendation> FindRecommended(int receiverId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Recommendation> FindCreated(int creatorId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
