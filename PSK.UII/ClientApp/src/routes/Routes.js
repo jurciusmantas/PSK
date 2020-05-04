@@ -17,7 +17,8 @@ import AddRecommendationPage from '../components/Recommendations/AddRecommendati
 import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
 import RegistrationPage from '../components/Registration/RegistrationPage';
 import CreateTopicPage from '../components/Topic/CreateTopicPage';
-import DetailedTopicPage from '../components/Topic/DetailedTopicPage';;
+import DetailedTopicPage from '../components/Topic/DetailedTopicPage';
+import UserProfile from '../components/UserProfile/UserProfile';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -38,6 +39,7 @@ class Routes extends React.Component{
                 { component: AddRecommendationPage, path: "/add-recommendation" },
                 { component: EditRecommendationsPage, path: "/edit-recommendation/:id" },
                 { component: CreateTopicPage, path: "/createTopic" },
+                { component: UserProfile, path: "/user_profile" },
             ]
         }
     }

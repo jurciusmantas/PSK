@@ -7,7 +7,8 @@ import {
   NavbarBrand, 
   NavbarToggler, 
   NavItem, 
-  NavLink 
+  NavLink,
+  Label,
 } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -15,7 +16,10 @@ import * as currentUserActions from '../../redux/actions/currentUserActions';
 import { removeCookie } from '../../helpers/cookie';
 import { get } from '../../helpers/request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faSignOutAlt,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import './NavMenu.css';
 
 class NavMenu extends Component {
@@ -67,8 +71,19 @@ class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="sign-out-button" onClick={() => this.logout()}>
-                    <FontAwesomeIcon icon={faSignOutAlt} />
+                  <Button className="nav-button-with-icon" onClick={() => this.logout()}>
+                    <div className="button-with-icon-wrapper">
+                      <Label>Logout</Label>
+                      <FontAwesomeIcon icon={faSignOutAlt} />
+                    </div>
+                  </Button>
+                </NavItem>
+                <NavItem>
+                  <Button className="nav-button-with-icon" onClick={() => this.props.history.push('/user_profile')}>
+                    <div className="button-with-icon-wrapper">
+                      <Label>Profile</Label>
+                      <FontAwesomeIcon icon={faUser} />
+                    </div>
                   </Button>
                 </NavItem>
               </ul>
