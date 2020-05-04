@@ -71,18 +71,18 @@ class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="nav-button-with-icon" onClick={() => this.logout()}>
-                    <div className="button-with-icon-wrapper">
-                      <Label>Logout</Label>
-                      <FontAwesomeIcon icon={faSignOutAlt} />
-                    </div>
-                  </Button>
-                </NavItem>
-                <NavItem>
                   <Button className="nav-button-with-icon" onClick={() => this.props.history.push('/user_profile')}>
                     <div className="button-with-icon-wrapper">
                       <Label>Profile</Label>
                       <FontAwesomeIcon icon={faUser} />
+                    </div>
+                  </Button>
+                </NavItem>
+                <NavItem>
+                  <Button className="nav-button-with-icon" onClick={() => this.logout()}>
+                    <div className="button-with-icon-wrapper">
+                      <Label>Logout</Label>
+                      <FontAwesomeIcon icon={faSignOutAlt} />
                     </div>
                   </Button>
                 </NavItem>
