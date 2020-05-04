@@ -3,7 +3,10 @@ import moment from 'moment';
 import CalendarDayItem from './CalendarDayItem';
 import './Calendar.css';
 
-export default class Calendar extends React.Component {
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+class Calendar extends React.Component {
     constructor(props) {
         super(props);
 
@@ -17,7 +20,9 @@ export default class Calendar extends React.Component {
             currentMonth,
             monthAfter,
             monthDiff: 0,
-        }
+        };
+
+        this.openCreateDayPage = this.openCreateDayPage.bind(this);
     }
 
     generateCalendar(now) {
@@ -81,6 +86,10 @@ export default class Calendar extends React.Component {
         })
     }
 
+    openCreateDayPage() {
+        this.props.history.push(`add-day`);
+    }
+
     render() {
         const {
             calendar,
@@ -103,6 +112,11 @@ export default class Calendar extends React.Component {
                         className="btn btn-dark"
                         onClick={() => this.changeMonth(true)}
                     >{monthAfter + '  >>'}</button>
+                    <button
+                        type="button"
+                        className="btn btn-dark"
+                        onClick={this.openCreateDayPage}
+                    >Add learning day</button>
                 </div>
                 <div className='calendar-holder'>
                     {[1, 2, 3, 4, 5, 6, 7].map(index => {
@@ -123,7 +137,6 @@ export default class Calendar extends React.Component {
                                     <CalendarDayItem
                                         key={`calendar-day-item-${i.monthDay}`}
                                         monthDay={i.monthDay}
-                                        currentMonth={currentMonth}
                                     />
                                 ))}
                                 {calendar.addLasts.includes(items[0].weekDay) &&
@@ -141,3 +154,16 @@ export default class Calendar extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        currentUser: state.currentUser
+    };
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => ({})
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Calendar));

@@ -1,18 +1,16 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import queryString from 'query-string';
+import moment from 'moment';
 import { get, post } from '../../helpers/request';
 
 import './NewLearningDayPage.css';
-import * as moment from 'moment';
 
 class NewLearningDayPage extends React.Component {
     constructor(props) {
         super(props);
-        const queryArgs = queryString.parse(this.props.location.search);
         this.state = {
-            selectedDate: queryArgs.date,
+            selectedDate: moment().format("YYYY-MM-DD"),
             topics: [],
             selectedTopic: {},
         };
@@ -32,7 +30,7 @@ class NewLearningDayPage extends React.Component {
     }
 
     changeDate(newDate) {
-        this.setState({ selectedDate: newDate });
+        this.setState({ selectedDate: newDate.target.value });
     }
 
     changeTopic(selectedTopic) {
