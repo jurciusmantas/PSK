@@ -19,9 +19,9 @@ namespace PSK.Model.Services
                         Success = true,
                         Data = new User
                         {
+                            Id = 1,
                             Login = "admin",
-                            FirstName = "admin",
-                            LastName = "admin",
+                            Name = "admin",
                             Token = GetToken(),
                         },
                     };
@@ -58,8 +58,7 @@ namespace PSK.Model.Services
                         Data = new User
                         {
                             Login = "admin",
-                            FirstName = "admin",
-                            LastName = "admin",
+                            Name = "admin",
                             Token = token,
                         },
                     };

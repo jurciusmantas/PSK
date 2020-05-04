@@ -1,17 +1,17 @@
 import React from 'react';
 
-export default class Calendar extends React.Component{
-    constructor(props){
+export default class CalendarDayItem extends React.Component {
+    constructor(props) {
         super(props);
     }
 
-    render(){
+    render() {
         if (this.props.skipper)
             return (
-                <div className='skipper'/>
+                <div className='skipper' />
             );
 
-        return(
+        return (
             <div className='calendar-day-item'>
                 <div>
                     {this.props.monthDay}
