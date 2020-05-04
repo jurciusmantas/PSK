@@ -10,6 +10,7 @@ using PSK.DB.Contexts;
 using PSK.DB.SqlRepository;
 using PSK.Model.Repository;
 using SimpleInjector;
+using System.Configuration;
 
 namespace PSK.UI
 {
@@ -51,7 +52,7 @@ namespace PSK.UI
                 options.AddLocalization();
             });
 
-            services.AddDbContext<PSKDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<PSKDbContext>(options => options.UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
             InitializeContainer();
         }
 

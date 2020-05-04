@@ -13,6 +13,7 @@ namespace PSK.DB.Contexts
         }
         public DbSet<TopicCompletion> TopicCompletions { set; get; }
         public DbSet<Employee> Employees { set; get; }
+        public DbSet<EmployeesToken> EmployeesTokens { set; get; }
         public DbSet<IncomingEmployee> IncomingEmployees { set; get; }
         public DbSet<Day> Days { set; get; }
         public DbSet<Recommendation> Recommendations { set; get; }
