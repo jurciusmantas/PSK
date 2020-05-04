@@ -21,10 +21,17 @@ namespace PSK.UI.Controllers
             return _topicService.GetTopics();
         }
 
-        [HttpGet("{id}")]
-        public ServerResult<Topic> Topic(int id)
+        [HttpGet]
+        [Route("topic/{id}")]
+        public ServerResult<Topic> GetDetailedTopic(int id)
         {
             return _topicService.GetTopic(id);
+        }
+
+        [HttpPost]
+        public ServerResult CreateTopic([FromBody]Topic args)
+        {
+            return _topicService.CreateTopic(args);
         }
     }
 }

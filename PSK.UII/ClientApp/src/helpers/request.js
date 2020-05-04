@@ -17,3 +17,13 @@ export function get(url) {
         }
     })
 }
+
+export function put(url, params = {}) {
+    return fetch('./api/' + url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+    })
+}
