@@ -13,7 +13,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import { removeCookie } from '../../helpers/cookie';
-import { get } from '../../helpers/request';
+import { post } from '../../helpers/request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import './NavMenu.css';
@@ -42,7 +42,7 @@ class NavMenu extends Component {
     this.props.logout();
     removeCookie('AuthToken');
     this.props.history.push('/');
-    get("login/logout");
+    post("login/logout");
   }
 
   render () {

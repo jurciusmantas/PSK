@@ -28,7 +28,7 @@ namespace PSK.UI.Controllers
             return _loginService.LoginToken(token);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("logout")]
         public void Logout()
         {
