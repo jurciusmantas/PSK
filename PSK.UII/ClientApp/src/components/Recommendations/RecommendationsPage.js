@@ -4,25 +4,27 @@ import './RecommendationPage.css';
 import { get } from '../../helpers/request'
 import { Link } from "react-router-dom";
 
-class RecommendationsPage extends React.Component {
+export default class RecommendationsPage extends React.Component {
     constructor() {
         super()
 
         this.state = {
             recommendedToEmp: null,
-            loading1: true,
+            loadingBy: true,
             recommending: null,
-            loading2: true
+            loadingTo: true
         }
     }
 
     componentDidMount() {
         var employeeId = 1; //TODO get current user. 
-        get('recommendations/recommendations/' + employeeId)
+        get('recommendations?by=' + employeeId)
             .then(res => res.json())
             .then(res => {
+                console.log("By:");
+                console.log(res.data);
                 if (res.success) {
-                    this.setState({ recommendedToEmp: res.data, loading1: false })
+                    this.setState({ recommendedToEmp: res.data, loadingBy: false })
                 }
                 else {
                     console.log(res.message);
@@ -32,11 +34,13 @@ class RecommendationsPage extends React.Component {
                 console.log(error);
             })
 
-        get('recommendations/recommended/' + employeeId)
+        get('recommendations?to=' + employeeId)
             .then(res => res.json())
             .then(res => {
+                console.log("To:");
+                console.log(res.data);
                 if (res.success) {
-                    this.setState({ recommending: res.data, loading2: false })
+                    this.setState({ recommending: res.data, loadingTo: false })
                 }
                 else {
                     console.log(res.message);
@@ -51,9 +55,8 @@ class RecommendationsPage extends React.Component {
         return this.state.recommendedToEmp.map((recommendation, index) => {
             return (
                 <tr key={index}>
-                    <td>{recommendation.topicName}</td>
+                    <td><Link to={'topic/' + recommendation.topicId}>{recommendation.topicName}</Link></td>
                     <td>{recommendation.creatorName}</td>
-                    <td><Link to={'topic/' + recommendation.topicId}>More</Link></td>
                 </tr>
             )
         })
@@ -75,16 +78,14 @@ class RecommendationsPage extends React.Component {
         return (
             <div className="wrapper">
                 <div className="row">
-                    <Link to='add-recommendation/' className="btn btn-dark">Add recommendation</Link>
+                    <Link to='add-recommendation' className="btn btn-dark">Add recommendation</Link>
                 </div>
-                <h3 className="row">Recommended topics to learn for you:</h3>
+                <h3>Recommended topics to learn for you:</h3>
                 <div className="row">
-                    {this.state.loading1 || !this.state.recommendedToEmp ?
-                        <div>
-                            loading...
-                    </div>
+                    {this.state.loadingBy || !this.state.recommendedToEmp ?
+                        <div>loading...</div>
                         :
-                        <table align="center">
+                        <table>
                             <tbody>
                                 {this.showRecommendationList()}
                             </tbody>
@@ -93,10 +94,8 @@ class RecommendationsPage extends React.Component {
                 </div>
                 <h3>Recommendations you have created:</h3>
                 <div className="row">
-                    {this.state.loading2 || !this.state.recommending ?
-                        <div>
-                            loading...
-                        </div>
+                    {this.state.loadingTo || !this.state.recommending ?
+                        <div>loading...</div>
                         :
                         <table>
                             <tbody>
@@ -109,5 +108,3 @@ class RecommendationsPage extends React.Component {
         )
     }
 }
-
-export default RecommendationsPage;

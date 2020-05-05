@@ -1,9 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace PSK.DB.SqlRepository
 {
@@ -37,6 +36,11 @@ namespace PSK.DB.SqlRepository
         public TopicCompletion Get(int id)
         {
             return context.TopicCompletions.Find(id);
+        }
+
+        public List<TopicCompletion> Get()
+        {
+            return context.TopicCompletions.ToList();
         }
 
         public TopicCompletion Update(TopicCompletion updatedTopicCompletion)

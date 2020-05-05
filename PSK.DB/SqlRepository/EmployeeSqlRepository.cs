@@ -56,5 +56,10 @@ namespace PSK.DB.SqlRepository
         {
             return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
         }
+
+        public List<Employee> Get()
+        {
+            return context.Employees.ToList();
+        }
     }
 }

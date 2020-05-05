@@ -21,7 +21,7 @@ class EditRecommendationsPage extends React.Component {
     }
 
     componentDidMount() {
-        get('recommendations/recommendation/' + this.state.id)
+        get('recommendations/' + this.state.id)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -35,7 +35,7 @@ class EditRecommendationsPage extends React.Component {
                 console.log(error);
             })
 
-        get('topic/topic')
+        get('topic/' + this.state.topicid)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -68,7 +68,7 @@ class EditRecommendationsPage extends React.Component {
 
         var createdById = 1; //TODO: get current user id
 
-        put('recommendations/update-recommendation/' + this.state.id, {
+        put('recommendations/' + this.state.id, {
             topicid: parseInt(topicid),
             recommendedTo: recommendedTo,
             createdById: createdById
@@ -76,7 +76,7 @@ class EditRecommendationsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert("Recommendation changed successfully");
+                    alert("Recommendation updated successfully");
                 }
                 else {
                     alert(res.message);
@@ -88,14 +88,14 @@ class EditRecommendationsPage extends React.Component {
     }
 
     deleteRecommendation(id, e) {
-        fetch("./api/recommendations/delete/" + id, {
+        fetch("./api/recommendations/" + id, {
             method: "delete"
         })
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     alert("Recommendation deleted");
-                    this.props.history.push('/recommendations'); 
+                    this.props.history.push('/recommendations');
                 }
             })
             .catch(error => {
@@ -127,9 +127,7 @@ class EditRecommendationsPage extends React.Component {
                 <h3>Edit recommendation</h3>
                 <div className="row">
                     {this.state.loading1 || !this.state.recommendation ?
-                        <div>
-                            loading...
-                        </div>
+                        <div>loading...</div>
                         :
                         <div>
                             {this.state.recommendation.topicName} {this.state.recommendation.receiverName}
@@ -154,7 +152,7 @@ class EditRecommendationsPage extends React.Component {
                                 defaultValue={this.state.recommendedTo}
                                 onChange={e => this.setState({ recommendedTo: e.target.value })}
                                 onKeyPress={e => this.handleKeyPress(e)}
-                                required/>
+                                required />
                         </div>
                     }
                 </div>

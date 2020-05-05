@@ -2,6 +2,7 @@
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PSK.Model.Services
 {
@@ -11,7 +12,7 @@ namespace PSK.Model.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITopicRepository _topicRepository;
 
-        public RecommendationService(IRecommendationRepository recommendationRepository, 
+        public RecommendationService(IRecommendationRepository recommendationRepository,
             IEmployeeRepository employeeRepository,
             ITopicRepository topicRepository)
         {
@@ -20,7 +21,7 @@ namespace PSK.Model.Services
             _topicRepository = topicRepository;
         }
 
-        public ServerResult<List<Recommendation>> GetRecommendations(int recommendedToId)
+        public ServerResult<List<Recommendation>> GetRecommendationsForEmployee(int recommendedToId)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace PSK.Model.Services
             }
         }
 
-        public ServerResult<List<Recommendation>> GetCreatedRecommendations(int createdById)
+        public ServerResult<List<Recommendation>> GetRecommendationsByEmployee(int createdById)
         {
             try
             {
@@ -67,9 +68,9 @@ namespace PSK.Model.Services
                     recommendations.Add(new Recommendation
                     {
                         Id = r.Id,
-                        TopicName = _topicRepository.Get(r.TopicId).Name,
-                        ReceiverName = _employeeRepository.Get(r.ReceiverId).Name,
-                        CreatorName = _employeeRepository.Get(r.CreatorId).Name
+                        TopicName = _topicRepository.Get(r.TopicId)?.Name,
+                        ReceiverName = _employeeRepository.Get(r.ReceiverId)?.Name,
+                        CreatorName = _employeeRepository.Get(r.CreatorId)?.Name
                     });
                 }
 
@@ -130,7 +131,7 @@ namespace PSK.Model.Services
                 };
             }
 
-            if (CheckIfAbleToAssin(args.CreatedById, recommendedToId) == false)
+            if (CheckIfAbleToAssign(args.CreatedById, recommendedToId) == false)
             {
                 return new ServerResult
                 {
@@ -139,8 +140,6 @@ namespace PSK.Model.Services
                     "You can assign recommendations only to yourself and your team."
                 };
             }
-
-            BusinessEntities.Recommendation newRecommendation = new BusinessEntities.Recommendation();
 
             try
             {
@@ -174,13 +173,13 @@ namespace PSK.Model.Services
                 };
             }
 
-            if (CheckIfAbleToAssin(args.CreatedById, recommendedToId) == false)
+            if (CheckIfAbleToAssign(args.CreatedById, recommendedToId) == false)
             {
                 return new ServerResult
                 {
                     Success = false,
-                    Message = "You are not allowed to assign recommendation to this employee.\n" +
-                    "You can assign recommendations only to yourself and your team."
+                    Message = "You are not allowed to assign recommendation to this employee.\n"
+                              + "You can assign recommendations only to yourself and your team."
                 };
             }
 
@@ -238,7 +237,7 @@ namespace PSK.Model.Services
             }
         }
 
-        private bool CheckIfAbleToAssin(int createdById, int recommendedToId)
+        private bool CheckIfAbleToAssign(int createdById, int recommendedToId)
         {
             try
             {
@@ -251,6 +250,23 @@ namespace PSK.Model.Services
             {
                 return false;
             }
+        }
+
+        public ServerResult<List<Recommendation>> GetRecommendations()
+        {
+            return new ServerResult<List<Recommendation>>()
+            {
+                Data = _recommendationRepository.Get().Select(r => new Recommendation()
+                { 
+                    Id = r.Id,
+                    CreatorId = r.CreatorId,
+                    ReceiverId = r.ReceiverId,
+                    TopicId = r.TopicId,
+                    CreatorName = r.Creator.Name,
+                    ReceiverName = r.Receiver.Name,
+                    TopicName = r.Topic.Name
+                }).ToList()
+            };
         }
     }
 }

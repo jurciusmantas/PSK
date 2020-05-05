@@ -1,10 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -55,6 +53,11 @@ namespace PSK.DB.SqlRepository
         public List<Recommendation> FindCreated(int creatorId)
         {
             return context.Recommendations.Where(recommendation => recommendation.CreatorId == creatorId).ToList();
+        }
+
+        public List<Recommendation> Get()
+        {
+            return context.Recommendations.ToList();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace PSK.Model.BusinessEntities
         public string Email { set; get; }
         [Column(TypeName = "varchar(255)")]
         public string Password { set; get; }
-        public int LeaderId { get; set; }
+        public int? LeaderId { get; set; }
         public Employee Leader { set; get; }
         public virtual ICollection<EmployeeRestriction> EmployeeRestrictions { set; get; }
     }

@@ -2,7 +2,6 @@
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -19,6 +18,11 @@ namespace PSK.DB.MockRepository
         }
 
         public Topic Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Topic> Get()
         {
             throw new NotImplementedException();
         }

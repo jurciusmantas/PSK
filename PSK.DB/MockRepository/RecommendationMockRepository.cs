@@ -2,7 +2,6 @@
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -34,6 +33,11 @@ namespace PSK.DB.MockRepository
         }
 
         public List<Recommendation> FindCreated(int creatorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Recommendation> Get()
         {
             throw new NotImplementedException();
         }

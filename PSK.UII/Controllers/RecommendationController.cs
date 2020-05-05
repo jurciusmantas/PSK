@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
@@ -15,38 +14,36 @@ namespace PSK.UI.Controllers
             _recommendationService = recommendationService;
         }
 
-        [HttpGet, Route("recommendations/{recommendedTo}")]
-        public ServerResult<List<Recommendation>> GetRecommendations(int recommendedTo)
+        [HttpGet]
+        public ServerResult<List<Recommendation>> GetRecommendations([FromQuery(Name = "to")] int? recommendedTo, [FromQuery(Name = "by")] int? createdBy)
         {
-            return _recommendationService.GetRecommendations(recommendedTo);
+            if(recommendedTo != null)
+                return _recommendationService.GetRecommendationsForEmployee((int)recommendedTo);
+            if (createdBy != null)
+                return _recommendationService.GetRecommendationsByEmployee((int)createdBy);
+            return _recommendationService.GetRecommendations();
         }
 
-        [HttpGet, Route("recommended/{createdBy}")]
-        public ServerResult<List<Recommendation>> GetCreatedRecommendations(int createdBy)
-        {
-            return _recommendationService.GetCreatedRecommendations(createdBy);
-        }
-
-        [HttpGet, Route("recommendation/{id}")]
-        public ServerResult<Recommendation> GetRecommendation(int id)
+        [HttpGet, Route("{id}")]
+        public ServerResult<Recommendation> GetRecommendation([FromRoute] int id)
         {
             return _recommendationService.GetRecommendation(id);
         }
 
         [HttpPost]
-        public ServerResult AddRecommendation([FromBody]RecommendationArgs args)
+        public ServerResult AddRecommendation([FromBody] RecommendationArgs args)
         {
             return _recommendationService.AddRecommendation(args);
         }
 
-        [HttpPut, Route("update-recommendation/{id}")]
-        public ServerResult ChangeRecommendation(int id, [FromBody]RecommendationArgs args)
+        [HttpPut, Route("{id}")]
+        public ServerResult ChangeRecommendation([FromRoute] int id, [FromBody] RecommendationArgs args)
         {
             return _recommendationService.ChangeRecommendation(id, args);
         }
 
-        [HttpDelete, Route("delete/{id}")]
-        public ServerResult DeleteRecommendation(int id)
+        [HttpDelete, Route("{id}")]
+        public ServerResult DeleteRecommendation([FromRoute] int id)
         {
             return _recommendationService.DeleteRecommendation(id);
         }

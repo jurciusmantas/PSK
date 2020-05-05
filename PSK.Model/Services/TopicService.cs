@@ -17,7 +17,7 @@ namespace PSK.Model.Services
 
         public ServerResult<List<Topic>> GetTopics()
         {
-            var topicTree = ConvertToTree(_topicRepository.GetTopics());
+            var topicTree = ConvertToTree(_topicRepository.Get());
 
             return new ServerResult<List<Topic>> { Data = topicTree, Message = "Success", Success = true };
         }
