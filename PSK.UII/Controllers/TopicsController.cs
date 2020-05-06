@@ -22,7 +22,7 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        [Route("topic/{id}")]
+        [Route("{id}")]
         public ServerResult<Topic> GetDetailedTopic(int id)
         {
             return _topicService.GetTopic(id);

@@ -32,8 +32,8 @@ class Routes extends React.Component {
             components: [
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
-                { component: DetailedTopicPage, path: "/topic/:id" },
-                { component: TopicPage, path: "/topic" },
+                { component: DetailedTopicPage, path: "/topic" },
+                { component: TopicPage, path: "/topics" },
                 { component: RecommendationsPage, path: "/recommendations" },
                 { component: AddRecommendationPage, path: "/add-recommendation" },
                 { component: EditRecommendationsPage, path: "/edit-recommendation/:id" },
@@ -44,7 +44,7 @@ class Routes extends React.Component {
     }
 
     componentDidMount() {
-        let token = getCookie('AuthToken');
+        const token = getCookie('AuthToken');
         if (token)
             post('login?token=true', { token })
                 .then(res => res.json())
