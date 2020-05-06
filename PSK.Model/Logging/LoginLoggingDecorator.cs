@@ -22,6 +22,7 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.Login(args);
+
                 if (!result.Success)
                 {
                     _logger.Information("{Login}: {DecorateeClassName}.Login unsuccessful", args.Login, _decorateeClassName);
