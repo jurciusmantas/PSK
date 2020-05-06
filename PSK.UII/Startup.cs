@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PSK.DB;
 using PSK.DB.Contexts;
 using PSK.DB.SqlRepository;
+using PSK.Model.Logging;
 using PSK.Model.Repository;
 using SimpleInjector;
 
@@ -47,7 +47,6 @@ namespace PSK.UI
                 //.AddPageModelActivation()
                 //.AddTagHelperActivation();
 
-                options.AddLogging();
                 options.AddLocalization();
             });
 
@@ -96,6 +95,10 @@ namespace PSK.UI
 
         private void InitializeContainer()
         {
+
+            string file = Configuration.GetSection("Logging").GetValue<string>("File");
+            LogLevel level = Configuration.GetSection("Logging").GetValue<LogLevel>("Level");
+            Model.ObjectContainer.InitializeContainer(container, file, level);
             Model.ObjectContainer.InitializeContainer(container);
         }
 
@@ -107,5 +110,7 @@ namespace PSK.UI
             container.Register<IRecommendationRepository, RecommendationSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
         }
+
+        
     }
 }
