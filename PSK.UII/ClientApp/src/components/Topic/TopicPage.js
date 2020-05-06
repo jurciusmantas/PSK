@@ -29,7 +29,7 @@ export default class TopicPage extends React.Component {
             return (
                 <tr key={ `topic-list-item-${id}` }>
                     <td>
-                        <Link to={{ pathname: `/topic?id=${id}` }} > {name} </Link>
+                        <Link to={{ pathname: "/topic", search: `?id=${id}` }} > {name} </Link>
                     </td>
                 </tr>
             )

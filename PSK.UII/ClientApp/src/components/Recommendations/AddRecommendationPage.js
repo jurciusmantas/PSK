@@ -1,5 +1,5 @@
 ﻿import React from "react"
-import './RecommendationPage.css';
+import './RecommendationsPage.css';
 
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'

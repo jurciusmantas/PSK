@@ -27,3 +27,9 @@ export function put(url, params = {}) {
         body: JSON.stringify(params)
     })
 }
+
+export function del(url, params = {}) {
+    return fetch(`./api/${url}`, {
+        method: 'DELETE'
+    })
+}

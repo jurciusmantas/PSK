@@ -46,9 +46,7 @@ class LoginPage extends React.Component {
                 }
                 //TODO: Else - to show "bad credentials"
             })
-            .catch(error => {
-                console.log(error);
-            })
+            .catch(error => console.error(error));
     }
 
     render() {

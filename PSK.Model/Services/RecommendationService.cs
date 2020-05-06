@@ -68,6 +68,9 @@ namespace PSK.Model.Services
                     recommendations.Add(new Recommendation
                     {
                         Id = r.Id,
+                        TopicId = r.TopicId,
+                        CreatorId = r.CreatorId,
+                        ReceiverId = r.ReceiverId,
                         TopicName = _topicRepository.Get(r.TopicId)?.Name,
                         ReceiverName = _employeeRepository.Get(r.ReceiverId)?.Name,
                         CreatorName = _employeeRepository.Get(r.CreatorId)?.Name

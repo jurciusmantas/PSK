@@ -23,17 +23,14 @@ export default class DetailedTopicPage extends React.Component {
     }
 
     setDetails() {
-        get(`topics/${this.state.id}`).then(res => {
-            console.log(res);
-            return res.json()
-        })
+        get(`topics/${this.state.id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false });
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.error(error);
             })
     }
 
@@ -64,7 +61,7 @@ export default class DetailedTopicPage extends React.Component {
                                 return (
                                     <tr key={`subtopic-list-item-${id}`}>
                                         <td>
-                                            <Link to={{ pathname: `/topic?id=${id}` }} > {name} </Link>
+                                            <Link onClick={this.forceUpdate} to={{ pathname: "/topic", search: `?id=${id}` }}>{name}</Link>
                                         </td>
                                     </tr>
                                 )
@@ -95,7 +92,7 @@ export default class DetailedTopicPage extends React.Component {
                 <p>{this.state.data.description}</p>
                 <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
                 <div>
-                    <Link className="btn btn-dark" to={{ pathname: `/add-topic?parent=${this.state.id}` }} > Add New Subtopic </Link>
+                    <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }} > Add New Subtopic </Link>
                 </div>
 
                 {this.showSubtopics()}
