@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -9,6 +10,7 @@ using PSK.DB.Contexts;
 using PSK.DB.SqlRepository;
 using PSK.Model.Logging;
 using PSK.Model.Repository;
+using PSK.Model.Services;
 using SimpleInjector;
 using System.Configuration;
 
@@ -30,6 +32,16 @@ namespace PSK.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAuthorizationHandler, TokenHandler>();
+            services.AddScoped<ITokenValidator, TokenValidator>();
+            services.AddScoped<IEmployeesTokenRepository, EmployeesTokenSqlRepository>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Token", policy =>
+                    policy.Requirements.Add(new TokenRequirement()));
+            });
+
             services.AddMvc();
 
             // In production, the React files will be served from this directory
@@ -71,6 +83,8 @@ namespace PSK.UI
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

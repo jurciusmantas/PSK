@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
 
 namespace PSK.UI.Controllers
 {
+    [Authorize(Policy = "Token")]
     [Route("api/[controller]")]
     public class RecommendationsController : Controller
     {
