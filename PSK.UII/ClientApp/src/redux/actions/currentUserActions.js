@@ -6,8 +6,8 @@ export function loginSuccess(currentUser){
     return {
         type: LOGIN_SUCCESS,
         login: currentUser.login,
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
+        name: currentUser.name,
         token: currentUser.token,
+        expiredAt: currentUser.expiredAt
     }
 }

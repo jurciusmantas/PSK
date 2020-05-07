@@ -5,7 +5,10 @@ export function getCookie(name){
     return cookies.get(name);
 }
 
-export function setCookie(value){
+export function setCookie(value, expirationDate){
     let cookies = new Cookies();
-    cookies.set('AuthToken', value, { path: '/' });
+    cookies.set('AuthToken', value, {
+        path: '/',
+        expires: new Date(expirationDate)
+    });
 }

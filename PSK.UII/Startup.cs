@@ -102,8 +102,7 @@ namespace PSK.UI
             container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
             container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
             container.Register<IRecommendationRepository, RecommendationSqlRepository>(Lifestyle.Scoped);
+            container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Scoped);
         }
-
-        
     }
 }

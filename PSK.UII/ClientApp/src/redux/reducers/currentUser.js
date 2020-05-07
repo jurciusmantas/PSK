@@ -4,18 +4,18 @@ import {
 
 const initialState = {
     login: null,
-    firstName: null,
-    lastName: null,
+    name: null,
     token: null,
+    expiredAt: null
 }
 
 export default (state = initialState, action) => {
     switch(action.type){
         case LOGIN_SUCCESS:{
             state.login = action.login;
-            state.firstName = action.firstName;
-            state.lastName = action.lastName;
+            state.name = action.name;
             state.token = action.token;
+            state.expiredAt = action.expiredAt;
             return { ...state };
         }
         default:
