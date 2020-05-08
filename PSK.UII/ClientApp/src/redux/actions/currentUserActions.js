@@ -1,5 +1,6 @@
 import {
-    LOGIN_SUCCESS
+    LOGIN_SUCCESS,
+    AUTH_ERROR
 } from '../constans';
 
 export function loginSuccess(currentUser){
@@ -9,5 +10,11 @@ export function loginSuccess(currentUser){
         name: currentUser.name,
         token: currentUser.token,
         expiredAt: currentUser.expiredAt
+    }
+}
+
+export function authError() {
+    return {
+        type: AUTH_ERROR
     }
 }

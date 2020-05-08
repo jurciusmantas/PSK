@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
@@ -9,8 +6,8 @@ using PSK.Model.Services;
 
 namespace PSK.UI.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
-
     public class RegistrationController : Controller
     {
         private readonly IRegistrationService _registrationService;

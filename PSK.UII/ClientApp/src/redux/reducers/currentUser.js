@@ -1,5 +1,6 @@
 import {
     LOGIN_SUCCESS,
+    AUTH_ERROR
 } from '../constans';
 
 const initialState = {
@@ -16,6 +17,14 @@ export default (state = initialState, action) => {
             state.name = action.name;
             state.token = action.token;
             state.expiredAt = action.expiredAt;
+            return { ...state };
+        }
+        case AUTH_ERROR: {
+            state.login = null;
+            state.name = null;
+            state.token = null;
+            state.expiredAt = null;
+            state.authError = true;
             return { ...state };
         }
         default:

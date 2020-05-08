@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
 
@@ -13,6 +14,7 @@ namespace PSK.UI.Controllers
             _loginService = loginService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public ServerResult<User> Login([FromBody]LoginArgs args)
@@ -20,6 +22,7 @@ namespace PSK.UI.Controllers
             return _loginService.Login(args);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login_token")]
         public ServerResult<User> LoginFromToken([FromBody]string token)

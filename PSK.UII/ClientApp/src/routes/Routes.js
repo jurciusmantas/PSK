@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
@@ -65,6 +65,15 @@ class Routes extends React.Component{
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
                         <Route component={NotFoundPage} />
+                        {currentUser.authError
+                            ? <Redirect
+                                to={{
+                                    pathname: "/",
+                                    state: { from: this.props.location }
+                                }}
+                            />
+                            : null
+                        }
                     </Switch>
                 </BrowserRouter>
             )

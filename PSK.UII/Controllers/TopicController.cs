@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
 using System.Collections.Generic;
 
 namespace PSK.UI.Controllers
 {
-    [Authorize(Policy = "Token")]
     [Route("api/[controller]")]
     public class TopicController : Controller
     {

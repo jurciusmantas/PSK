@@ -1,14 +1,20 @@
 import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
+
 export function getCookie(name){
-    let cookies = new Cookies();
     return cookies.get(name);
 }
 
 export function setCookie(value, expirationDate){
-    let cookies = new Cookies();
     cookies.set('AuthToken', value, {
         path: '/',
         expires: new Date(expirationDate)
+    });
+}
+
+export function removeCookie(name) {
+    cookies.remove(name, {
+        path: '/',
     });
 }

@@ -1,4 +1,16 @@
-export function post(url, params = {}){
+import { authError } from '../redux/actions/currentUserActions';
+import getStore from '../redux/store';
+
+export function get(url, params = {}) {
+        return fetch('./api/' + url, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(handleErrors,url)
+}
+export function post(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'post',
         headers: { 
@@ -6,16 +18,7 @@ export function post(url, params = {}){
             //maybe auth token later
         },
         body: JSON.stringify(params)
-    })
-}
-
-export function get(url) {
-    return fetch('./api/' + url, {
-        method: 'get',
-        headers: { 
-            'Content-Type': 'application/json'
-        }
-    })
+    }).then(handleErrors)
 }
 
 export function put(url, params = {}) {
@@ -25,5 +28,15 @@ export function put(url, params = {}) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
-    })
+    }).then(handleErrors)
+}
+
+const { store } = getStore();
+function handleErrors(response) {
+    if (response.status === 401) {
+        store.dispatch(authError());
+        window.location.reload();
+        return Promise.reject()
+    }
+    return response;
 }

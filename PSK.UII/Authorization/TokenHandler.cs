@@ -19,7 +19,7 @@ namespace PSK.UI
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TokenRequirement requirement)
         {
             if (!_tokenValidator.Validate(_httpContextAccessor.HttpContext.Request.Cookies["AuthToken"]))
-                _httpContextAccessor.HttpContext.Response.StatusCode = 403;
+                _httpContextAccessor.HttpContext.Response.StatusCode = 401;
 
             context.Succeed(requirement);
             return Task.CompletedTask;
