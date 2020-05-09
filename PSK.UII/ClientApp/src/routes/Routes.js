@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
+//Pages
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
@@ -53,6 +54,9 @@ class Routes extends React.Component{
                 .catch(error => {
                     console.log(error);
                 })
+
+        else if (this.props.currentUser)
+            this.props.logout();
     }
 
     render(){
@@ -99,7 +103,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser)),
+        logout: () => dispatch(currentUserActions.logout())
     }
 }
 
