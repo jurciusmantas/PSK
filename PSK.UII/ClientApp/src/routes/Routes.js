@@ -47,8 +47,9 @@ class Routes extends React.Component{
             post('login/login_token', token)
                 .then(res => res.json())
                 .then(res => {
-                    if (res.success)
+                    if (res.success) {
                         this.props.login(res.data);
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -64,16 +65,15 @@ class Routes extends React.Component{
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
-                        <Route component={NotFoundPage} />
                         {currentUser.authError
                             ? <Redirect
                                 to={{
                                     pathname: "/",
                                     state: { from: this.props.location }
-                                }}
-                            />
+                                }}/>
                             : null
                         }
+                        <Route component={NotFoundPage} />
                     </Switch>
                 </BrowserRouter>
             )

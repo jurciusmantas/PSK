@@ -1,11 +1,15 @@
 import { authError } from '../redux/actions/currentUserActions';
 import getStore from '../redux/store';
+import { getCookie } from './cookie';
+
+var token = 'Token ' + getCookie('AuthToken');
 
 export function get(url, params = {}) {
         return fetch('./api/' + url, {
             method: 'get',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token,
             }
         })
             .then(handleErrors,url)
@@ -14,8 +18,8 @@ export function post(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'post',
         headers: { 
-            'Content-Type': 'application/json'
-            //maybe auth token later
+            'Content-Type': 'application/json',
+            'Authorization': token,
         },
         body: JSON.stringify(params)
     }).then(handleErrors)
@@ -25,7 +29,8 @@ export function put(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token,
         },
         body: JSON.stringify(params)
     }).then(handleErrors)

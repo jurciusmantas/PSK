@@ -17,15 +17,12 @@ namespace PSK.Model.Services
             try
             {
                 EmployeesToken empToken = _employeesTokenRepository.FindByToken(token);
-                if (empToken.ExpiredAt > DateTime.Now)
-                {
-                    return true;
-                }
-                else
-                {
-                    _employeesTokenRepository.Delete(empToken.Id);
+                int result = DateTime.Compare(empToken.ExpiredAt, DateTime.Now);
+
+                if (result < 1 || result == 0)
                     return false;
-                }
+                else
+                    return true;
             }
             catch
             {
