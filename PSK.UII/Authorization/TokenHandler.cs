@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using PSK.Model.Services;
+using PSK.Model.Authorization;
 using System.Threading.Tasks;
 
 namespace PSK.UI

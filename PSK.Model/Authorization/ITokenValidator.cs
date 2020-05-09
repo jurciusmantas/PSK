@@ -1,4 +1,4 @@
-﻿namespace PSK.Model.Services
+﻿namespace PSK.Model.Authorization
 {
     public interface ITokenValidator
     {

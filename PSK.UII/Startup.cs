@@ -11,7 +11,7 @@ using PSK.DB.Contexts;
 using PSK.DB.SqlRepository;
 using PSK.Model.Logging;
 using PSK.Model.Repository;
-using PSK.Model.Services;
+using PSK.Model.Authorization;
 using SimpleInjector;
 using System.Configuration;
 

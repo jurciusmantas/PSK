@@ -2,7 +2,7 @@
 using PSK.Model.Repository;
 using System;
 
-namespace PSK.Model.Services
+namespace PSK.Model.Authorization
 {
     public class TokenValidator : ITokenValidator
     {
