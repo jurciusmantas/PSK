@@ -39,7 +39,7 @@ namespace PSK.DB.SqlRepository
 
         public IncomingEmployee Update(IncomingEmployee updatedIncomingEmployee)
         {
-            var incomingEmployee = context.Attach(updatedIncomingEmployee);
+            var incomingEmployee = context.IncomingEmployees.Attach(updatedIncomingEmployee);
             incomingEmployee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedIncomingEmployee;

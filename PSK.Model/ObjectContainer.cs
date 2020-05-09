@@ -22,6 +22,7 @@ namespace PSK.Model
             container.RegisterInstance(Log.Logger);
 
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
         }
 
         private static void InitializeLogging(string logFile, LogLevel logLevel)

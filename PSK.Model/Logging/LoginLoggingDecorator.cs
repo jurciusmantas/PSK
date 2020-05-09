@@ -57,5 +57,19 @@ namespace PSK.Model.Logging
                 throw;
             }
         }
+
+        public void Logout()
+        {
+            try
+            {
+                _decoratee.Logout();
+                _logger.Information("{DecorateeClassName}.Logout success", _decorateeClassName);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.Logout failed {Newline} {Exception}", _decorateeClassName, e);
+                throw; 
+            }
+        }
     }
 }

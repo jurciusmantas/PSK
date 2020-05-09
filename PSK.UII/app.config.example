@@ -6,5 +6,6 @@
     <add key="NoreplyEmailAddress" value="EL.PASTAS"/>
     <add key="Password" value="SLAPTAZODIS" />
     <add key="Url" value="https://localhost:44395/"/>
+    <add key="DBConnectionString" value="Server=SERVER_NAME;Database=DB_NAME;Password=PASSWORD;User=USERNAME"/>
   </appSettings>
 </configuration>

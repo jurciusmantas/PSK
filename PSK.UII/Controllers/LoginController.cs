@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PSK.Model.Entities;
 using PSK.Model.Services;
 
@@ -22,6 +23,13 @@ namespace PSK.UI.Controllers
                 return _loginService.LoginToken(args.Token);
             }
             return _loginService.Login(args);
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public void Logout()
+        {
+            _loginService.Logout();
         }
     }
 }

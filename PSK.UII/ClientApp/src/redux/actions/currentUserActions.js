@@ -1,5 +1,6 @@
 import {
-    LOGIN_SUCCESS
+    LOGIN_SUCCESS,
+    LOGOUT,
 } from '../constans';
 
 export function loginSuccess(currentUser) {
@@ -9,5 +10,11 @@ export function loginSuccess(currentUser) {
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
         token: currentUser.token,
+    }
+}
+
+export function logout(){
+    return {
+        type: LOGOUT
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSK.DB.Contexts;
 
 namespace PSK.DB.Migrations
 {
     [DbContext(typeof(PSKDbContext))]
-    partial class PSKDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200509052718_UpdateHashs")]
+    partial class UpdateHashs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

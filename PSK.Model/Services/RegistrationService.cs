@@ -25,7 +25,7 @@ namespace PSK.Model.Services
                 IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
                 _employeeRepository.Add(new Employee
                 {
-                    Name = args.FullName,
+                    Name = args.FullName.Trim(),
                     Email = emp.Email,
                     Password = HashPassword(args.Password),
                     LeaderId = 1,
