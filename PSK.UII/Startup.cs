@@ -50,7 +50,6 @@ namespace PSK.UI
 
                 options.AddLocalization();
             });
-
             services.AddDbContext<PSKDbContext>(options => options.UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
             InitializeContainer();
             InjectRepositories();
@@ -100,7 +99,6 @@ namespace PSK.UI
             string file = Configuration.GetSection("Logging").GetValue<string>("File");
             LogLevel level = Configuration.GetSection("Logging").GetValue<LogLevel>("Level");
             Model.ObjectContainer.InitializeContainer(container, file, level);
-            Model.ObjectContainer.InitializeContainer(container);
         }
 
         private void InjectRepositories()

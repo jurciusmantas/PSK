@@ -38,6 +38,11 @@ namespace PSK.DB.SqlRepository
             return context.EmployeesTokens.Find(id);
         }
 
+        public List<EmployeesToken> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public EmployeesToken Update(EmployeesToken updatedEmployeesToken)
         {
             var employeesToken = context.EmployeesTokens.Attach(updatedEmployeesToken);
