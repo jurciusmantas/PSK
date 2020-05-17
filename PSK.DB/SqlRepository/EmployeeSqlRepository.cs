@@ -56,5 +56,25 @@ namespace PSK.DB.SqlRepository
         {
             return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
         }
+
+        public List<Employee> FindTeamMembers(int leaderId)
+        {
+            return context.Employees.Where(employee => employee.LeaderId == leaderId).ToList();
+        }
+
+        public List<Employee> FindAllLower(int leaderId)
+        {
+            List<Employee> employees = new List<Employee>();
+            var teamMembers = FindTeamMembers(leaderId);
+            employees.AddRange(teamMembers);
+            foreach (Employee employee in teamMembers)
+            {
+                List<Employee> allLower = FindAllLower(employee.Id) ?? new List<Employee>();
+                if (allLower.Count > 0) { employees.AddRange(allLower); }
+            } 
+            return employees;
+        }
+
+         
     }
 }

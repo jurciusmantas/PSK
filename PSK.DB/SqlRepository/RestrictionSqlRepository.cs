@@ -1,6 +1,7 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,6 +37,17 @@ namespace PSK.DB.SqlRepository
         public Restriction Get(int id)
         {
             return context.Restrictions.Find(id);
+        }
+
+        public List<Restriction> GetCreatedRestrictions(int creatorId)
+        {
+            return context.Restrictions.Where(restriction => restriction.CreatorId == creatorId).ToList();
+        }
+
+        public Restriction GetLastGlobal()
+        {
+            return context.Restrictions.Aggregate((r1, r2) => r1.Global && r2.Global && 
+            r1.CreationDate > r2.CreationDate ? r1 : r2);
         }
 
         public Restriction Update(Restriction updatedRestriction)
