@@ -1,15 +1,11 @@
 import React from 'react';
 import Calendar from '../Calendar/Calendar';
 
-export default class HomePage extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
+export default class HomePage extends React.Component {
+    render() {
         return (
             <React.Fragment>
-                <Calendar/>
+                <Calendar />
             </React.Fragment>
         )
     }

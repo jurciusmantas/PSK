@@ -9,9 +9,9 @@ namespace PSK.Model.BusinessEntities
     {
         public int Id { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Name { set; get; }
+        public string Name { set; get; }
         [Column(TypeName = "varchar(12000)")]
-        public String Description { set; get; }
+        public string Description { get; set; }
         public int? ParentTopicId { get; set; }
         public Topic ParentTopic { set; get; }
     }

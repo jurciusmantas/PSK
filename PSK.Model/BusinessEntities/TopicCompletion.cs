@@ -7,10 +7,10 @@ namespace PSK.Model.BusinessEntities
     public class TopicCompletion
     {
         public int Id { set; get; }
-        public int TopicId { set; get; }
-        public Topic Topic {set; get;}
-        public int EmployeeId { set; get; }
+        public int TopicId { get; set; }
+        public Topic Topic { get; set; }
+        public int EmployeeId { get; set; }
         public Employee Employee { set; get; }
-        public DateTime CompletedOn { set; get; }
+        public DateTime CompletedOn { get; set; }
     }
 }

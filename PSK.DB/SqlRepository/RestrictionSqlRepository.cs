@@ -1,9 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace PSK.DB.SqlRepository
 {
@@ -36,6 +35,11 @@ namespace PSK.DB.SqlRepository
         public Restriction Get(int id)
         {
             return context.Restrictions.Find(id);
+        }
+
+        public List<Restriction> Get()
+        {
+            return context.Restrictions.ToList();
         }
 
         public Restriction Update(Restriction updatedRestriction)

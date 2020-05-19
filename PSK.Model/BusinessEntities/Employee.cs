@@ -9,11 +9,11 @@ namespace PSK.Model.BusinessEntities
     {
         public int Id { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Name { set; get; }
+        public string Name { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Email { set; get; }
+        public string Email { set; get; }
         [Column(TypeName = "varchar(255)")]
-        public String Password { set; get; }
+        public string Password { set; get; }
         public int? LeaderId { get; set; }
         public Employee Leader { set; get; }
         public virtual ICollection<EmployeeRestriction> EmployeeRestrictions { set; get; }

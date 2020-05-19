@@ -3,7 +3,6 @@ using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -43,6 +42,11 @@ namespace PSK.DB.MockRepository
         }
 
         public Employee FindByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Employee> Get()
         {
             throw new NotImplementedException();
         }

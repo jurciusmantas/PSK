@@ -1,5 +1,5 @@
 ﻿import React from "react"
-import './RecommendationPage.css';
+import './RecommendationsPage.css';
 
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
@@ -20,7 +20,7 @@ class AddRecommendationPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topic/topic').then(res => res.json())
+        get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loading: false })

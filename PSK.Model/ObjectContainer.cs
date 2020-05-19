@@ -15,6 +15,7 @@ namespace PSK.Model
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
             container.Register<IRecommendationService, RecommendationService>(Lifestyle.Scoped);
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
+            container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
 
             InitializeLogging(logFile, logLevel);
             

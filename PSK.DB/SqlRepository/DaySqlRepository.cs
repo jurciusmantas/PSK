@@ -1,9 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace PSK.DB.SqlRepository
 {
@@ -36,6 +35,11 @@ namespace PSK.DB.SqlRepository
         public Day Get(int id)
         {
             return context.Days.Find(id);
+        }
+
+        public List<Day> Get()
+        {
+            return context.Days.ToList();
         }
 
         public Day Update(Day updatedDay)
