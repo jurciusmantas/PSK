@@ -1,6 +1,8 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export default class DetailedTopicPage extends React.Component {
     constructor(props) {
@@ -63,9 +65,6 @@ export default class DetailedTopicPage extends React.Component {
 
         return (
             <div>
-                <h5>Subtopics</h5>
-                
-               
                 <table>
                     <tbody>
                         { 
@@ -91,8 +90,8 @@ export default class DetailedTopicPage extends React.Component {
         if (this.state.loading)
         {
             return (
-                <div>
-                    loading...
+                <div className="loader">
+                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
                 </div>
             )
         }
@@ -105,17 +104,19 @@ export default class DetailedTopicPage extends React.Component {
             )
         }
         return (
-            <div>
-                <h3>{ this.state.data.name }</h3>
-
-                <h5>Description</h5>
+            <div className="topic-wrapper">
+                <div className="topic-holder">
+                    <h2>{this.state.data.name}</h2>
+                    <h5>Description</h5>
                 <p>{ this.state.data.description }</p>
-                <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
-                <div>
-                    <Link className="btn btn-dark" to={{ pathname: `/createtopic/${this.state.id}` }} > Add New Subtopic </Link>
+                    <button className="btn btn-custom" onClick={this.assign}>Assign!</button>
+                    <hr/>
+                    <h5>Subtopics</h5>
+                    <div>
+                        <Link className="btn btn-custom" to={{ pathname: `/createtopic/${this.state.id}` }} > Add New Subtopic </Link>
+                    </div>
+                    {this.showSubtopics()}
                 </div>
-            
-                {this.showSubtopics()}
             </div>
         )
       }

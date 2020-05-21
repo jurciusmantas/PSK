@@ -1,3 +1,13 @@
+.calendar-container {
+    background: #fff;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0px 0px 5px 0px rgba(70, 72, 102, 0.5);
+}
+
 .calendar-navbar *{
     margin-left: 5px;
     margin-right: 5px;
@@ -12,15 +22,15 @@
     width: calc(100% / 7);
 }
 
-.calendar-day-item{
+.calendar-day-item {
     height: 13vh;
-    border: 2px solid #343a40;
+    border: 2px solid #3f474e;
     margin: 5px 5px 5px 5px;
 }
 
-.calendar-day-item:hover{
-    border: 3px solid #3f474e;
-}
+    .calendar-day-item:hover {
+        border: 3px solid #177995;
+    }
 
 .calendar-day-item > div{
     position: absolute;

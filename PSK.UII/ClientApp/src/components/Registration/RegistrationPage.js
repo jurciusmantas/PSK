@@ -1,8 +1,9 @@
 ﻿import React from "react"
 import './RegistrationPage.css';
-
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 class RegistrationPage extends React.Component {
     constructor() {
@@ -14,7 +15,8 @@ class RegistrationPage extends React.Component {
             password: '',
             repeatedPassword: '',
             email: '',
-            token: ''
+            token: '',
+            loading: true
         }
 
         this.onSubmit = this.handleSubmit.bind(this)
@@ -64,9 +66,10 @@ class RegistrationPage extends React.Component {
     componentDidMount = () => {
         var token = window.location.pathname.split('/').pop();
 
-        get('registration/' + token )
+        get('registration/' + token)
             .then(res => res.json())
             .then(res => {
+                this.setState({ loading: false })
                 if (res.success) {
                     this.setState({ email: res.data });
                 }
@@ -77,63 +80,70 @@ class RegistrationPage extends React.Component {
     }
 
     render() {
-        const { email } = this.state;
-
-        if (this.state.email === "") {
-            return <h6> Token used or doesn't exist</h6>
+        if (this.state.email === '' && !this.state.loading) {
+            return (
+                <div className="error-container">
+                    <div className="error-wrapper">
+                        <h2>uh-oh</h2>
+                        <hr />
+                        <h3>Token used or doesn't exist</h3>
+                    </div>
+                </div>
+            )
+        }
+        if (this.state.loading) {
+            return (
+                <div className="loader">
+                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
+                </div>
+            )
         }
 
         return (
-            <form className="invite-wrapper" onSubmit={this.onSubmit}>
-                <h3>Hello, {email}</h3>
-                
-                <div className="invite-holder">
+            <form className="registration-wrapper" onSubmit={this.onSubmit}>
+                <div className="registration-holder">
+                    <h2>Registration</h2>
                     <div className="row">
-                        <label>First name: </label>
+                        <input value={this.state.email} disabled />
+                    </div>
+                    <div className="row">
                         <input
                             type="text"
                             name="firstName"
+                            placeholder="First name"
                             value={this.state.firstName}
                             onChange={e => this.setState({ firstName: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                        />
+                            onKeyPress={e => this.handleKeyPress(e)} />
                     </div>
-
                     <div className="row">
-                        <label>Last name:</label>
                         <input
                             type="text"
                             name="lastName"
+                            placeholder="Last name"
                             value={this.state.lastName}
                             onChange={e => this.setState({ lastName: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                        />
+                            onKeyPress={e => this.handleKeyPress(e)} />
                     </div>
-
                     <div className="row">
-                        <label>Password:</label>
                         <input
                             type="password"
                             name="password"
+                            placeholder="Password"
                             value={this.state.password}
                             onChange={e => this.setState({ password: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                        />
+                            onKeyPress={e => this.handleKeyPress(e)} />
                     </div>
-
                     <div className="row">
-                        <label>Repeat password:</label>
                         <input
                             type="password"
                             name="repeatedPassword"
+                            placeholder="Confirm password"
                             value={this.state.repeatedPassword}
                             onChange={e => this.setState({ repeatedPassword: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                        />
+                            onKeyPress={e => this.handleKeyPress(e)} />
                     </div>
-
                     <div className="row">
-                        <button className="btn btn-dark" type="submit">Submit</button>
+                        <button className="btn btn-custom" type="submit">Submit</button>
                     </div>
                 </div>
             </form>

@@ -1,0 +1,26 @@
+﻿body {
+    background-color: #DCDCDD;
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4C5C68;
+    padding-top: 100px;
+}
+
+    .error-container h1 {
+        font-weight: 700;
+        font-size: 250px;
+        font-family: sans-serif;
+        letter-spacing: 20px;
+        text-shadow: 11px -5px #C6C8C9;
+    }
+
+    .error-container h3 {
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-transform: uppercase;
+        text-align: center;
+    }

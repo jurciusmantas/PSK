@@ -1,43 +1,52 @@
-﻿.wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+﻿.rec-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.holder {
-    border: 1px solid black;
-    padding: 10px 40px 10px 40px;
-    border-radius: 15px;
-    display: inline-block;
+.rec-holder {
+    background: #fff;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 32px;
+    padding-right: 20px;
+    box-shadow: 0px 0px 5px 0px rgba(70, 72, 102, 0.5);
+    width: 100%;
 }
 
-label {
-    min-width: 100px;
-}
-
-input {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 25px;
-    text-align: center;
-}
-
-    input:focus {
-        outline: none;
+    .rec-holder .row {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    
+    .rec-holder p {
+        margin-left: 15px;
+        margin-bottom: 0px;
     }
 
-.row {
-    padding: 5px 0 5px 0;
-}
-
-    .row:last-child {
-        justify-content: center;
+    .rec-holder input {
+        margin-left: auto;
+        margin-right: auto;
     }
 
 table {
-    width: 100%;
+    width: 1060px;
+    margin-left: auto;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+.topicColumn {
+    width: 50%;
+}
+
+.creatorColumn {
+    width: 40%;
+}
+
+.topicColum {
+    text-align: right;
 }
 
 th, td {
@@ -49,6 +58,60 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-h3 {
-    text-align: center;
+tbody tr:hover {
+    background-color: #A9B4C2;
+}
+
+.loader {
+    margin-right: auto;
+    margin-left: auto;
+    height: 20px;
+}
+
+.row:last-child a, .row:last-child .btn-custom {
+    margin-right: 10px;
+}
+
+select {
+    width: 315px;
+    border-style: solid;
+    border-width: 1px;
+    height: 40px;
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: #bebebe;
+}
+
+.info {
+    width: 25%;
+    float: left;
+}
+
+.newData {
+    width: 75%;
+    padding-top: 0;
+}
+
+@media screen and (max-width: 1110px) {
+    table {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .info {
+        width: 100%;
+        float: none;
+    }
+
+    .newData {
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    .btn-custom {
+        margin-right: 10px;
+        margin-top: 10px;
+    }
 }

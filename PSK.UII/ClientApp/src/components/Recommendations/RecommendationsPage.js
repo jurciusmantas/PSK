@@ -1,8 +1,10 @@
 ﻿import React from "react"
 import './RecommendationPage.css';
-
+import 'bootstrap/dist/css/bootstrap.css';
 import { get } from '../../helpers/request'
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 class RecommendationsPage extends React.Component {
     constructor() {
@@ -51,9 +53,9 @@ class RecommendationsPage extends React.Component {
         return this.state.recommendedToEmp.map((recommendation, index) => {
             return (
                 <tr key={index}>
-                    <td>{recommendation.topicName}</td>
-                    <td>{recommendation.creatorName}</td>
-                    <td><Link to={'topic/' + recommendation.topicId}>More</Link></td>
+                    <td className="topicColumn">{recommendation.topicName}</td>
+                    <td className="creatorColumn">{recommendation.creatorName}</td>
+                    <td className="topicColum"><Link to={'topic/' + recommendation.topicId}>More</Link></td>
                 </tr>
             )
         })
@@ -63,9 +65,9 @@ class RecommendationsPage extends React.Component {
         return this.state.recommending.map((recommendation, index) => {
             return (
                 <tr key={index}>
-                    <td>{recommendation.topicName}</td>
-                    <td>{recommendation.receiverName}</td>
-                    <td><Link to={'edit-recommendation/' + recommendation.id}>Edit</Link></td>
+                    <td className="topicColumn">{recommendation.topicName}</td>
+                    <td className="creatorColumn">{recommendation.receiverName}</td>
+                    <td className="topicColum"><Link to={'edit-recommendation/' + recommendation.id}>Edit</Link></td>
                 </tr>
             )
         })
@@ -73,37 +75,51 @@ class RecommendationsPage extends React.Component {
 
     render() {
         return (
-            <div className="wrapper">
-                <div className="row">
-                    <Link to='add-recommendation/' className="btn btn-dark">Add recommendation</Link>
-                </div>
-                <h3 className="row">Recommended topics to learn for you:</h3>
-                <div className="row">
-                    {this.state.loading1 || !this.state.recommendedToEmp ?
-                        <div>
-                            loading...
+            <div className="rec-wrapper">
+                <div className="rec-holder">
+                    <div className="row">
+                        <Link to='add-recommendation/' className="btn btn-custom">Add recommendation</Link>
                     </div>
-                        :
-                        <table align="center">
+                    <h2>Recommended topics to learn for you:</h2>
+                    <div className="row">
+                        {this.state.loading1 || !this.state.recommendedToEmp ?
+                            <div className="loader">
+                                <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px"/>
+                            </div>
+                            :
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th className="topicColumn">Topic</th>
+                                    <th className="creatorColumn">Created by</th>
+                                    </tr>
+                                </thead>
                             <tbody>
                                 {this.showRecommendationList()}
                             </tbody>
-                        </table>
-                    }
+                            </table>
+                        }
                 </div>
-                <h3>Recommendations you have created:</h3>
-                <div className="row">
-                    {this.state.loading2 || !this.state.recommending ?
-                        <div>
-                            loading...
-                        </div>
-                        :
-                        <table>
-                            <tbody>
-                                {this.showCreatedRecommendationsList()}
-                            </tbody>
-                        </table>
-                    }
+                <h2>Recommendations you have created:</h2>
+                    <div className="row">
+                        {this.state.loading2 || !this.state.recommending ?
+                            <div className="loader">
+                                <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                            </div>
+                            :
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th className="topicColumn">Topic</th>
+                                        <th className="creatorColumn">Created by</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.showCreatedRecommendationsList()}
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 </div>
             </div>
         )
