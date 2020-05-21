@@ -1,7 +1,8 @@
 import React from 'react';
 import Calendar from '../Calendar/Calendar';
+import { connect } from 'react-redux';
 
-export default class HomePage extends React.Component {
+class HomePage extends React.Component {
     render() {
         return (
             <React.Fragment>

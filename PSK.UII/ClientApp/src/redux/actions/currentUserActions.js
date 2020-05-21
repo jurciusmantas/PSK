@@ -1,7 +1,7 @@
 import {
     LOGIN_SUCCESS,
     LOGOUT,
-} from '../constans';
+} from '../constants';
 
 export function loginSuccess(currentUser) {
     return {
