@@ -29,6 +29,7 @@ namespace PSK.Model.Services
                         Success = true,
                         Data = new User
                         {
+                            Id = 1,
                             Login = "admin",
                             Name = "admin",
                             Token = GetToken(),

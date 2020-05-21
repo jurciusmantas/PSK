@@ -1,5 +1,5 @@
 import React from 'react';
-import { post } from '../../helpers/request'
+import { post } from '../../helpers/request';
 import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
