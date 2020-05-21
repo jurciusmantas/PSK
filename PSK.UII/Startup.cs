@@ -109,9 +109,6 @@ namespace PSK.UI
             container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
             container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
-            container.Register<IRecommendationsRepository, RecommendationsMockRepository>(Lifestyle.Singleton);
         }
-
-        
     }
 }
