@@ -1,6 +1,6 @@
-﻿namespace PSK.Model.Entities
+﻿namespace PSK.Model.DTO
 {
-    public class RegistrationArgs
+    public class Registration
     {
         public string FullName { get; set; }
         public string Password { get; set; }

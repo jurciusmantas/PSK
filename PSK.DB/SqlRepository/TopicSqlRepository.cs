@@ -1,9 +1,8 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace PSK.DB.SqlRepository
 {
@@ -36,6 +35,16 @@ namespace PSK.DB.SqlRepository
         public Topic Get(int id)
         {
             return context.Topics.Find(id);
+        }
+
+        public List<Topic> Get()
+        {
+            return context.Topics.ToList();
+        }
+
+        public List<Topic> GetSubtopics(int id)
+        {
+            return context.Topics.Where(m => m.ParentTopicId == id).ToList();
         }
 
         public Topic Update(Topic updatedTopic)

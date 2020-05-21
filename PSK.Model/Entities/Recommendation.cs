@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PSK.Model.BusinessEntities
+﻿namespace PSK.Model.Entities
 {
     public class Recommendation
     {

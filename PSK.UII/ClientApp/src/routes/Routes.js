@@ -5,36 +5,49 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
+//Pages
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
 import HomePage from '../components/Home/HomePage';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
+import RecommendationsPage from '../components/Recommendations/RecommendationsPage';
+import AddRecommendationPage from '../components/Recommendations/AddRecommendationPage';
+import EditRecommendationsPage from '../components/Recommendations/EditRecommendationPage';
 import RegistrationPage from '../components/Registration/RegistrationPage';
+import CreateTopicPage from '../components/Topic/CreateTopicPage';
+import DetailedTopicPage from '../components/Topic/DetailedTopicPage';
+import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 
 const NotFoundPageWraped = () =>
     <Layout>
-        <NotFoundPage/>
+        <NotFoundPage />
     </Layout>;
 
-class Routes extends React.Component{
-    constructor(props){
+class Routes extends React.Component {
+    constructor(props) {
         super(props);
 
         this.state = {
             components: [
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
-                { component: TopicPage, path: "/topic" },
+                { component: DetailedTopicPage, path: "/topic" },
+                { component: TopicPage, path: "/topics" },
+                { component: RecommendationsPage, path: "/recommendations" },
+                { component: AddRecommendationPage, path: "/add-recommendation" },
+                { component: EditRecommendationsPage, path: "/edit-recommendation" },
+                { component: CreateTopicPage, path: "/add-topic" },
+                { component: NewLearningDayPage, path: "/add-day" },
             ]
         }
     }
 
-    componentDidMount(){
-        let token = getCookie('AuthToken');
+    componentDidMount() {
+        const token = getCookie('AuthToken');
         if (token)
-            post('login/login_token', token)
+            post('login?token=true', { token })
                 .then(res => res.json())
                 .then(res => {
                     if (res.success)
@@ -43,11 +56,13 @@ class Routes extends React.Component{
                 .catch(error => {
                     console.log(error);
                 })
+
+        else if (this.props.currentUser)
+            this.props.logout();
     }
 
-    render(){
+    render() {
         const { currentUser } = this.props;
-
         if (!currentUser || !currentUser.token)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
@@ -62,34 +77,35 @@ class Routes extends React.Component{
         return (
             <BrowserRouter basename={'MegstuKumpi'}>
                 <Switch>
-                    {   
+                    {
                         this.state.components.map((comp, i) => {
                             let wrappedComponent = () =>
                                 <Layout>
-                                    <comp.component/>
+                                    <comp.component />
                                 </Layout>;
-                            
+
                             return (
-                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`}/>
+                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`} />
                             )
                         })
                     }
-                    <Route component={NotFoundPageWraped}/>
+                    <Route component={NotFoundPageWraped} />
                 </Switch>
             </BrowserRouter>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, _) => {
     return {
         currentUser: state.currentUser
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, _) => {
     return {
-        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser))
+        login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser)),
+        logout: () => dispatch(currentUserActions.logout())
     }
 }
 

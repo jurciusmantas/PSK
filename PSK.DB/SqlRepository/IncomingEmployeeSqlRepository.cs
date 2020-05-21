@@ -1,10 +1,8 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -41,7 +39,7 @@ namespace PSK.DB.SqlRepository
 
         public IncomingEmployee Update(IncomingEmployee updatedIncomingEmployee)
         {
-            var incomingEmployee = context.Attach(updatedIncomingEmployee);
+            var incomingEmployee = context.IncomingEmployees.Attach(updatedIncomingEmployee);
             incomingEmployee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedIncomingEmployee;
@@ -50,6 +48,11 @@ namespace PSK.DB.SqlRepository
         public IncomingEmployee FindByToken(string token)
         {
             return context.IncomingEmployees.FirstOrDefault(incomingEmployee => incomingEmployee.Token.Equals(token));
+        }
+
+        public List<IncomingEmployee> Get()
+        {
+            return context.IncomingEmployees.ToList();
         }
     }
 }

@@ -201,6 +201,31 @@ namespace PSK.DB.Migrations
                     b.ToTable("EmployeeRestriction");
                 });
 
+            modelBuilder.Entity("PSK.Model.BusinessEntities.EmployeesToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeesTokens");
+                });
+
             modelBuilder.Entity("PSK.Model.BusinessEntities.IncomingEmployee", b =>
                 {
                     b.Property<int>("Id")
@@ -422,6 +447,15 @@ namespace PSK.DB.Migrations
                     b.HasOne("PSK.Model.BusinessEntities.Restriction", "Restriction")
                         .WithMany("RestrictionEmployees")
                         .HasForeignKey("RestrictionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PSK.Model.BusinessEntities.EmployeesToken", b =>
+                {
+                    b.HasOne("PSK.Model.BusinessEntities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

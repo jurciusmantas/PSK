@@ -1,5 +1,6 @@
 import {
     LOGIN_SUCCESS,
+    LOGOUT,
 } from '../constants';
 
 const initialState = {
@@ -17,6 +18,12 @@ export default (state = initialState, action) => {
             state.name = action.name;
             state.token = action.token;
             return { ...state };
+        }
+        case LOGOUT:{
+            state.login = null;
+            state.name = null;
+            state.token = null;
+            return {...state};
         }
         default:
             return state;

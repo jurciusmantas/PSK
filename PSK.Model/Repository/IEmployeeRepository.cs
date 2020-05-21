@@ -1,13 +1,11 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PSK.Model.Entities;
+using PSK.Model.DTO;
 
 namespace PSK.Model.Repository
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
         public Employee Login(LoginArgs loginArgs);
+        public Employee FindByName(string name);
     }
 }

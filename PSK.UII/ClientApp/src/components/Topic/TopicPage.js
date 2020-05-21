@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
+import { Link } from 'react-router-dom';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class TopicPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topic/topic').then(res => res.json())
+        get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })
@@ -23,12 +24,13 @@ export default class TopicPage extends React.Component {
     }
 
     topicList() {
-        return this.state.data.map((d, index) => {
-            const {name, description} = d
+        return this.state.data.map((d) => {
+            const {id, name} = d          
             return (
-                <tr key={"topic-list-item-" + index}>
-                    <td>{name}</td>
-                    <td>{description}</td>
+                <tr key={ `topic-list-item-${id}` }>
+                    <td>
+                        <Link to={{ pathname: "/topic", search: `?id=${id}` }} > {name} </Link>
+                    </td>
                 </tr>
             )
         })
@@ -38,6 +40,7 @@ export default class TopicPage extends React.Component {
         return (
             <div>
                 <h3>Topics</h3>
+                <Link className="btn btn-dark" to={{ pathname: `/add-topic` }} > Add New Topic </Link>
                 { this.state.loading || !this.state.data ?
                     <div>
                         loading...

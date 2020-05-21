@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 
 namespace PSK.Model.Services
 {
@@ -6,5 +6,6 @@ namespace PSK.Model.Services
     {
         ServerResult<User> Login(LoginArgs args);
         ServerResult<User> LoginToken(string token);
+        void Logout();
     }
 }

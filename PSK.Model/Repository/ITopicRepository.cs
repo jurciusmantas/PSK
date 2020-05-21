@@ -1,11 +1,10 @@
-﻿using PSK.Model.BusinessEntities;
-using System;
+﻿using PSK.Model.Entities;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.Model.Repository
 {
     public interface ITopicRepository : IRepository<Topic>
     {
+        List<Topic> GetSubtopics(int id);
     }
 }

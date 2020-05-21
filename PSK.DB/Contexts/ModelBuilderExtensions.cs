@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
