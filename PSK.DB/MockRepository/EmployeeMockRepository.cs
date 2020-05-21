@@ -1,5 +1,5 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.Entities;
+﻿using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;

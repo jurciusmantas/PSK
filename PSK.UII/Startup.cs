@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSK.DB.Contexts;
+using PSK.DB.MockRepository;
 using PSK.DB.SqlRepository;
 using PSK.Model.Logging;
 using PSK.Model.Repository;
@@ -106,10 +107,8 @@ namespace PSK.UI
             container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
             container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
             container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
-            container.Register<IRecommendationRepository, RecommendationSqlRepository>(Lifestyle.Scoped);
+            container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
         }
-
-        
     }
 }

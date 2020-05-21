@@ -1,4 +1,4 @@
-﻿namespace PSK.Model.Entities
+﻿namespace PSK.Model.DTO
 {
     public class LoginArgs
     {

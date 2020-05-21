@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Services;
 using System.Collections.Generic;
 

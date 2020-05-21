@@ -9,6 +9,5 @@ namespace PSK.Model.Repository
         TEntity Get(int id);
         TEntity Delete(int id);
         TEntity Update(TEntity entity);
-
     }
 }

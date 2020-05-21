@@ -1,5 +1,5 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.Entities;
+﻿using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 
@@ -13,11 +13,11 @@ namespace PSK.Model.Services
         {
             _dayRepository = dayRepository;
         }
-        public ServerResult AddNewLearningDay(DayArgs args)
+        public ServerResult AddNewLearningDay(DTO.Day args)
         {
             try
             {
-                Day learningDay = _dayRepository.Add(new Day() { Date = DateTime.Parse(args.Date), EmployeeId = args.EmployeeId, TopicId = args.TopicId });
+                Entities.Day learningDay = _dayRepository.Add(new Entities.Day() { Date = DateTime.Parse(args.Date), EmployeeId = args.EmployeeId, TopicId = args.TopicId });
                 return new ServerResult() { Success = true };
             }
             catch (Exception e)

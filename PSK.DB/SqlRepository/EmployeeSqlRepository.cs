@@ -1,6 +1,6 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;

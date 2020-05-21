@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Services;
 
 namespace PSK.UI.Controllers
@@ -15,7 +15,7 @@ namespace PSK.UI.Controllers
         }
 
         [HttpPost]
-        public ServerResult CreateDay([FromBody] DayArgs args)
+        public ServerResult CreateDay([FromBody] Day args)
         {
             return _learningDayService.AddNewLearningDay(args);
         }
