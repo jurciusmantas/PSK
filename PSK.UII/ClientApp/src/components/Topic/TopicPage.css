@@ -60,7 +60,7 @@ th, td {
 }
 
 input:focus, textarea:focus {
-    border: 2px solid #177995;
+    border: 2px solid #1B8C84;
 }
 
 .loader {

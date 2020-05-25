@@ -24,12 +24,13 @@
 
 .calendar-day-item {
     height: 13vh;
-    border: 2px solid #3f474e;
+    border: 2px solid #111C26;
     margin: 5px 5px 5px 5px;
+    background: #F0F0F2;
 }
 
     .calendar-day-item:hover {
-        border: 3px solid #177995;
+        border: 3px solid #1B8C84;
     }
 
 .calendar-day-item > div{

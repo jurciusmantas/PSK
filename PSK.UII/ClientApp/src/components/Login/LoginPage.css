@@ -38,19 +38,19 @@ input {
 
 
     input:focus {
-        border: 2px solid #177995;
+        border: 2px solid #1B8C84;
     }
 
 .btn-custom {
-    background-color: #3D4A57;
-    color: #FFFFFFD9;
+    background-color: #1E3340;
+    color: #FFF;
     min-width: 160px;
 }
 
     .btn-custom:hover {
         cursor: pointer;
-        background-color: #313C49;
-        color: #FFFFFFD9;
+        background-color: #111C26;
+        color: #FFF;
     }
 
 h2 {
