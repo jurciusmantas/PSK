@@ -16,7 +16,7 @@ export default class CalendarDayItem extends React.Component {
                     {this.props.userDays.map(day =>
                         (<UserDay
                             key={`user-day-${day.id}`}
-                            topicName={`topic name: ${day.topicName}`}
+                            topicName={day.topicName}
                             topicId={day.topicId}
                         />)
                     )}
@@ -25,8 +25,8 @@ export default class CalendarDayItem extends React.Component {
                             key={`subordinate-day-${day.id}`}
                             topicId={day.topicId}
                             employeeId={day.employeeId}
-                            topicName={day.topicName ? day.topicName : '???'}
-                            employeeName={day.employeeName ? day.employeeName : '???'}
+                            topicName={day.topicName}
+                            employeeName={day.employeeName}
                         />
                         ))}
                 </div>

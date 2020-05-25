@@ -1,13 +1,11 @@
 ﻿import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class UserDay extends React.Component {
     render() {
         return (
-            <div className='user-day'
-                //onClick={() => this.props.history.push(`topic?=${this.props.topicId}`)}
-                onClick={() => console.log(`topic?=${this.props.topicId}`)}
-            >
-                {this.props.topicName}
+            <div className='user-day'>
+                <Link to={`topic?=${this.props.topicId}`}>{this.props.topicName}</Link>
             </div>
         )
     }

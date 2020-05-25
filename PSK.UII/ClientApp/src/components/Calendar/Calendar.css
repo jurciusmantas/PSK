@@ -40,3 +40,38 @@ button.add-day-btn {
     background: none;
     border: none;
 }
+
+.user-day {
+    border: 2px solid #343a40;
+    background: #343a40;
+    padding: 1px;
+    margin-top: 1px;
+    margin-left: 3px;
+    margin-right: 3px;
+    font-size: small;
+}
+
+.user-day a {
+    color: whitesmoke;
+}
+
+.subordinate-day {
+    border: 2px solid #343a40;
+    color: #343a40;
+    font-size: small;
+    padding: 1px;
+    margin-top: 1px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.subordinate-day a {
+    color: #343a40;
+}
+
+.subordinate-day .left {
+}
+
+.subordinate-day .right {
+    float: right;
+}
