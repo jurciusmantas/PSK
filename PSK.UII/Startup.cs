@@ -49,7 +49,7 @@ namespace PSK.UI
             });
             //services.AddDbContext<PSKDbContext>(options => options
             //    .UseLazyLoadingProxies()
-            //    .UseMySql("Server=localhost;Database=psk_db;Password=psk_login;User=psk_app"));
+            //    .UseMySql("Server=localhost;Database=DB;Password=PASS;User=USER"));
             services.AddDbContext<PSKDbContext>(options => options
                 .UseLazyLoadingProxies()
                 .UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
