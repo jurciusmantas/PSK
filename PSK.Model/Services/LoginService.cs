@@ -1,7 +1,5 @@
-﻿using PSK.Model.Entities;
-using PSK.Model.DTO;
+﻿using PSK.Model.DTO;
 using PSK.Model.Repository;
-using Serilog;
 using System;
 using System.Security.Cryptography;
 
@@ -23,26 +21,27 @@ namespace PSK.Model.Services
                 if (args == null)
                     throw new ArgumentNullException("Arguments are empty");
 
-                if (args.Login == "admin" && args.Password == "admin")
-                    return new ServerResult<User>
-                    {
-                        Success = true,
-                        Data = new User
-                        {
-                            Id = 1,
-                            Login = "admin",
-                            Name = "admin",
-                            Token = GetToken(),
-                        },
-                    };
+                //if (args.Login == "admin" && args.Password == "admin")
+                //    return new ServerResult<User>
+                //    {
+                //        Success = true,
+                //        Data = new User
+                //        {
+                //            Id = 1,
+                //            Login = "admin",
+                //            Name = "admin",
+                //            Token = GetToken(),
+                //        },
+                //    };
 
-                Employee employee = _employeeRepository.Login(args);
+                Entities.Employee employee = _employeeRepository.Login(args);
                 VerifyPassword(args.Password, employee.Password);              
                 return new ServerResult<User>
                 {
                     Success = true,
                     Data = new User
                     {
+                        Id = employee.Id,
                         Login = args.Login,
                         Name = employee.Name,
                         Token = GetToken()

@@ -1,11 +1,12 @@
 ﻿using PSK.Model.Entities;
-using PSK.Model.DTO;
+using System.Collections.Generic;
 
 namespace PSK.Model.Repository
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
-        public Employee Login(LoginArgs loginArgs);
+        public Employee Login(DTO.LoginArgs loginArgs);
         public Employee FindByName(string name);
+        List<Employee> GetSubordinates(int employeeId);
     }
 }

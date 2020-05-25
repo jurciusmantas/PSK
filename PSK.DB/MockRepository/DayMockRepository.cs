@@ -36,6 +36,11 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
+        public List<Day> GetEmployeeDays(int employeeId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Day Update(Day updatedDay)
         {
             Day day = Delete(updatedDay.Id);

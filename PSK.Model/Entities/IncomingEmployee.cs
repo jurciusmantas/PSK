@@ -10,6 +10,6 @@ namespace PSK.Model.Entities
         [Column(TypeName = "varchar(255)")]
         public string Token { set; get; }
         public int LeaderId { set; get; }
-        public Employee Leader { set; get; }
+        public virtual Employee Leader { set; get; }
     }
 }

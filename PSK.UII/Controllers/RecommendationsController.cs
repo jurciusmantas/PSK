@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace PSK.UI.Controllers
 {
     [Route("api/[controller]")]
-    public class RecommendationsController : Controller
+    public class RecommendationsController : ControllerBase
     {
         private readonly IRecommendationsService _recService;
 
