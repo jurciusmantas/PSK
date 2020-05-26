@@ -1,6 +1,9 @@
 ﻿import React from 'react';
 import { get } from '../../helpers/request'
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import TreeView from 'devextreme-react/tree-view';
+import './TopicPage.css';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -37,22 +40,45 @@ export default class TopicPage extends React.Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
         return (
             <div>
+
                 <h3>Topics</h3>
                 <Link className="btn btn-dark" to={{ pathname: `/createtopic` }} > Add New Topic </Link>
-                { this.state.loading || !this.state.data ?
+                {this.state.loading || !this.state.data ?
                     <div>
                         loading...
                     </div>
                     :
-                    <table>
-                        <tbody>
-                            { this.topicList() }
-                        </tbody>
-                    </table>
+                    <div>
+                        <TreeView
+                            id="simple-treeview"
+                            items={this.state.data}
+                            displayExpr="name"
+                            itemRender={this.renderTreeViewItem}
+                            itemsExpr="subTopicList"
+                            parentIdExpr="parentTopicId"
+                            keyExpr="id"
+                            searchMode="contains"
+                            searchEnabled={true} />
+                    </div>
+                    
                 }
+                
+
             </div>
         );
     }
+
+
+    renderTreeViewItem(item) {
+        console.log(item);
+        return (
+            <Link to={{ pathname: `/topic/${item.id}` }} > {item.name} </Link>
+        );
+    }
+
 }

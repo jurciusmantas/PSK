@@ -1,0 +1,20 @@
+.dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
+    background-color: transparent;
+    color: #000000;
+}
+
+.dx-treeview-search {
+    width: 400px;
+}
+.dx-treeview-item {
+    cursor: default;
+}
+
+.dx-treeview-item.dx-state-hover {
+    background-color: transparent;
+    color: #ffffff
+}
+
+.dx-texteditor-input {
+    text-align: left;
+}
