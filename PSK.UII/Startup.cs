@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +11,7 @@ using PSK.DB.Contexts;
 using PSK.DB.SqlRepository;
 using PSK.Model.Logging;
 using PSK.Model.Repository;
+using PSK.Model.Authorization;
 using SimpleInjector;
 using System.Configuration;
 
@@ -30,7 +33,20 @@ namespace PSK.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddScoped<IAuthorizationHandler, TokenHandler>();
+            services.AddScoped<ITokenValidator, TokenValidator>();
+            services.AddScoped<IEmployeesTokenRepository, EmployeesTokenSqlRepository>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Token", policy =>
+                    policy.Requirements.Add(new TokenRequirement()));
+            });
+
+            services.AddMvc(config =>
+{
+                config.Filters.Add(new AuthorizeFilter("Token"));
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -74,6 +90,8 @@ namespace PSK.UI
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -110,6 +128,7 @@ namespace PSK.UI
             container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
             container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
             container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
+            container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Scoped);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import './TopicPage.css';
 import { post } from '../../helpers/request';
 
 export default class TopicPage extends React.Component {
@@ -54,32 +55,33 @@ export default class TopicPage extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>Create Topic</h2>
-                <div>
-                    <label>Name:</label>
-                    <input
-                        type='text'
-                        onChange={e => this.setState({ name: e.target.value })}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                    />
-                </div>
-                <div>
-                    <label>Description:</label>
-                    <textarea cols="50"
-                        onChange={e => this.setState({ description: e.target.value })}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                    />
-                </div>
-                <div>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={this.create}
-                    >Create</button>
+            <div className="topic-wrapper">
+                <div className="topic-holder">
+                    <h2>Create Topic</h2>
+                    <div className='row'>
+                        <input
+                            type='text'
+                            placeholder='Topic name'
+                            onChange={e => this.setState({ name: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
+                        />
+                    </div>
+                    <div className='row'>
+                        <textarea cols="50"
+                            onChange={e => this.setState({ description: e.target.value })}
+                            placeholder='Topic description'
+                            onKeyPress={e => this.handleKeyPress(e)}
+                        />
+                    </div>
+                    <div className='row'>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={() => this.create}
+                        >Create</button>
+                    </div>
                 </div>
             </div>
-
         );
     }
 }
