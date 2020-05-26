@@ -1,5 +1,5 @@
 import React from 'react';
-import { post } from '../../helpers/request'
+import { post } from '../../helpers/request';
 import { connect } from 'react-redux';
 import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -33,7 +33,7 @@ class LoginPage extends React.Component {
             return;
         //TODO: Else - to show "no input"
 
-        post('login/login', {
+        post('login', {
             login: login,
             password: password,
         })
@@ -46,9 +46,7 @@ class LoginPage extends React.Component {
                 }
                 //TODO: Else - to show "bad credentials"
             })
-            .catch(error => {
-                console.log(error);
-            })
+            .catch(error => console.error(error));
     }
 
     render() {

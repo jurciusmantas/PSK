@@ -1,26 +1,21 @@
 ﻿import React from 'react';
-import { post } from '../../helpers/request'
 import './TopicPage.css';
+import { post } from '../../helpers/request';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
         super(props);
 
+        const query = new URLSearchParams(window.location.search);
         this.state = {
             name: null,
             description: null,
-            parentId: null
+            parentId: query.get("parent"),
         };
     }
 
     componentDidMount() {
         window.addEventListener("keypress", this.handleKeyPress);
-
-        if (!isNaN(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))) {
-            this.setState({
-                parentId: parseInt(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
-            });
-        }
     }
 
     componentWillUnmount() {
@@ -39,26 +34,23 @@ export default class TopicPage extends React.Component {
             parentId
         } = this.state;
 
-        
-
         if (!name || !description) {
-            alert("please fill empty fields")
+            alert("please fill empty fields");
         }
         else {
-            post('topic/createtopic', {
+            post('topics', {
                 name: name,
                 description: description,
                 parentId: parentId,
             })
-            .then(res => res.json())
-            .then(res => {
-                alert(res.message)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-        }   
-        
+                .then(res => res.json())
+                .then(res => {
+                    alert(res.message)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
     }
 
     render() {
@@ -85,7 +77,7 @@ export default class TopicPage extends React.Component {
                         <button
                             type="button"
                             className="btn btn-custom"
-                            onClick={() => this.create()}
+                            onClick={() => this.create}
                         >Create</button>
                     </div>
                 </div>

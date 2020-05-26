@@ -1,7 +1,7 @@
-export function post(url, params = {}){
+export function post(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'post',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json'
             //maybe auth token later
         },
@@ -12,7 +12,7 @@ export function post(url, params = {}){
 export function get(url) {
     return fetch('./api/' + url, {
         method: 'get',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json'
         }
     })
@@ -25,5 +25,11 @@ export function put(url, params = {}) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
+    })
+}
+
+export function del(url, params = {}) {
+    return fetch(`./api/${url}`, {
+        method: 'DELETE'
     })
 }

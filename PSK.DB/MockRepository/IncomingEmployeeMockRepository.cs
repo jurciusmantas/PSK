@@ -1,8 +1,7 @@
-﻿using PSK.Model.BusinessEntities;
+﻿using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -29,6 +28,11 @@ namespace PSK.DB.MockRepository
         }
 
         public IncomingEmployee FindByToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<IncomingEmployee> Get()
         {
             throw new NotImplementedException();
         }

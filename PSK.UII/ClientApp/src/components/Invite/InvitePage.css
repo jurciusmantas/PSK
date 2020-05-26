@@ -25,22 +25,3 @@
         text-align: center;
         padding-bottom: 20px;
     }
-
-    .invite-holder input {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-.row {
-    margin-bottom: 20px;
-}
-
-    .row:last-child {
-        padding-top: 16px;
-        display: flex;
-        justify-content: center;
-    }
-
-label {
-    min-width: 100px;
-}

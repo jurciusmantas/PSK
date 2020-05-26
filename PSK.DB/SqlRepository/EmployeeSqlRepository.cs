@@ -1,6 +1,6 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
@@ -55,6 +55,11 @@ namespace PSK.DB.SqlRepository
         public Employee FindByName(string name)
         {
             return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
+        }
+
+        public List<Employee> Get()
+        {
+            return context.Employees.ToList();
         }
     }
 }

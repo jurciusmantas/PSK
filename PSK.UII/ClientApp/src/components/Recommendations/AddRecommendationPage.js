@@ -1,5 +1,6 @@
 ﻿import React from "react"
-import './RecommendationPage.css';
+import './RecommendationsPage.css';
+
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 import { Link } from "react-router-dom";
@@ -21,7 +22,7 @@ class AddRecommendationPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topic/topic').then(res => res.json())
+        get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loading: false })
@@ -97,14 +98,13 @@ class AddRecommendationPage extends React.Component {
         return (
             <form className="rec-wrapper" onSubmit={this.onSubmit}>
                 <div className="rec-holder">
-                    <h2>Add recommendation</h2>
+                    <h2>Add a recommendation</h2>
                     <div className="row">
-                        {this.state.loading || !this.state.topics ?
-                            <div className="loader">
+                        {this.state.loading || !this.state.topics
+                            ? <div className="loader">
                                 <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
                             </div>
-                            :
-                            <select
+                            : <select
                                 value={this.state.topicid}
                                 onChange={this.handleOnChange}>
                                 {this.showTopicOptions()}
@@ -119,7 +119,7 @@ class AddRecommendationPage extends React.Component {
                             value={this.state.recommendedTo}
                             onChange={e => this.setState({ recommendedTo: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
-                            required />
+                            required/>
                     </div>
                     <div className="row">
                         <Link to="/recommendations" className="btn btn-custom">Return</Link>
