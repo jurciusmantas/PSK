@@ -6,7 +6,10 @@ import {
 export function loginSuccess(currentUser) {
     return {
         type: LOGIN_SUCCESS,
-        ...currentUser,
+        login: currentUser.login,
+        name: currentUser.name,
+        token: currentUser.token,
+		expiredAt: currentUser.expiredAt
     };
 }
 

@@ -7,5 +7,6 @@ namespace PSK.Model.Repository
 {
     public interface IEmployeesTokenRepository : IRepository<EmployeesToken>
     {
+        public EmployeesToken FindByToken(string token);
     }
 }

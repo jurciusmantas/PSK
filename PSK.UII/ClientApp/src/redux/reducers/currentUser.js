@@ -8,6 +8,7 @@ const initialState = {
     login: null,
     name: null,
     token: null,
+    expiredAt: null
 }
 
 export default (state = initialState, action) => {
@@ -17,6 +18,7 @@ export default (state = initialState, action) => {
             state.login = action.login;
             state.name = action.name;
             state.token = action.token;
+            state.expiredAt = action.expiredAt;
             return { ...state };
         }
         case LOGOUT:{

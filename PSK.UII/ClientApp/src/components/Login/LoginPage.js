@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    setCookie(res.data.token);
+                    setCookie(res.data.token, res.data.expiredAt);
                     this.props.history.push('/home');
                     this.props.login(res.data);
                 }
