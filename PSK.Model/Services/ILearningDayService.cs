@@ -1,4 +1,5 @@
 ﻿using PSK.Model.DTO;
+using System.Collections.Generic;
 
 namespace PSK.Model.Services
 {
@@ -6,5 +7,7 @@ namespace PSK.Model.Services
     {
         ServerResult AddNewLearningDay(Day args);
         ServerResult DeleteLearningDay(int id);
+        ServerResult<List<Day>> GetEmployeeDays(int employeeId);
+        ServerResult<List<Day>> GetDays();
     }
 }

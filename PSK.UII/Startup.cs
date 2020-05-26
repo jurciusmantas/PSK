@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSK.DB.Contexts;
-using PSK.DB.MockRepository;
 using PSK.DB.SqlRepository;
 using PSK.Model.Logging;
 using PSK.Model.Repository;
@@ -62,12 +61,14 @@ namespace PSK.UI
                 options.AddAspNetCore()
                     .AddControllerActivation()
                     .AddViewComponentActivation();
-                //.AddPageModelActivation()
-                //.AddTagHelperActivation();
-
                 options.AddLocalization();
             });
-            services.AddDbContext<PSKDbContext>(options => options.UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
+            //services.AddDbContext<PSKDbContext>(options => options
+            //    .UseLazyLoadingProxies()
+            //    .UseMySql("Server=localhost;Database=DB;Password=PASS;User=USER"));
+            services.AddDbContext<PSKDbContext>(options => options
+                .UseLazyLoadingProxies()
+                .UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
             InitializeContainer();
             InjectRepositories();
         }

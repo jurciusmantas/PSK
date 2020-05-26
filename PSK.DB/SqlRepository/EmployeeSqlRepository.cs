@@ -1,10 +1,8 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.Entities;
-using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -39,7 +37,7 @@ namespace PSK.DB.SqlRepository
             return context.Employees.Find(id);
         }
 
-        public Employee Login(LoginArgs loginArgs)
+        public Employee Login(Model.DTO.LoginArgs loginArgs)
         {
             return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login /*&& employee.Password == loginArgs.Password*/);
         }
@@ -60,6 +58,11 @@ namespace PSK.DB.SqlRepository
         public List<Employee> Get()
         {
             return context.Employees.ToList();
+        }
+
+        public List<Employee> GetSubordinates(int employeeId)
+        {
+            return context.Employees.Where(e => e.LeaderId == employeeId).ToList();
         }
     }
 }

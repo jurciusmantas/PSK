@@ -10,6 +10,7 @@ export function get(url, params = {}) {
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
         }
     })
@@ -21,6 +22,7 @@ export function post(url, params = {}) {
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
         },
         body: JSON.stringify(params)
@@ -33,6 +35,7 @@ export function put(url, params = {}) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
         },
         body: JSON.stringify(params)
@@ -42,7 +45,11 @@ export function put(url, params = {}) {
 
 export function del(url, params = {}) {
     return fetch(`./api/${url}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
     })
 }
 

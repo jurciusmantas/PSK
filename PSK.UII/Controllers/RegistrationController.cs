@@ -8,7 +8,7 @@ namespace PSK.UI.Controllers
 {
     [AllowAnonymous]
     [Route("api/[controller]")]
-    public class RegistrationController : Controller
+    public class RegistrationController : ControllerBase
     {
         private readonly IRegistrationService _registrationService;
 

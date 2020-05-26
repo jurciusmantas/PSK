@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; }
         public int RestrictionId { get; set; }
-        public Restriction Restriction { get; set; }
+        public virtual Restriction Restriction { get; set; }
     }
 }

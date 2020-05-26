@@ -12,7 +12,7 @@ class NewLearningDayPage extends React.Component {
         this.state = {
             selectedDate: moment().format("YYYY-MM-DD"),
             topics: [],
-            selectedTopic: {},
+            selectedTopicId: 0,
             recommendations: [],
         };
         this.changeDate = this.changeDate.bind(this);
@@ -24,15 +24,12 @@ class NewLearningDayPage extends React.Component {
     componentDidMount() {
         get("topics").then(res => res.json()).then(res => {
             if (res.success)
-                this.setState({ topics: res.data });
+                this.setState({ topics: res.data, selectedTopicId: res.data[0].id });
         }).catch(err => {
             console.error(`GET /api/topics failed: ${err}`);
             this.setState({ topics: [] });
         });
-        // Use this when login returns user id:
-        // get(`recommendations?receiverId=${this.state.currentUser.id}`).then(res => res.json()).then(res => {
-        // for now hardcoded for use with mock repository
-        get(`recommendations?receiverId=3`).then(res => res.json()).then(res => {
+        get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
         }).catch(err => {
@@ -44,21 +41,26 @@ class NewLearningDayPage extends React.Component {
         this.setState({ selectedDate: newDate.target.value });
     }
 
-    changeTopic(selectedTopic) {
-        this.setState({ selectedTopic });
+    changeTopic(e) {
+        console.log(e.target.value);
+        this.setState({ selectedTopicId: parseInt(e.target.value) });
     }
 
     createDay() {
-        // Uncomment this when login returns user id
-
-        //post('days', {
-        //    date: this.state.selectedDate,
-        //    employeeId: this.state.currentUser.id,
-        //    topicId: this.state.selectedTopic.id,
-        //}).then(r => r.json())
-        //    .then(() => {
-        //        this.props.history.push('/home');
-        //    });
+        post('days', {
+            date: this.state.selectedDate,
+            employeeId: this.props.currentUser.id,
+            topicId: this.state.selectedTopicId,
+        })
+            //.then(r => r.json())
+            //.then(res => console.log(res))
+            .then(() => {
+                this.props.history.push('/home');
+            })
+            .catch(reason => {
+                console.error(`POST days failed`);
+                console.error(reason);
+            });
     }
 
     makeTopicOptionList() {

@@ -1,5 +1,4 @@
 ﻿using PSK.Model.Entities;
-using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ namespace PSK.DB.MockRepository
             return _employees.Find(employee => employee.Id == id);
         }
 
-        public Employee Login(LoginArgs loginArgs)
+        public Employee Login(Model.DTO.LoginArgs loginArgs)
         {
             throw new NotImplementedException();
         }
@@ -47,6 +46,11 @@ namespace PSK.DB.MockRepository
         }
 
         public List<Employee> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Employee> GetSubordinates(int employeeId)
         {
             throw new NotImplementedException();
         }

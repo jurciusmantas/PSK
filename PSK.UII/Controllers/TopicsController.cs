@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace PSK.UI.Controllers
 {
     [Route("api/[controller]")]
-    public class TopicsController : Controller
+    public class TopicsController : ControllerBase
     {
         private readonly ITopicService _topicService;
 
