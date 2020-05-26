@@ -1,4 +1,4 @@
-﻿namespace PSK.Model.BusinessEntities
+﻿namespace PSK.Model.Entities
 {
     public class EmployeeRestriction
     {

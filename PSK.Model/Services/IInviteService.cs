@@ -1,9 +1,9 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 
 namespace PSK.Model.Services
 {
     public interface IInviteService
     {
-        ServerResult<InviteArgs> Invite(InviteArgs args);
+        ServerResult<Invite> Invite(Invite args);
     }
 }

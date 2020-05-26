@@ -17,7 +17,7 @@ export function get(url, params = {}) {
 export function post(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'post',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
             'Authorization': token,
         },
@@ -44,4 +44,10 @@ function handleErrors(response) {
         return Promise.reject()
     }
     return response;
+}
+
+export function del(url, params = {}) {
+    return fetch(`./api/${url}`, {
+        method: 'DELETE'
+    })
 }

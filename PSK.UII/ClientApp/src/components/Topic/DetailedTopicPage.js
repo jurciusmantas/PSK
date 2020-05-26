@@ -1,124 +1,106 @@
 ﻿import React from 'react';
-import { get } from '../../helpers/request'
+import './TopicPage.css';
+import { get } from '../../helpers/request';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export default class DetailedTopicPage extends React.Component {
     constructor(props) {
-        super();
+        super(props);
+        const queryParams = new URLSearchParams(window.location.search);
+        console.log(queryParams.get("id"));
         this.state = {
             loading: true,
             data: null,
-            id: null
+            id: queryParams.get("id"),
         }
     }
 
     componentDidMount() {
-
         this.setDetails();
     }
 
     assign() {
         alert("Assigned");
-      }
+    }
 
     setDetails() {
-        let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); //Takes id from the URL
-        this.setState({
-            id: id
-        });
-
-        get(`topic/topic/${id}`).then(res => res.json())
+        get(`topics/${this.state.id}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    this.setState({ data: res.data, loading: false })
+                    this.setState({ data: res.data, loading: false });
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.error(error);
             })
     }
 
-    componentWillReceiveProps(){
-        this.setDetails();
-        this.forceUpdate();  
-    }
 
     showSubtopics() {
-        if (!this.state.data.subTopicList)
-        {
+        if (!this.state.data.subTopicList) {
             return (
-                <div>
-                    Subtopic not found
-                </div>
+                <div>Subtopics not found</div>
             )
         }
-        else if (Array.isArray(this.state.data.subTopicList) && this.state.data.subTopicList.length === 0)
-        {
+        else if (Array.isArray(this.state.data.subTopicList) && this.state.data.subTopicList.length === 0) {
             return (
-                <div>
-                    No subtopics
-                </div>
+                <div>No subtopics</div>
             )
         }
 
         return (
             <div>
-                <h5>Subtopics</h5>
-                
-               
                 <table>
                     <tbody>
-                        { 
-                        this.state.data.subTopicList.map((d) => {
-                            const {id, name} = d
+                        {
+                            this.state.data.subTopicList.map((d) => {
+                                const { id, name } = d
 
-                            return (
-                                <tr key={ `subtopic-list-item-${id}` }>
-                                    <td> 
-                                        <Link to={{ pathname: `/topic/${id}`}} > {name} </Link>
-                                    </td>
-                                </tr>
-                            )
-                        })
+                                return (
+                                    <tr key={`subtopic-list-item-${id}`}>
+                                        <td>
+                                            <Link onClick={this.forceUpdate} to={{ pathname: "/topic", search: `?id=${id}` }}>{name}</Link>
+                                        </td>
+                                    </tr>
+                                )
+                            })
                         }
                     </tbody>
                 </table>
             </div>
-        )      
+        )
     }
 
-      render() {
-        if (this.state.loading)
-        {
+    render() {
+        if (this.state.loading) {
             return (
-                <div>
-                    loading...
+                <div className="loader">
+                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
                 </div>
             )
         }
-        else if (!this.state.loading && !this.state.data)
-        {
+        if (!this.state.data || this.state.id === null) {
             return (
-                <div>
-                    Not found
-                </div>
+                <div>Not found</div>
             )
         }
         return (
-            <div>
-                <h3>{ this.state.data.name }</h3>
-
-                <h5>Description</h5>
-                <p>{ this.state.data.description }</p>
-                <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
-                <div>
-                    <Link className="btn btn-dark" to={{ pathname: `/createtopic/${this.state.id}` }} > Add New Subtopic </Link>
+            <div className="topic-wrapper">
+                <div className="topic-holder">
+                    <h2>{this.state.data.name}</h2>
+                    <h5>Description</h5>
+                    <p>{this.state.data.description}</p>
+                    <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
+                    <hr />
+                    <h5>Subtopics</h5>
+                    <div>
+                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }} > Add New Subtopic </Link>
+                    </div>
+                    {this.showSubtopics()}
                 </div>
-            
-                {this.showSubtopics()}
             </div>
         )
-      }
+    }
 }
-
-

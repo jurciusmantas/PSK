@@ -2,6 +2,7 @@
   white-space: normal;
   text-align: center;
   word-break: break-all;
+
 }
 
 html {
@@ -15,4 +16,23 @@ html {
 
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.sign-out-button{
+  background-color: transparent !important;
+  border: none !important;
+}
+
+    .sign-out-button > svg {
+        color: #f8f9fa;
+        font-size: 25px;
+    }
+
+        .sign-out-button > svg:hover {
+            color: #cbd3da;
+            font-size: 25px;
+        }
+
+.navbar-brand {
+    color: #fff;
 }

@@ -1,9 +1,11 @@
 import {
     LOGIN_SUCCESS,
+    LOGOUT,
     AUTH_ERROR
-} from '../constans';
+} from '../constants';
 
 const initialState = {
+    id: null,
     login: null,
     name: null,
     token: null,
@@ -12,12 +14,19 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch(action.type){
-        case LOGIN_SUCCESS:{
+        case LOGIN_SUCCESS: {
+            state.id = action.id;
             state.login = action.login;
             state.name = action.name;
             state.token = action.token;
             state.expiredAt = action.expiredAt;
             return { ...state };
+        }
+        case LOGOUT:{
+            state.login = null;
+            state.name = null;
+            state.token = null;
+            return {...state};
         }
         case AUTH_ERROR: {
             state.login = null;

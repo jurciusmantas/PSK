@@ -9,7 +9,7 @@ export function getCookie(name){
 export function setCookie(value, expirationDate){
     cookies.set('AuthToken', value, {
         path: '/',
-        expires: new Date(expirationDate)
+        expires: new Date(expirationDate),
     });
 }
 

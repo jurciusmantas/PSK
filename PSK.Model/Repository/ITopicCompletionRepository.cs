@@ -1,7 +1,4 @@
-﻿using PSK.Model.BusinessEntities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PSK.Model.Entities;
 
 namespace PSK.Model.Repository
 {
