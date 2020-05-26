@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.Model.Entities
 {
     public class Restriction
     {
-        public int Id { get; set; }
-        public int ConsecutiveDays { get; set; }
-        public int MaxDaysPerYear { get; set; }
-        public int MaxDaysPerQuarter { get; set; }
-        public int MaxDaysPerMonth { get; set; }
-        public bool Global { get; set; }
-        public DateTime CreationDate { get; set; }
-        public int UseCount { get; set; }
+        public int Id { set; get; }
+        public int ConsecutiveDays { set; get; }
+        public int MaxDaysPerYear { set; get; }
+        public int MaxDaysPerQuarter { set; get; }
+        public int MaxDaysPerMonth { set; get; }
+        public bool Global { set; get; }
+        public DateTime CreationDate { set; get; }
+        public int CreatorId { set; get; }
+        public Employee Creator { set; get; }
+        public virtual ICollection<EmployeeRestriction> RestrictionEmployees { set; get; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Services;
 
 namespace PSK.UI.Controllers
@@ -15,8 +15,7 @@ namespace PSK.UI.Controllers
         }
 
         [HttpPost]
-        public ServerResult<InviteArgs> 
-            Invite([FromBody]InviteArgs args)
+        public ServerResult<Invite> Invite([FromBody]Invite args)
         {
             return _inviteService.Invite(args);
         }

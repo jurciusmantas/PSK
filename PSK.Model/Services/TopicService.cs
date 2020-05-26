@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace PSK.Model.Services
 
         public ServerResult<List<Topic>> GetTopics()
         {
-            var topicTree = ConvertToTree(_topicRepository.GetTopics());
+            var topicTree = ConvertToTree(_topicRepository.Get());
 
             return new ServerResult<List<Topic>> { Data = topicTree, Message = "Success", Success = true };
         }
@@ -40,7 +40,7 @@ namespace PSK.Model.Services
             return new ServerResult<Topic> { Data = topic, Message = "Success", Success = true };
         }
 
-        private List<Topic> ConvertToTree(List<BusinessEntities.Topic> topicList)
+        private List<Topic> ConvertToTree(List<Entities.Topic> topicList)
         {
             var topics = new List<Topic>();
 
@@ -62,7 +62,7 @@ namespace PSK.Model.Services
 
         public ServerResult CreateTopic(Topic args)
         {
-            var newTopic = new BusinessEntities.Topic { Name = args.Name, Description = args.Description};
+            var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description};
 
             if (args.ParentId.HasValue)
             {

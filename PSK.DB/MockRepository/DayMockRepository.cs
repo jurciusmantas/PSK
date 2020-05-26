@@ -1,9 +1,8 @@
-﻿using PSK.Model.BusinessEntities;
+﻿using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -30,6 +29,11 @@ namespace PSK.DB.MockRepository
         public Day Get(int id)
         {
             return _days.Find(day => day.Id == id);
+        }
+
+        public List<Day> Get()
+        {
+            throw new NotImplementedException();
         }
 
         public Day Update(Day updatedDay)

@@ -1,8 +1,7 @@
-﻿using PSK.Model.BusinessEntities;
+﻿using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.DB.MockRepository
 {
@@ -19,6 +18,11 @@ namespace PSK.DB.MockRepository
         }
 
         public TopicCompletion Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TopicCompletion> Get()
         {
             throw new NotImplementedException();
         }

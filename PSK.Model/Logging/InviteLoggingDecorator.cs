@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using PSK.Model.Services;
 using Serilog;
 using System;
@@ -19,7 +19,7 @@ namespace PSK.Model.Logging
             _logger = logger;
         }
 
-        public ServerResult<InviteArgs> Invite(InviteArgs args)
+        public ServerResult<Invite> Invite(Invite args)
         {
             try
             {

@@ -1,5 +1,5 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.Entities;
+﻿using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using Serilog;
 using System;
@@ -29,6 +29,7 @@ namespace PSK.Model.Services
                         Success = true,
                         Data = new User
                         {
+                            Id = 1,
                             Login = "admin",
                             Name = "admin",
                             Token = GetToken(),

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
+using PSK.Model.DTO;
 using PSK.Model.Entities;
-using PSK.Model.BusinessEntities;
 using PSK.Model.Repository;
 
 namespace PSK.Model.Services
@@ -18,7 +18,7 @@ namespace PSK.Model.Services
             _employeeRepository = employeeRepository;
         }
 
-        public ServerResult AddNewUser(RegistrationArgs args)
+        public ServerResult AddNewUser(Registration args)
         {
             try
             {
