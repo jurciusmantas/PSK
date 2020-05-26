@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PSK.Model.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using PSK.Model.DTO;
 using PSK.Model.Services;
 
 
@@ -27,7 +23,7 @@ namespace PSK.UI.Controllers
         }
 
         [HttpPost]
-        public ServerResult AddNewUser([FromBody]RegistrationArgs args)
+        public ServerResult AddNewUser([FromBody]Registration args)
         {
             return _registrationService.AddNewUser(args);
         } 

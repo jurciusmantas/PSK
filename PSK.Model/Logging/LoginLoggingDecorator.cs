@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using PSK.Model.Services;
 using Serilog;
 using System;
@@ -22,6 +22,7 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.Login(args);
+
                 if (!result.Success)
                 {
                     _logger.Information("{Login}: {DecorateeClassName}.Login unsuccessful", args.Login, _decorateeClassName);
@@ -62,12 +63,12 @@ namespace PSK.Model.Logging
             try
             {
                 _decoratee.Logout();
-                _logger.Information("{Timestamp} {Login}: {DecorateeClassName}.LoginToken success", null, _decorateeClassName);
+                _logger.Information("{DecorateeClassName}.Logout success", _decorateeClassName);
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{Timestamp}: {DecorateeClassName}.LoginToken failed {Newline} {Exception}", _decorateeClassName, e);
-                throw; // perhaps we'd like to hide original exception from the database and 'throw e;' would be more suitable
+                _logger.Error(e, "{DecorateeClassName}.Logout failed {Newline} {Exception}", _decorateeClassName, e);
+                throw; 
             }
         }
     }

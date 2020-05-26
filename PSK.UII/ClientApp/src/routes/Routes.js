@@ -18,36 +18,38 @@ import EditRecommendationsPage from '../components/Recommendations/EditRecommend
 import RegistrationPage from '../components/Registration/RegistrationPage';
 import CreateTopicPage from '../components/Topic/CreateTopicPage';
 import DetailedTopicPage from '../components/Topic/DetailedTopicPage';
+import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 import UserProfile from '../components/UserProfile/UserProfile';
 
 const NotFoundPageWraped = () =>
     <Layout>
-        <NotFoundPage/>
+        <NotFoundPage />
     </Layout>;
 
-class Routes extends React.Component{
-    constructor(props){
+class Routes extends React.Component {
+    constructor(props) {
         super(props);
 
         this.state = {
             components: [
                 { component: HomePage, path: "/home" },
                 { component: InvitePage, path: "/invite" },
-                { component: DetailedTopicPage, path: "/topic/:id" },
-                { component: TopicPage, path: "/topic" },
+                { component: DetailedTopicPage, path: "/topic" },
+                { component: TopicPage, path: "/topics" },
                 { component: RecommendationsPage, path: "/recommendations" },
                 { component: AddRecommendationPage, path: "/add-recommendation" },
-                { component: EditRecommendationsPage, path: "/edit-recommendation/:id" },
-                { component: CreateTopicPage, path: "/createTopic" },
+                { component: EditRecommendationsPage, path: "/edit-recommendation" },
+                { component: CreateTopicPage, path: "/add-topic" },
+                { component: NewLearningDayPage, path: "/add-day" },
                 { component: UserProfile, path: "/user_profile" },
             ]
         }
     }
 
-    componentDidMount(){
-        let token = getCookie('AuthToken');
+    componentDidMount() {
+        const token = getCookie('AuthToken');
         if (token)
-            post('login/login_token', token)
+            post('login?token=true', { token })
                 .then(res => res.json())
                 .then(res => {
                     if (res.success)
@@ -61,9 +63,8 @@ class Routes extends React.Component{
             this.props.logout();
     }
 
-    render(){
+    render() {
         const { currentUser } = this.props;
-
         if (!currentUser || !currentUser.token)
             return (
                 <BrowserRouter basename={'MegstuKumpi'}>
@@ -78,32 +79,32 @@ class Routes extends React.Component{
         return (
             <BrowserRouter basename={'MegstuKumpi'}>
                 <Switch>
-                    {   
+                    {
                         this.state.components.map((comp, i) => {
                             let wrappedComponent = () =>
                                 <Layout>
-                                    <comp.component/>
+                                    <comp.component />
                                 </Layout>;
-                            
+
                             return (
-                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`}/>
+                                <Route component={wrappedComponent} path={comp.path} key={`route_key_${i}`} />
                             )
                         })
                     }
-                    <Route component={NotFoundPageWraped}/>
+                    <Route component={NotFoundPageWraped} />
                 </Switch>
             </BrowserRouter>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, _) => {
     return {
         currentUser: state.currentUser
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, _) => {
     return {
         login: (currentUser) => dispatch(currentUserActions.loginSuccess(currentUser)),
         logout: () => dispatch(currentUserActions.logout())
