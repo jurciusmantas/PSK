@@ -1,5 +1,5 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -37,6 +37,11 @@ namespace PSK.DB.SqlRepository
         public EmployeesToken Get(int id)
         {
             return context.EmployeesTokens.Find(id);
+        }
+
+        public List<EmployeesToken> Get()
+        {
+            throw new NotImplementedException();
         }
 
         public EmployeesToken Update(EmployeesToken updatedEmployeesToken)

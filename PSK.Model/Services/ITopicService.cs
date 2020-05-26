@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using System.Collections.Generic;
 
 namespace PSK.Model.Services

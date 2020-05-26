@@ -35,9 +35,7 @@ class InvitePage extends React.Component {
                     });
                 }
             })
-            .catch(error => {
-                console.log(error);
-            })
+            .catch(error => console.error(error));
     }
 
     handleKeyPress(e) {

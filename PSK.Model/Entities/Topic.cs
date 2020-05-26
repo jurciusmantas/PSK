@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PSK.Model.Entities
 {
     public class Topic
     {
         public int Id { set; get; }
+        [Column(TypeName = "varchar(255)")]
         public string Name { set; get; }
-        public string Description { set; get; }
-        public int? ParentId { set; get; }
-
-        public List<Topic> SubTopicList { get; set; }
+        [Column(TypeName = "varchar(12000)")]
+        public string Description { get; set; }
+        public int? ParentTopicId { get; set; }
+        public Topic ParentTopic { set; get; }
     }
 }

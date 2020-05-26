@@ -12,7 +12,7 @@ export default class TopicPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topic/topic').then(res => res.json())
+        get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })
@@ -29,7 +29,7 @@ export default class TopicPage extends React.Component {
             return (
                 <tr key={ `topic-list-item-${id}` }>
                     <td>
-                        <Link to={{ pathname: `/topic/${id}` }} > {name} </Link>
+                        <Link to={{ pathname: "/topic", search: `?id=${id}` }} > {name} </Link>
                     </td>
                 </tr>
             )
@@ -40,7 +40,7 @@ export default class TopicPage extends React.Component {
         return (
             <div>
                 <h3>Topics</h3>
-                <Link className="btn btn-dark" to={{ pathname: `/createtopic` }} > Add New Topic </Link>
+                <Link className="btn btn-dark" to={{ pathname: `/add-topic` }} > Add New Topic </Link>
                 { this.state.loading || !this.state.data ?
                     <div>
                         loading...

@@ -13,14 +13,16 @@ namespace PSK.Model
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
-            container.Register<IRecommendationService, RecommendationService>(Lifestyle.Scoped);
+            container.Register<IRecommendationsService, RecommendationsService>(Lifestyle.Scoped);
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
+            container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
 
             InitializeLogging(logFile, logLevel);
             
             container.RegisterInstance(Log.Logger);
 
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
         }
 
         private static void InitializeLogging(string logFile, LogLevel logLevel)

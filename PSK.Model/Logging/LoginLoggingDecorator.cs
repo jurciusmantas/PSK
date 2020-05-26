@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using PSK.Model.Services;
 using Serilog;
 using System;
@@ -55,6 +55,20 @@ namespace PSK.Model.Logging
             {
                 _logger.Error(e, "{_decorateeClassName}.LoginToken failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
+            }
+        }
+
+        public void Logout()
+        {
+            try
+            {
+                _decoratee.Logout();
+                _logger.Information("{DecorateeClassName}.Logout success", _decorateeClassName);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.Logout failed {Newline} {Exception}", _decorateeClassName, e);
+                throw; 
             }
         }
     }
