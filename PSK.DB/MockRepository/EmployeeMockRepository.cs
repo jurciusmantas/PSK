@@ -1,4 +1,4 @@
-﻿using PSK.Model.BusinessEntities;
+﻿using PSK.Model.DTO;
 using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
@@ -53,6 +53,11 @@ namespace PSK.DB.MockRepository
         }
 
         public List<Employee> FindAllLower(int leaderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Employee> Get()
         {
             throw new NotImplementedException();
         }

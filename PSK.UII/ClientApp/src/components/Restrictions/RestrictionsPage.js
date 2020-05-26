@@ -22,7 +22,7 @@ class RestrictionsPage extends React.Component {
 
     componentDidMount() {
         employeeId = 1;
-        get('restrictions/restriction/' + employeeId)
+        get(`restrictions/current_restriction?=${employeeId}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -35,7 +35,7 @@ class RestrictionsPage extends React.Component {
             .catch(error => {
                 console.log(error);
             })
-        get('restrictions/restrictions/' + employeeId)
+        get(`restrictions/restrictions?=${employeeId}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -84,7 +84,7 @@ class RestrictionsPage extends React.Component {
                     <td>{restriction.maxDaysPerMonth}</td>
                     <td>{restriction.creationDate}</td>
                     <td>{restriction.useCount}</td>
-                    <td><Link to={'delete/' + restriction.id}>Delete</Link></td>
+                    <td><Link to={`delete?id=${restriction.id}`}>Delete</Link></td>
                 </tr>
             )
         })

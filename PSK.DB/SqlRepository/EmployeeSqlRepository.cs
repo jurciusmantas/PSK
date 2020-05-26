@@ -1,10 +1,10 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
 using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using PSK.Model.DTO;
 
 namespace PSK.DB.SqlRepository
 {
@@ -75,6 +75,9 @@ namespace PSK.DB.SqlRepository
             return employees;
         }
 
-         
+        public List<Employee> Get()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

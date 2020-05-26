@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PSK.Model.Entities
+namespace PSK.Model.DTO
 {
     public class RestrictionArgs
     {

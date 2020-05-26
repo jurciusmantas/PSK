@@ -1,4 +1,4 @@
-﻿using PSK.Model.Entities;
+﻿using PSK.Model.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Services;
 using System;
 using System.Collections.Generic;
@@ -18,18 +18,18 @@ namespace PSK.UI.Controllers
             _restrictionService = restrictionService;
         }
 
-        [HttpGet, Route("restriction/{employeeId}")]
-        public ServerResult<Restriction> GetRestriction(int employeeId)
+        [HttpGet, Route("current_restriction")]
+        public ServerResult<Restriction> GetRestriction([FromQuery(Name = "id")] int employeeId)
         {
             return _restrictionService.GetRestriction(employeeId);
         }
-        [HttpGet, Route("restrictions/{employeeId}")]
+        [HttpGet, Route("restrictions")]
         public ServerResult<List<Restriction>> GetCreatedRestrictions(int employeeId)
         {
             return _restrictionService.GetCreatedRestrictions(employeeId);
         }
-        [HttpDelete, Route("delete/{id}")]
-        public ServerResult DeleteRestriction(int id)
+        [HttpDelete, Route("delete")]
+        public ServerResult DeleteRestriction([FromQuery(Name = "id")]int id)
         {
             return _restrictionService.DeleteRestriction(id);
         }

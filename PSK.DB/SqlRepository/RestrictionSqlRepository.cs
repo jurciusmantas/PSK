@@ -1,5 +1,5 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Linq;
 using System;
@@ -37,6 +37,11 @@ namespace PSK.DB.SqlRepository
         public Restriction Get(int id)
         {
             return context.Restrictions.Find(id);
+        }
+
+        public List<Restriction> Get()
+        {
+            throw new NotImplementedException();
         }
 
         public List<Restriction> GetCreatedRestrictions(int creatorId)

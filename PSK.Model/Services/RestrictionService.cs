@@ -1,10 +1,11 @@
-﻿using PSK.Model.BusinessEntities;
+﻿
 using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using PSK.Model.DTO;
 
 namespace PSK.Model.Services
 {
@@ -30,7 +31,7 @@ namespace PSK.Model.Services
             {
                 return new ServerResult { Message = msg, Success = false };
             }
-            BusinessEntities.Restriction restriction = ParseRestriction(restrictionArgs);
+            Entities.Restriction restriction = ParseRestriction(restrictionArgs);
             int applyTo = restrictionArgs.ApplyTo;
             List<Employee> employees;
             string notFoundNames;
@@ -71,7 +72,7 @@ namespace PSK.Model.Services
             return null;
         }
 
-        private void CreateRestrictionForEmployees(BusinessEntities.Restriction restriction, List<Employee> employees)
+        private void CreateRestrictionForEmployees(Entities.Restriction restriction, List<Employee> employees)
         {
             List<EmployeeRestriction> employeeRestrictions = new List<EmployeeRestriction>();
             foreach (Employee employee in employees)
@@ -82,7 +83,7 @@ namespace PSK.Model.Services
             _restrictionRepository.Add(restriction);
         }
 
-        private void CreateRestrictionForEmployee(BusinessEntities.Restriction restriction, int employeeId)
+        private void CreateRestrictionForEmployee(Entities.Restriction restriction, int employeeId)
         {
             EmployeeRestriction employeeRestriction = CreateEmployeeRestriction(employeeId, restriction);
             List<EmployeeRestriction> restrictionEmployees = new List<EmployeeRestriction>
@@ -94,7 +95,7 @@ namespace PSK.Model.Services
 
         }
 
-        private EmployeeRestriction CreateEmployeeRestriction(int receiverId, BusinessEntities.Restriction restriction)
+        private EmployeeRestriction CreateEmployeeRestriction(int receiverId, Entities.Restriction restriction)
         {
             return new EmployeeRestriction
             {
@@ -103,9 +104,9 @@ namespace PSK.Model.Services
             };
         }
 
-        private BusinessEntities.Restriction ParseRestriction(RestrictionArgs restrictionArgs)
+        private Entities.Restriction ParseRestriction(RestrictionArgs restrictionArgs)
         {
-            return new BusinessEntities.Restriction
+            return new Entities.Restriction
             {
                 ConsecutiveDays = restrictionArgs.ConsecutiveDays,
                 MaxDaysPerMonth = restrictionArgs.MaxDaysPerMonth,
@@ -119,7 +120,7 @@ namespace PSK.Model.Services
 
         public ServerResult DeleteRestriction(int id)
         {
-            BusinessEntities.Restriction deletedRestriction = _restrictionRepository.Delete(id);
+            Entities.Restriction deletedRestriction = _restrictionRepository.Delete(id);
             if (deletedRestriction == null)
             {
                 return new ServerResult { Message = "Restriction was not found", Success = false };
@@ -127,26 +128,26 @@ namespace PSK.Model.Services
             return new ServerResult { Message = "Success", Success = true };
         }
 
-        public ServerResult<Entities.Restriction> GetRestriction(int employeeId)
+        public ServerResult<DTO.Restriction> GetRestriction(int employeeId)
         {
             Employee employee = _employeeRepository.Get(employeeId);
             if (employee == null)
             {
-                return new ServerResult<Entities.Restriction> { Message = "Employee was not found", Success = false };
+                return new ServerResult<DTO.Restriction> { Message = "Employee was not found", Success = false };
             }
             var employeeRestrictions = employee.EmployeeRestrictions;
-            Entities.Restriction restrictionResult = null;
+            DTO.Restriction restrictionResult = null;
             if (employeeRestrictions != null && employeeRestrictions.Count > 0)
             {
                 EmployeeRestriction employeeRestriction = employeeRestrictions.OrderByDescending(er => er.Restriction.CreationDate).First();
                 restrictionResult = ParseRestriction(employeeRestriction.Restriction);
             }
-            return new ServerResult<Entities.Restriction> { Data = restrictionResult, Message = "Success", Success = true };
+            return new ServerResult<DTO.Restriction> { Data = restrictionResult, Message = "Success", Success = true };
         }
 
-        private Entities.Restriction ParseRestriction(BusinessEntities.Restriction restriction)
+        private DTO.Restriction ParseRestriction(Entities.Restriction restriction)
         {
-            return new Entities.Restriction
+            return new DTO.Restriction
             {
                 Id = restriction.Id,
                 ConsecutiveDays = restriction.ConsecutiveDays,
@@ -187,16 +188,16 @@ namespace PSK.Model.Services
             return (foundEmployees, notFoundEmplStrBldr.ToString());
         }
 
-        public ServerResult<List<Entities.Restriction>> GetCreatedRestrictions(int employeeId)
+        public ServerResult<List<DTO.Restriction>> GetCreatedRestrictions(int employeeId)
         {
-            List<BusinessEntities.Restriction> restrictions = _restrictionRepository.GetCreatedRestrictions(employeeId);
-            List<Entities.Restriction> restrictionsResult = new List<Entities.Restriction>();
-            foreach (BusinessEntities.Restriction restriction in restrictions)
+            List<Entities.Restriction> restrictions = _restrictionRepository.GetCreatedRestrictions(employeeId);
+            List<DTO.Restriction> restrictionsResult = new List<DTO.Restriction>();
+            foreach (Entities.Restriction restriction in restrictions)
             {
                 var restrictionResultItem = ParseRestriction(restriction);
                 restrictionsResult.Add(restrictionResultItem);
             }
-            return new ServerResult<List<Entities.Restriction>> { Data = restrictionsResult, Message = "Success", Success = true };
+            return new ServerResult<List<DTO.Restriction>> { Data = restrictionsResult, Message = "Success", Success = true };
         }
 
         public ServerResult<List<User>> GetLowerUsers(int leaderId)
