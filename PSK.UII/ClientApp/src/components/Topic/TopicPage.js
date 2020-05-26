@@ -47,7 +47,7 @@ export default class TopicPage extends React.Component {
                     <Link className="btn btn-dark" to={{ pathname: `/add-topic` }} > Add New Topic </Link>
                     {this.state.loading || !this.state.data ?
                         <div className="loader">
-                            <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                            <FontAwesomeIcon icon={faSpinner} height="20px" />
                         </div>
                         :
                         <table>

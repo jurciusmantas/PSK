@@ -3,17 +3,19 @@ import getStore from '../redux/store';
 import { getCookie } from './cookie';
 
 var token = 'Token ' + getCookie('AuthToken');
+const { store } = getStore();
 
 export function get(url, params = {}) {
-        return fetch('./api/' + url, {
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token,
-            }
-        })
-            .then(handleErrors,url)
+    return fetch('./api/' + url, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+        }
+    })
+    .then(res => handleErrors(res));
 }
+
 export function post(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'post',
@@ -22,7 +24,8 @@ export function post(url, params = {}) {
             'Authorization': token,
         },
         body: JSON.stringify(params)
-    }).then(handleErrors)
+    })
+    .then(res => handleErrors(res))
 }
 
 export function put(url, params = {}) {
@@ -33,10 +36,16 @@ export function put(url, params = {}) {
             'Authorization': token,
         },
         body: JSON.stringify(params)
-    }).then(handleErrors)
+    })
+    .then(res => handleErrors(res))
 }
 
-const { store } = getStore();
+export function del(url, params = {}) {
+    return fetch(`./api/${url}`, {
+        method: 'DELETE'
+    })
+}
+
 function handleErrors(response) {
     if (response.status === 401) {
         store.dispatch(authError());
@@ -44,10 +53,4 @@ function handleErrors(response) {
         return Promise.reject()
     }
     return response;
-}
-
-export function del(url, params = {}) {
-    return fetch(`./api/${url}`, {
-        method: 'DELETE'
-    })
 }

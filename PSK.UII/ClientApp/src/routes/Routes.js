@@ -54,9 +54,7 @@ class Routes extends React.Component {
                         this.props.login(res.data);
                     }
                 })
-                .catch(error => {
-                    console.log(error);
-                })
+                .catch(error => console.log(error))
 
         else if (this.props.currentUser)
             this.props.logout();
@@ -70,14 +68,6 @@ class Routes extends React.Component {
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
-                        {currentUser.authError
-                            ? <Redirect
-                                to={{
-                                    pathname: "/",
-                                    state: { from: this.props.location }
-                                }}/>
-                            : null
-                        }
                         <Route component={NotFoundPage} />
                     </Switch>
                 </BrowserRouter>
