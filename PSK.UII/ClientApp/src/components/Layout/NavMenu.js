@@ -47,23 +47,23 @@ export class NavMenu extends Component {
     render() {
         return (
             <header>
-                <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+                <Navbar className="navbar-expand-sm navbar-toggleable-sm bg-dark border-bottom box-shadow mb-3" dark>
                     <Container>
                         <NavbarBrand tag={Link} to="/">PSK.UI</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                             <ul className="navbar-nav flex-grow">
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/home">Home</NavLink>
+                                    <NavLink tag={Link} className="text-light" to="/home">Home</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/topics">Topics</NavLink>
+                                    <NavLink tag={Link} className="text-light" to="/topics">Topics</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/recommendations">Recommendations</NavLink>
+                                    <NavLink tag={Link} className="text-light" to="/recommendations">Recommendations</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
+                                    <NavLink tag={Link} className="text-light" to="/invite">Invite</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <Button className="sign-out-button" onClick={() => this.logout()}>

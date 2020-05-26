@@ -3,6 +3,8 @@ import './RecommendationsPage.css';
 
 import { put, get } from '../../helpers/request'
 import { Link, withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 class EditRecommendationsPage extends React.Component {
     constructor() {
@@ -105,39 +107,56 @@ class EditRecommendationsPage extends React.Component {
 
     render() {
         return (
-            <form className="wrapper" onSubmit={this.onSubmit}>
-                <h3>Edit recommendation</h3>
-                <div className="row">
-                    {this.state.loading1 || !this.state.recommendation
-                        ? <div>loading...</div>
-                        : <div>{this.state.recommendation.topicName} {this.state.recommendation.receiverName}</div>
-                    }
-                </div>
-                <div className="row">
-                    <h3>Enter new data:</h3>
-                    {this.state.loading1 || !this.state.recommendation || this.state.loading2 || !this.state.topics
-                        ? <div> loading... </div>
-                        : <div>
-                            <select
-                                value={this.state.topicId}
-                                onChange={this.handleOnChange}
-                            >
-                                {this.showTopicOptions()}
-                                {this.showSubTopicOptions()}
-                            </select>
-                            <input
-                                type="text"
-                                name="recommendedTo"
-                                defaultValue={this.state.recommendedTo}
-                                onChange={e => this.setState({ recommendedTo: e.target.value })}
-                                onKeyPress={e => this.handleKeyPress(e)}
-                                required />
+            <form className="rec-wrapper" onSubmit={this.onSubmit}>
+                <div className="rec-holder">
+                    <h2>Edit recommendation</h2>
+                    <div className='info'>
+                        <div className="row">
+                            {this.state.loading1 || !this.state.recommendation
+                                ? <div className="loader">
+                                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                </div>
+                                : <div>
+                                    <h5>Current data:</h5>
+                                    <p><b>Topic: </b>{this.state.recommendation.topicName}</p>
+                                    <p><b>Asignee: </b>{this.state.recommendation.receiverName}</p>
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
-                <div className="row">
-                    <Link to="/recommendations" className="btn btn-dark">Return</Link>
-                    <button className="btn btn-dark" type="submit">Submit</button>
+                    </div>
+                    <div className='newData'>
+                        <div className="row">
+                            {this.state.loading1 || !this.state.recommendation || this.state.loading2 || !this.state.topics
+                                ? <div className="loader">
+                                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                </div>
+                                : <div>
+                                    <h5>Enter new data:</h5>
+                                    <div className='row'>
+                                        <select
+                                            value={this.state.topicId}
+                                            onChange={this.handleOnChange}
+                                        >
+                                            {this.showTopicOptions()}
+                                            {this.showSubTopicOptions()}
+                                        </select>
+                                    </div>
+                                    <div className='row'>
+                                        <input
+                                            type="text"
+                                            defaultValue={this.state.recommendedTo}
+                                            onChange={e => this.setState({ recommendedTo: e.target.value })}
+                                            onKeyPress={e => this.handleKeyPress(e)}
+                                            required />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div className="row">
+                        <Link to="/recommendations" className="btn btn-custom">Return</Link>
+                        <button className="btn btn-custom" type="submit">Submit</button>
+                    </div>
                 </div>
             </form>
         )

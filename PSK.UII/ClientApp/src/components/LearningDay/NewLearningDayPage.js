@@ -73,11 +73,14 @@ class NewLearningDayPage extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>Create new learning day</h1>
-                <form>
-                    <div>
-                        <label htmlFor="learn-date">Date:</label>
+            <div className='day-wrapper'>
+                <div className='day-holder'>
+                <h2>Create new learning day</h2>
+                    <form>
+                        <div className='row'>
+                            <label htmlFor="learn-date">Date:</label>
+                        </div>
+                        <div className='row'>
                         <input
                             type="date"
                             id="learn-date"
@@ -86,18 +89,23 @@ class NewLearningDayPage extends React.Component {
                             min={moment().format("YYYY-MM-DD")}
                             pattern="d{4}-d{2}-d{2}"
                         />
-                    </div>
-                    <div>
-                        <label htmlFor="topics">Topic:</label>
+                        </div>
+                        <div className='row'>
+                            <label htmlFor="topics">Topic:</label>
+                        </div>
+                        <div className='row'>
                         <select
                             id="topics"
                             onChange={this.changeTopic}
                         >
                             {this.makeTopicOptionList()}
                         </select>
-                    </div>
-                    <button type="submit" className="btn btn-dark" onClick={this.createDay}>Create</button>
+                        </div>
+                        <div className='row'>
+                            <button type="submit" className="btn btn-custom" onClick={this.createDay}>Create</button>
+                        </div>
                 </form>
+                </div>
             </div>
         )
     }

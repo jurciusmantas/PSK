@@ -100,55 +100,57 @@ class Calendar extends React.Component {
 
         return (
             <React.Fragment>
-                <div className='calendar-navbar'>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={(e) => this.changeMonth()}
-                    >{'<<  ' + monthBefore}</button>
-                    <b>{currentMonth}</b>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={() => this.changeMonth(true)}
-                    >{monthAfter + '  >>'}</button>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={this.openCreateDayPage}
-                    >Add learning day</button>
-                </div>
-                <div className='calendar-holder'>
-                    {[1, 2, 3, 4, 5, 6, 7].map(index => {
-                        const items = calendar.days.filter(i => i.weekDay === index);
+                <div className="calendar-container">
+                    <div className='calendar-navbar'>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={(e) => this.changeMonth()}
+                        >{'<<  ' + monthBefore}</button>
+                        <b>{currentMonth}</b>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={() => this.changeMonth(true)}
+                        >{monthAfter + '  >>'}</button>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={this.openCreateDayPage}
+                        >Add learning day</button>
+                    </div>
+                    <div className='calendar-holder'>
+                        {[1, 2, 3, 4, 5, 6, 7].map(index => {
+                            const items = calendar.days.filter(i => i.weekDay === index);
 
-                        return (
-                            <div
-                                className='weekday-column'
-                                key={`weekday-column-${index}`}
-                            >
-                                {calendar.skipFirsts.includes(items[0].weekDay) &&
-                                    <CalendarDayItem
+                            return (
+                                <div
+                                    className='weekday-column'
+                                    key={`weekday-column-${index}`}
+                                >
+                                    {calendar.skipFirsts.includes(items[0].weekDay) &&
+                                        <CalendarDayItem
                                         key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
                                         skipper
-                                    />
-                                }
-                                {items.map(i => (
-                                    <CalendarDayItem
-                                        key={`calendar-day-item-${i.monthDay}`}
-                                        monthDay={i.monthDay}
-                                    />
-                                ))}
-                                {calendar.addLasts.includes(items[0].weekDay) &&
-                                    <CalendarDayItem
+                                        />
+                                    }
+                                    {items.map(i => (
+                                        <CalendarDayItem
+                                            key={`calendar-day-item-${i.monthDay}`}
+                                            monthDay={i.monthDay}
+                                        />
+                                    ))}
+                                    {calendar.addLasts.includes(items[0].weekDay) &&
+                                        <CalendarDayItem
                                         key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
                                         skipper
-                                    />
-                                }
-                            </div>
-                        )
-                    })
-                    }
+                                        />
+                                    }
+                                </div>
+                            )
+                        })
+                        }
+                    </div>
                 </div>
             </React.Fragment>
         )

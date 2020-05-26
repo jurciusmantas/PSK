@@ -4,6 +4,8 @@ import './RecommendationsPage.css';
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 class AddRecommendationPage extends React.Component {
     constructor() {
@@ -94,17 +96,15 @@ class AddRecommendationPage extends React.Component {
 
     render() {
         return (
-            <form className="wrapper" onSubmit={this.onSubmit}>
-                <h3>Add a recommendation</h3>
-                <div className="invite-holder">
+            <form className="rec-wrapper" onSubmit={this.onSubmit}>
+                <div className="rec-holder">
+                    <h2>Add a recommendation</h2>
                     <div className="row">
-                        <label>Select topic: </label>
-                        {this.state.loading || !this.state.topics ?
-                            <div>
-                                loading...
+                        {this.state.loading || !this.state.topics
+                            ? <div className="loader">
+                                <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
                             </div>
-                            :
-                            <select
+                            : <select
                                 value={this.state.topicid}
                                 onChange={this.handleOnChange}>
                                 {this.showTopicOptions()}
@@ -113,21 +113,18 @@ class AddRecommendationPage extends React.Component {
                         }
                     </div>
                     <div className="row">
-                        <label>Assign to:</label>
                         <input
                             type="text"
-                            name="recommendedTo"
+                            placeholder='Assign to'
                             value={this.state.recommendedTo}
                             onChange={e => this.setState({ recommendedTo: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                             required/>
                     </div>
                     <div className="row">
-                        <button className="btn btn-dark" type="submit">Submit</button>
+                        <Link to="/recommendations" className="btn btn-custom">Return</Link>
+                        <button className="btn btn-custom" type="submit">Submit</button>
                     </div>
-                </div>
-                <div className="row">
-                    <Link to="/recommendations" className="btn btn-dark">Return</Link>
                 </div>
             </form>
         )

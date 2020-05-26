@@ -1,8 +1,24 @@
-﻿form > div {
-    display: block;
-    margin: 25px 0px;
+﻿.day-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
-h1 {
-    font-size: 30px;
+.day-holder {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px 20px 20px 32px;
+    box-shadow: 0px 0px 5px 0px rgba(70, 72, 102, 0.5);
+    width: 100%;
+}
+
+label {
+    margin-left: auto;
+    margin-right: auto;
+    width: 315px;
+}
+
+.day-holder .row {
+    margin-bottom: 10px
 }
