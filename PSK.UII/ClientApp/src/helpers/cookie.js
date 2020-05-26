@@ -7,13 +7,13 @@ export function getCookie(name){
 }
 
 export function setCookie(value, expirationDate){
-    cookies.set('AuthToken', value, { 
+    cookies.set('AuthToken', value, {
         path: '/',
         expires: new Date(expirationDate),
     });
 }
 
-export function removeCookie(name){
+export function removeCookie(name) {
     cookies.remove(name, {
         path: '/',
     });

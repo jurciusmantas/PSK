@@ -15,6 +15,7 @@ namespace PSK.UI.Controllers
             _loginService = loginService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public ServerResult<User> Login([FromBody] LoginArgs args, [FromQuery] bool token = false)
         {
@@ -25,6 +26,7 @@ namespace PSK.UI.Controllers
             return _loginService.Login(args);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("logout")]
         public void Logout()

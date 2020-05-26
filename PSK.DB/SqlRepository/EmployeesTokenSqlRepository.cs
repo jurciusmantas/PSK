@@ -56,5 +56,9 @@ namespace PSK.DB.SqlRepository
         {
             return context.EmployeesTokens.FirstOrDefault(employeesToken => employeesToken.Token.Equals(token));
         }
+        public List<EmployeesToken> AllEmployeesTokens(int employeeId)
+        {
+            return context.EmployeesTokens.Where(token => token.EmployeeId == employeeId).ToList();
+        }
     }
 }

@@ -1,6 +1,7 @@
 import {
     LOGIN_SUCCESS,
     LOGOUT,
+    AUTH_ERROR
 } from '../constants';
 
 const initialState = {
@@ -8,7 +9,8 @@ const initialState = {
     login: null,
     name: null,
     token: null,
-    expiredAt: null
+    expiredAt: null,
+    authError: false,
 }
 
 export default (state = initialState, action) => {
@@ -19,6 +21,7 @@ export default (state = initialState, action) => {
             state.name = action.name;
             state.token = action.token;
             state.expiredAt = action.expiredAt;
+            state.authError = false;
             return { ...state };
         }
         case LOGOUT:{
@@ -26,6 +29,14 @@ export default (state = initialState, action) => {
             state.name = null;
             state.token = null;
             return {...state};
+        }
+        case AUTH_ERROR: {
+            state.login = null;
+            state.name = null;
+            state.token = null;
+            state.expiredAt = null;
+            state.authError = true;
+            return { ...state };
         }
         default:
             return state;

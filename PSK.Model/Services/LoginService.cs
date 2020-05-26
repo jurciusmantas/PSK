@@ -1,8 +1,8 @@
 ﻿using PSK.Model.Entities;
 using PSK.Model.DTO;
 using PSK.Model.Repository;
-using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -29,8 +29,8 @@ namespace PSK.Model.Services
 
                 Employee employee = _employeeRepository.Login(args);
                 VerifyPassword(args.Password, employee.Password);
-
-                var token = GetToken();
+                DeleteExpiredTokens(employee.Id);
+                string token = GetToken();
                 DateTime expiredAt = DateTime.Now.AddMinutes(15);
                 _employeesTokenRepository.Add(new EmployeesToken
                 {
@@ -73,7 +73,6 @@ namespace PSK.Model.Services
 
                 if (employeesToken.ExpiredAt < DateTime.Now)
                 {
-                    _employeesTokenRepository.Delete(employeesToken.Id);
                     return new ServerResult<User>
                     {
                         Success = false,
@@ -94,7 +93,7 @@ namespace PSK.Model.Services
                     },
                 };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new ServerResult<User>
                 {
@@ -138,8 +137,22 @@ namespace PSK.Model.Services
             var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
             byte[] hash = pbkdf2.GetBytes(20);
             for (int i = 0; i < 20; i++)
-                if (hashBytes[i + 16] != hash[i]) 
+                if (hashBytes[i + 16] != hash[i])
                     throw new UnauthorizedAccessException();
+        }
+
+        private void DeleteExpiredTokens(int employeeId)
+        {
+            List<EmployeesToken> tokens = _employeesTokenRepository.AllEmployeesTokens(employeeId);
+            int result;
+            foreach (EmployeesToken t in tokens)
+            {
+                result = DateTime.Compare(t.ExpiredAt, DateTime.Now);
+                if (result < 1 || result == 0)
+                {
+                    _employeesTokenRepository.Delete(t.Id);
+                }
+            }
         }
     }
 }
