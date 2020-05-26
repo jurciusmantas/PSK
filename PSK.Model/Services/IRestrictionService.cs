@@ -12,6 +12,7 @@ namespace PSK.Model.Services
         ServerResult<Restriction> GetRestriction(int employeeId);
         ServerResult<List<Restriction>> GetCreatedRestrictions(int employeeId);
         ServerResult DeleteRestriction(int id);
+        ServerResult<List<User>> GetLowerUsers(int currentUserId);
 
     }
 }

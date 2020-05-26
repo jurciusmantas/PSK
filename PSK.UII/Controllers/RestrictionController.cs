@@ -18,25 +18,31 @@ namespace PSK.UI.Controllers
             _restrictionService = restrictionService;
         }
 
-        [HttpGet]
+        [HttpGet, Route("restriction/{employeeId}")]
         public ServerResult<Restriction> GetRestriction(int employeeId)
         {
             return _restrictionService.GetRestriction(employeeId);
         }
-        [HttpGet]
+        [HttpGet, Route("restrictions/{employeeId}")]
         public ServerResult<List<Restriction>> GetCreatedRestrictions(int employeeId)
         {
             return _restrictionService.GetCreatedRestrictions(employeeId);
         }
-        [HttpDelete]
+        [HttpDelete, Route("delete/{id}")]
         public ServerResult DeleteRestriction(int id)
         {
             return _restrictionService.DeleteRestriction(id);
         }
-        [HttpPost]
+        [HttpPost, Route("create")]
         public ServerResult CreateRestriction([FromBody] RestrictionArgs restrictionArgs)
         {
             return _restrictionService.CreateRestriction(restrictionArgs);
+        }
+
+        [HttpPost, Route("users/{userId}")]
+        public ServerResult<List<User>> GetLowerUsers(int userId)
+        {
+            return _restrictionService.GetLowerUsers(userId);
         }
 
     }

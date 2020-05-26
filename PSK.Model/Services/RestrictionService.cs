@@ -31,20 +31,26 @@ namespace PSK.Model.Services
                 return new ServerResult { Message = msg, Success = false };
             }
             BusinessEntities.Restriction restriction = ParseRestriction(restrictionArgs);
-            int receiverId = restrictionArgs.ReceiverId;
+            int applyTo = restrictionArgs.ApplyTo;
             List<Employee> employees;
-            switch (receiverId)
+            string notFoundNames;
+            switch (applyTo)
             {
-                case -1:
+                case 1:
                     employees = _employeeRepository.FindAllLower(restrictionArgs.CreatorId);
                     CreateRestrictionForEmployees(restriction, employees);
                     break;
-                case -2:
+                case 2:
                     employees = _employeeRepository.FindTeamMembers(restrictionArgs.CreatorId);
                     CreateRestrictionForEmployees(restriction, employees);
                     break;
                 default:
-                    CreateRestrictionForEmployee(restriction, receiverId);
+                    (employees, notFoundNames) = FindByNames(restrictionArgs.UserNames);
+                    CreateRestrictionForEmployees(restriction, employees);
+                    if (notFoundNames.Length > 0)
+                    {
+                        return new ServerResult { Message = "These names where not found " + notFoundNames, Success = true };
+                    }
                     break;
             }
             return new ServerResult { Message = "Success", Success = true };
@@ -53,19 +59,14 @@ namespace PSK.Model.Services
         private String ValidateRestrictionArgs(RestrictionArgs restrictionArgs)
         {
             int creatorId = restrictionArgs.CreatorId;
-            int receiverId = restrictionArgs.ReceiverId;
             Employee employee = _employeeRepository.Get(creatorId);
-            if(employee == null)
+            if (employee == null)
             {
                 return "Creator was not found";
             }
-            if (receiverId >= 0)
+            if (restrictionArgs.ApplyTo > 2 && (restrictionArgs.UserNames == null || restrictionArgs.UserNames.Count == 0))
             {
-                employee = _employeeRepository.Get(receiverId);
-                if(employee == null)
-                {
-                    return "Receiver was not found";
-                }
+                return "There was not any specified restriction receiver";
             }
             return null;
         }
@@ -73,7 +74,7 @@ namespace PSK.Model.Services
         private void CreateRestrictionForEmployees(BusinessEntities.Restriction restriction, List<Employee> employees)
         {
             List<EmployeeRestriction> employeeRestrictions = new List<EmployeeRestriction>();
-            foreach(Employee employee in employees)
+            foreach (Employee employee in employees)
             {
                 employeeRestrictions.Add(CreateEmployeeRestriction(employee.Id, restriction));
             }
@@ -90,7 +91,7 @@ namespace PSK.Model.Services
             };
             restriction.RestrictionEmployees = restrictionEmployees;
             _restrictionRepository.Add(restriction);
-            
+
         }
 
         private EmployeeRestriction CreateEmployeeRestriction(int receiverId, BusinessEntities.Restriction restriction)
@@ -132,7 +133,7 @@ namespace PSK.Model.Services
             if (employee == null)
             {
                 return new ServerResult<Entities.Restriction> { Message = "Employee was not found", Success = false };
-            } 
+            }
             var employeeRestrictions = employee.EmployeeRestrictions;
             Entities.Restriction restrictionResult = null;
             if (employeeRestrictions != null && employeeRestrictions.Count > 0)
@@ -157,6 +158,35 @@ namespace PSK.Model.Services
             };
         }
 
+        private User ParseUser(Employee employee)
+        {
+            return new User { Name = employee.Name };
+        }
+
+        private (List<Employee>, string) FindByNames(List<string> names)
+        {
+            Employee employee;
+            List<Employee> foundEmployees = new List<Employee>();
+            StringBuilder notFoundEmplStrBldr = new StringBuilder();
+            foreach(string name in names)
+            {
+                employee = _employeeRepository.FindByName(name);
+                if (employee != null)
+                {
+                    foundEmployees.Add(employee);
+                }
+                else
+                {
+                    if (notFoundEmplStrBldr.Length > 0)
+                    {
+                        notFoundEmplStrBldr.Append(", ");
+                    }
+                    notFoundEmplStrBldr.Append(name);
+                }
+            }
+            return (foundEmployees, notFoundEmplStrBldr.ToString());
+        }
+
         public ServerResult<List<Entities.Restriction>> GetCreatedRestrictions(int employeeId)
         {
             List<BusinessEntities.Restriction> restrictions = _restrictionRepository.GetCreatedRestrictions(employeeId);
@@ -167,6 +197,25 @@ namespace PSK.Model.Services
                 restrictionsResult.Add(restrictionResultItem);
             }
             return new ServerResult<List<Entities.Restriction>> { Data = restrictionsResult, Message = "Success", Success = true };
+        }
+
+        public ServerResult<List<User>> GetLowerUsers(int leaderId)
+        {
+            List<Employee> employees = _employeeRepository.FindAllLower(leaderId);
+            List<User> users = new List<User>();
+            foreach(Employee employee in employees)
+            {
+                var user = ParseUser(employee);
+                users.Add(user);
+            }
+            if(users.Count == 0)
+            {
+                return new ServerResult<List<User>> { Success = false, Message = "0 manageable users was found" };
+            }
+            else
+            {
+                return new ServerResult<List<User>> { Data = users, Message = "Success", Success = true };
+            }
         }
     }
 }
