@@ -10,5 +10,7 @@ namespace PSK.Model.Services
         ServerResult<List<Recommendation>> GetCreatedRecommendations(int creatorId);
         ServerResult<Recommendation> GetRecommendation(int id);
         ServerResult CreateRecommendation(Recommendation recommendation);
+        ServerResult DeleteRecommendation(int id);
+        ServerResult UpdateRecommendation(Recommendation rec);
     }
 }

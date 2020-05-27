@@ -31,5 +31,24 @@ namespace PSK.UI.Controllers
             return _recService.GetRecommendation(id);
         }
 
+        [HttpPost]
+        public ServerResult CreateRecommendation([FromBody] Recommendation recommendation)
+        {
+            return _recService.CreateRecommendation(recommendation);
+        }
+
+        [HttpPut("{id}")]
+        public ServerResult UpdateRecommendation([FromRoute(Name = "id")] int id, [FromBody] Recommendation rec)
+        {
+            rec.Id = id;
+            return _recService.UpdateRecommendation(rec);
+        }
+
+        [HttpDelete("{id}")]
+        public ServerResult DeleteRecommendation([FromRoute(Name = "id")] int id)
+        {
+            return _recService.DeleteRecommendation(id);
+        }
+
     }
 }

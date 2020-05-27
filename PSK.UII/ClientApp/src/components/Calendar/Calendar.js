@@ -34,7 +34,6 @@ class Calendar extends React.Component {
 
     componentDidMount() {
         console.warn("This thing likes running. If you notice that this message appears twice, this is not good");
-        console.log(this.props.currentUser);
         get(`days?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
@@ -50,7 +49,6 @@ class Calendar extends React.Component {
                 console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
                 console.error(reason)
             });
-        console.log(`employees/${this.props.currentUser.id}/subordinates`)
         get(`employees/${this.props.currentUser.id}/subordinates`)
             .then(res => res.json())
             .then(res => {
@@ -225,13 +223,13 @@ class Calendar extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
     currentUser: state.currentUser
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({})
+const mapDispatchToProps = () => ({})
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Calendar);
+)(Calendar));
