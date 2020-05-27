@@ -24,7 +24,7 @@ namespace PSK.UI.Controllers
             return _restrictionService.GetRestriction(employeeId);
         }
         [HttpGet, Route("restrictions")]
-        public ServerResult<List<Restriction>> GetCreatedRestrictions(int employeeId)
+        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "id")] int employeeId)
         {
             return _restrictionService.GetCreatedRestrictions(employeeId);
         }
@@ -39,8 +39,8 @@ namespace PSK.UI.Controllers
             return _restrictionService.CreateRestriction(restrictionArgs);
         }
 
-        [HttpPost, Route("users/{userId}")]
-        public ServerResult<List<User>> GetLowerUsers(int userId)
+        [HttpPost, Route("users")]
+        public ServerResult<List<User>> GetLowerUsers([FromQuery(Name = "id")] int userId)
         {
             return _restrictionService.GetLowerUsers(userId);
         }
