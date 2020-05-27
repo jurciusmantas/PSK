@@ -1,19 +1,21 @@
 ﻿import React from "react"
+import { connect } from 'react-redux';
 import './RecommendationsPage.css';
 
 import { get, del } from '../../helpers/request'
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { notification } from "../../helpers/notification";
 
-export default class RecommendationsPage extends React.Component {
+class RecommendationsPage extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            recommendedToEmp: null,
+            recommendedTo: null,
             loadingBy: true,
-            recommending: null,
+            recommendedBy: null,
             loadingTo: true
         };
 
@@ -21,14 +23,12 @@ export default class RecommendationsPage extends React.Component {
     }
 
     componentDidMount() {
-        var employeeId = 1; //TODO get current user. 
+        var employeeId = this.props.currentUser.id
         get(`recommendations?to=${employeeId}`)
             .then(res => res.json())
             .then(res => {
-                console.log("To:");
-                console.log(res);
                 if (res.success) {
-                    this.setState({ recommendedToEmp: res.data, loadingBy: false })
+                    this.setState({ recommendedTo: res.data, loadingTo: false })
                 }
                 else {
                     console.warn(`GET recommendations?to=${employeeId} failed: ${res.message}`);
@@ -39,10 +39,8 @@ export default class RecommendationsPage extends React.Component {
         get(`recommendations?by=${employeeId}`)
             .then(res => res.json())
             .then(res => {
-                console.log("By:");
-                console.log(res);
                 if (res.success) {
-                    this.setState({ recommending: res.data, loadingTo: false })
+                    this.setState({ recommendedBy: res.data, loadingBy: false })
                 }
                 else {
                     console.warn(`GET recommendations?by=${employeeId} failed: ${res.message}`);
@@ -52,7 +50,7 @@ export default class RecommendationsPage extends React.Component {
     }
 
     showRecommendationList() {
-        return this.state.recommendedToEmp.map((recommendation, index) => {
+        return this.state.recommendedTo.map((recommendation, index) => {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
@@ -63,11 +61,11 @@ export default class RecommendationsPage extends React.Component {
     }
 
     showCreatedRecommendationsList() {
-        return this.state.recommending.map((recommendation, index) => {
+        return this.state.recommendedBy.map((recommendation, index) => {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
-                    <td><Link to={''}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
+                    <td><Link to={`employee?id=${recommendation.receiverId}`}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
                     <td><button className="btn btn-custom" onClick={() => this.deleteRecommendation(recommendation.id)}>Delete</button></td>
                     <td><Link to={`edit-recommendation?id=${recommendation.id}`} className="btn btn-custom">Edit</Link></td>
                 </tr>
@@ -80,9 +78,9 @@ export default class RecommendationsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert("Recommendation deleted");
+                    notification("Deleted!");
                     this.setState({
-                        recommending: this.state.recommending.filter(r => r.id !== id)
+                        recommendedBy: this.state.recommendedBy.filter(r => r.id !== id)
                     });
                 }
             })
@@ -95,9 +93,9 @@ export default class RecommendationsPage extends React.Component {
                 <div className='rec-holder'>
                     <h2>Recommended topics to learn for you:</h2>
                     <div className="row">
-                        {this.state.loadingBy || !this.state.recommendedToEmp
+                        {this.state.loadingBy || !this.state.recommendedTo
                             ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
                             </div>
                             : <table>
                                 <thead>
@@ -117,15 +115,15 @@ export default class RecommendationsPage extends React.Component {
                         <Link to='add-recommendation' className="btn btn-custom">Add recommendation</Link>
                     </div>
                     <div className="row">
-                        {this.state.loadingTo || !this.state.recommending
+                        {this.state.loadingTo || !this.state.recommendedBy
                             ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
                             </div>
                             : <table>
                                 <thead>
                                     <tr>
                                         <th className="topicColumn">Topic</th>
-                                        <th className="creatorColumn">Created by</th>
+                                        <th className="creatorColumn">Created for</th>
                                         <th className="link" />
                                         <th className="link" />
                                     </tr>
@@ -141,3 +139,14 @@ export default class RecommendationsPage extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    currentUser: state.currentUser
+});
+
+const mapDispatchToProps = () => ({})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecommendationsPage);

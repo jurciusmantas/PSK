@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 
@@ -54,7 +54,10 @@ class Routes extends React.Component {
                         this.props.login(res.data);
                     }
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    console.error('POST login?token=true failed:');
+                    console.error(error);
+                })
 
         else if (this.props.currentUser)
             this.props.logout();

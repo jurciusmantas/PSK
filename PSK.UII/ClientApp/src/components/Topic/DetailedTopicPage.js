@@ -9,7 +9,6 @@ export default class DetailedTopicPage extends React.Component {
     constructor(props) {
         super(props);
         const queryParams = new URLSearchParams(window.location.search);
-        console.log(queryParams.get("id"));
         this.state = {
             loading: true,
             data: null,

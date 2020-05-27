@@ -4,6 +4,7 @@ import { get } from '../../helpers/request'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { notification } from '../../helpers/notification';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -20,9 +21,15 @@ export default class TopicPage extends React.Component {
                 if (res.success) {
                     this.setState({ data: res.data, loading: false })
                 }
+                else {
+                    notification('Cannot get topics :(', 'error');
+                    console.warn(`Cannot get topics:`);
+                    console.warn(res.message);
+                }
             })
             .catch(error => {
-                console.log(error);
+                console.error('GET topics failed:')
+                console.error(error);
             })
     }
 

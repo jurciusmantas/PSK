@@ -42,7 +42,6 @@ class NewLearningDayPage extends React.Component {
     }
 
     changeTopic(e) {
-        console.log(e.target.value);
         this.setState({ selectedTopicId: parseInt(e.target.value) });
     }
 
@@ -52,8 +51,6 @@ class NewLearningDayPage extends React.Component {
             employeeId: this.props.currentUser.id,
             topicId: this.state.selectedTopicId,
         })
-            //.then(r => r.json())
-            //.then(res => console.log(res))
             .then(() => {
                 this.props.history.push('/home');
             })

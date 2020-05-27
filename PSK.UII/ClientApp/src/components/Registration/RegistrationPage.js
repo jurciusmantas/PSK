@@ -4,6 +4,7 @@ import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { notification } from "../../helpers/notification";
 
 class RegistrationPage extends React.Component {
     constructor() {
@@ -23,7 +24,7 @@ class RegistrationPage extends React.Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();  
+        e.preventDefault();
 
         const {
             firstName,
@@ -34,28 +35,29 @@ class RegistrationPage extends React.Component {
         } = this.state;
 
         if (password !== repeatedPassword) {
-            alert("Passwords don't match");
+            notification('Password does not match repeated password', 'error');
+            return;
         }
-        else {
-            post('registration', {
-                fullName: firstName + " " + lastName,
-                password: password,
-                email: email,
-                token: window.location.pathname.split('/').pop()
+        post('registration', {
+            fullName: firstName + " " + lastName,
+            password: password,
+            email: email,
+            token: window.location.pathname.split('/').pop()
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    this.props.history.push('/');
+                }
+                else {
+                    console.warn('Registration failed:');
+                    console.warn(res.message);
+                }
             })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        this.props.history.push('/');
-                    }
-                    else {
-                        console.log(res.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
+            .catch(error => {
+                console.error('POST registration failed:')
+                console.error(error);
+            })
     }
 
     handleKeyPress(e) {
@@ -73,9 +75,15 @@ class RegistrationPage extends React.Component {
                 if (res.success) {
                     this.setState({ email: res.data });
                 }
+                else {
+                    notification("Registration not found", 'error');
+                    console.warn('Could not get registration')
+                    console.warn(res.message);
+                }
             })
             .catch(error => {
-                console.log(error);
+                console.error(`GET registration/${token} failed:`)
+                console.error(error);
             })
     }
 
