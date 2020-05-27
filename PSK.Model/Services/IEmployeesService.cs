@@ -8,5 +8,6 @@ namespace PSK.Model.Services
         List<Employee> Get();
         Employee Get(int id);
         List<Employee> GetSubordinates(int employeeId);
+        EmployeeProfile GetProfile(int id);
     }
 }

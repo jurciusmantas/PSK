@@ -7,9 +7,9 @@ import {
 export function loginSuccess(currentUser) {
     return {
         type: LOGIN_SUCCESS,
-        id: currentUser.id,
-        login: currentUser.login,
-        name: currentUser.name,
+        id: currentUser.employee.id,
+        name: currentUser.employee.name,
+        email: currentUser.employee.email,
         token: currentUser.token,
         expiredAt: currentUser.expiredAt
     };

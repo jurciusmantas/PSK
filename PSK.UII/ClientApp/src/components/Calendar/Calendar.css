@@ -22,6 +22,7 @@
 
 .weekday-column {
     flex: auto;
+    width: 14.2%;
 }
 
 .calendar-day-item, .skipper {
