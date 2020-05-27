@@ -1,19 +1,23 @@
-﻿using PSK.Model.Entities;
-using PSK.Model.DTO;
+﻿using PSK.Model.DTO;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
-using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace PSK.Model.Services
 {
     public class LoginService : ILoginService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeesTokenRepository _employeesTokenRepository;
 
-        public LoginService(IEmployeeRepository employeeRepository)
+        public LoginService(IEmployeeRepository employeeRepository,
+            IEmployeesTokenRepository employeesTokenRepository)
         {
             _employeeRepository = employeeRepository;
+            _employeesTokenRepository = employeesTokenRepository;
         }
 
         public ServerResult<User> Login(LoginArgs args)
@@ -23,38 +27,30 @@ namespace PSK.Model.Services
                 if (args == null)
                     throw new ArgumentNullException("Arguments are empty");
 
-                if (args.Login == "admin" && args.Password == "admin")
-                    return new ServerResult<User>
-                    {
-                        Success = true,
-                        Data = new User
-                        {
-                            Id = 1,
-                            Login = "admin",
-                            Name = "admin",
-                            Token = GetToken(),
-                        },
-                    };
-
-                Employee employee = _employeeRepository.Login(args);
-                VerifyPassword(args.Password, employee.Password);              
+                Entities.Employee employee = _employeeRepository.Login(args);
+                VerifyPassword(args.Password, employee.Password);
+                DeleteExpiredTokens(employee.Id);
+                string token = GetToken();
+                DateTime expiredAt = DateTime.Now.AddMinutes(15);
+                _employeesTokenRepository.Add(new EmployeesToken
+                {
+                    Employee = employee,
+                    EmployeeId = employee.Id,
+                    Token = token,
+                    CreatedAt = DateTime.Now,
+                    ExpiredAt = expiredAt
+                });
                 return new ServerResult<User>
                 {
                     Success = true,
                     Data = new User
                     {
+                        Id = employee.Id,
                         Login = args.Login,
                         Name = employee.Name,
-                        Token = GetToken()
+                        Token = token,
+                        ExpiredAt = expiredAt.ToString()
                     }
-                };
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                return new ServerResult<User>
-                {
-                    Success = false,
-                    Message = e.Message,
                 };
             }
             catch (Exception e)
@@ -74,29 +70,31 @@ namespace PSK.Model.Services
                 if (string.IsNullOrWhiteSpace(token))
                     throw new ArgumentNullException("Token cannot be empty");
 
-                if (token == "Pacman")
-                {
-                    return new ServerResult<User>
-                    {
-                        Success = true,
-                        Data = new User
-                        {
-                            Login = "admin",
-                            Name = "admin",
-                            Token = token,
-                        },
-                    };
-                }
+                EmployeesToken employeesToken = _employeesTokenRepository.FindByToken(token);
 
-                else
+                if (employeesToken.ExpiredAt < DateTime.Now)
+                {
                     return new ServerResult<User>
                     {
                         Success = false,
                         Message = "token expired",
                         Data = null,
                     };
+                }
+
+                return new ServerResult<User>
+                {
+                    Success = true,
+                    Data = new User
+                    {
+                        Login = _employeeRepository.Get(employeesToken.EmployeeId).Name,
+                        Name = _employeeRepository.Get(employeesToken.EmployeeId).Name,
+                        Token = token,
+                        ExpiredAt = employeesToken.ExpiredAt.ToString()
+                    },
+                };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new ServerResult<User>
                 {
@@ -116,8 +114,20 @@ namespace PSK.Model.Services
 
         private string GetToken()
         {
-            //return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-            return "Pacman";
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            var crypto = new RNGCryptoServiceProvider();
+            var data = new byte[36];
+            crypto.GetNonZeroBytes(data);
+            var result = new StringBuilder(46);
+            foreach (var b in data)
+            {
+                result.Append(chars[b % (chars.Length)]);
+            }
+            var token = result.ToString();
+            if (_employeesTokenRepository.FindByToken(token) != null)
+                return GetToken();
+            else
+                return result.ToString();
         }
 
         private void VerifyPassword(string password, string savedPasswordHash)
@@ -128,8 +138,22 @@ namespace PSK.Model.Services
             var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
             byte[] hash = pbkdf2.GetBytes(20);
             for (int i = 0; i < 20; i++)
-                if (hashBytes[i + 16] != hash[i]) 
+                if (hashBytes[i + 16] != hash[i])
                     throw new UnauthorizedAccessException();
+        }
+
+        private void DeleteExpiredTokens(int employeeId)
+        {
+            List<EmployeesToken> tokens = _employeesTokenRepository.AllEmployeesTokens(employeeId);
+            int result;
+            foreach (EmployeesToken t in tokens)
+            {
+                result = DateTime.Compare(t.ExpiredAt, DateTime.Now);
+                if (result < 1 || result == 0)
+                {
+                    _employeesTokenRepository.Delete(t.Id);
+                }
+            }
         }
     }
 }

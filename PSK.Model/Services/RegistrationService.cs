@@ -23,7 +23,7 @@ namespace PSK.Model.Services
             try
             {
                 IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
-                _employeeRepository.Add(new Employee
+                _employeeRepository.Add(new Entities.Employee
                 {
                     Name = args.FullName.Trim(),
                     Email = emp.Email,

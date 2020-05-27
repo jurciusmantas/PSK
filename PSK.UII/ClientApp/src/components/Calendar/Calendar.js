@@ -6,6 +6,8 @@ import './Calendar.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { get } from '../../helpers/request';
+
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
@@ -20,9 +22,46 @@ class Calendar extends React.Component {
             currentMonth,
             monthAfter,
             monthDiff: 0,
+            userDays: [],
+            userDaysLoaded: false,
+            subordinatesDays: [],
+            subordinatesDaysLoaded: false,
         };
 
         this.openCreateDayPage = this.openCreateDayPage.bind(this);
+    }
+
+    componentDidMount() {
+        console.warn("This thing likes running. If you notice that this message appears twice, this is not good");
+        get(`days?employeeId=${this.props.currentUser.id}`)
+            .then(res => res.json())
+            .then(res => {
+                this.setState({ userDays: res.data, userDaysLoaded: true });
+            })
+            .catch(reason => {
+                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                console.error(reason)
+            });
+        get(`employees/${this.props.currentUser.id}/subordinates`)
+            .then(res => res.json())
+            .then(res => {
+                for (let employee of res.data) {
+                    get(`days?employeeId=${employee.id}`)
+                        .then(r => r.json())
+                        .then(r => {
+                            this.setState({ subordinatesDays: this.state.subordinatesDays.concat(r.data) });
+                        })
+                        .catch(reason => {
+                            console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                            console.error(reason)
+                        });
+                }
+            })
+            .then(_ => { this.setState({ subordinatesDaysLoaded: true }); })
+            .catch(reason => {
+                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
+                console.error(reason)
+            });
     }
 
     generateCalendar(now) {
@@ -86,6 +125,10 @@ class Calendar extends React.Component {
         })
     }
 
+    selectDay(dayList, dateString) {
+        return dayList.filter(d => d.date === dateString);
+    }
+
     openCreateDayPage() {
         this.props.history.push(`add-day`);
     }
@@ -100,35 +143,36 @@ class Calendar extends React.Component {
 
         return (
             <React.Fragment>
-                <div className='calendar-navbar'>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={(e) => this.changeMonth()}
-                    >{'<<  ' + monthBefore}</button>
-                    <b>{currentMonth}</b>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={() => this.changeMonth(true)}
-                    >{monthAfter + '  >>'}</button>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={this.openCreateDayPage}
-                    >Add learning day</button>
-                </div>
-                <div className='calendar-holder'>
-                    {[1, 2, 3, 4, 5, 6, 7].map(index => {
-                        const items = calendar.days.filter(i => i.weekDay === index);
+                <div className="calendar-container">
+                    <div className='calendar-navbar'>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={(e) => this.changeMonth()}
+                        >{'<<  ' + monthBefore}</button>
+                        <b>{currentMonth}</b>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={() => this.changeMonth(true)}
+                        >{monthAfter + '  >>'}</button>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={this.openCreateDayPage}
+                        >Add learning day</button>
+                    </div>
+                    <div className='calendar-holder'>
+                        {[1, 2, 3, 4, 5, 6, 7].map(index => {
+                            const items = calendar.days.filter(i => i.weekDay === index);
 
-                        return (
-                            <div
-                                className='weekday-column'
-                                key={`weekday-column-${index}`}
-                            >
-                                {calendar.skipFirsts.includes(items[0].weekDay) &&
-                                    <CalendarDayItem
+                            return (
+                                <div
+                                    className='weekday-column'
+                                    key={`weekday-column-${index}`}
+                                >
+                                    {calendar.skipFirsts.includes(items[0].weekDay) &&
+                                        <CalendarDayItem
                                         key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
                                         skipper
                                     />
@@ -137,29 +181,32 @@ class Calendar extends React.Component {
                                     <CalendarDayItem
                                         key={`calendar-day-item-${i.monthDay}`}
                                         monthDay={i.monthDay}
+                                        userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
+                                        userDaysLoaded={this.state.userDaysLoaded}
+                                        subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
+                                        subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
                                     />
                                 ))}
                                 {calendar.addLasts.includes(items[0].weekDay) &&
                                     <CalendarDayItem
                                         key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
                                         skipper
-                                    />
-                                }
-                            </div>
-                        )
-                    })
-                    }
+                                        />
+                                    }
+                                </div>
+                            )
+                        })
+                        }
+                    </div>
                 </div>
             </React.Fragment>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        currentUser: state.currentUser
-    };
-}
+const mapStateToProps = (state, ownProps) => ({
+    currentUser: state.currentUser
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({})
 
