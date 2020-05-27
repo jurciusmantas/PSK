@@ -33,7 +33,7 @@ namespace PSK.Model.Services
             }
             Entities.Restriction restriction = ParseRestriction(restrictionArgs);
             int applyTo = restrictionArgs.ApplyTo;
-            List<Employee> employees;
+            List<Entities.Employee> employees;
             string notFoundNames;
             switch (applyTo)
             {
@@ -60,22 +60,22 @@ namespace PSK.Model.Services
         private String ValidateRestrictionArgs(RestrictionArgs restrictionArgs)
         {
             int creatorId = restrictionArgs.CreatorId;
-            Employee employee = _employeeRepository.Get(creatorId);
+            Entities.Employee employee = _employeeRepository.Get(creatorId);
             if (employee == null)
             {
                 return "Creator was not found";
             }
-            if (restrictionArgs.ApplyTo > 2 && (restrictionArgs.UserNames == null || restrictionArgs.UserNames.Count == 0))
+            if (restrictionArgs.ApplyTo > 2 && (restrictionArgs.UserNames == null || restrictionArgs.UserNames.Length == 0))
             {
                 return "There was not any specified restriction receiver";
             }
             return null;
         }
 
-        private void CreateRestrictionForEmployees(Entities.Restriction restriction, List<Employee> employees)
+        private void CreateRestrictionForEmployees(Entities.Restriction restriction, List<Entities.Employee> employees)
         {
             List<EmployeeRestriction> employeeRestrictions = new List<EmployeeRestriction>();
-            foreach (Employee employee in employees)
+            foreach (Entities.Employee employee in employees)
             {
                 employeeRestrictions.Add(CreateEmployeeRestriction(employee.Id, restriction));
             }
@@ -99,7 +99,7 @@ namespace PSK.Model.Services
         {
             return new EmployeeRestriction
             {
-                EmployeeId = receiverId, //patikrinti ar Egz toks id
+                EmployeeId = receiverId,
                 Restriction = restriction
             };
         }
@@ -128,13 +128,24 @@ namespace PSK.Model.Services
             return new ServerResult { Message = "Success", Success = true };
         }
 
-        public ServerResult<DTO.Restriction> GetRestriction(int employeeId)
+        public ServerResult<Restrictions> GetRestrictions(int employeeId)
         {
-            Employee employee = _employeeRepository.Get(employeeId);
+            Entities.Employee employee = _employeeRepository.Get(employeeId);
             if (employee == null)
             {
-                return new ServerResult<DTO.Restriction> { Message = "Employee was not found", Success = false };
+                return new ServerResult<Restrictions> { Message = "Employee was not found", Success = false };
             }
+            Restrictions restrictions = new Restrictions
+            {
+                Restriction = GetRestriction(employee),
+                RestrictionsList = GetToRestrictions(employeeId),
+                TeamMembers = GetTeamMembers(employeeId),
+            };
+            return new ServerResult<Restrictions> { Data = restrictions, Success = true, Message = "Success" };
+
+        }
+        public DTO.Restriction GetRestriction(Entities.Employee employee)
+        {
             var employeeRestrictions = employee.EmployeeRestrictions;
             DTO.Restriction restrictionResult = null;
             if (employeeRestrictions != null && employeeRestrictions.Count > 0)
@@ -142,7 +153,7 @@ namespace PSK.Model.Services
                 EmployeeRestriction employeeRestriction = employeeRestrictions.OrderByDescending(er => er.Restriction.CreationDate).First();
                 restrictionResult = ParseRestriction(employeeRestriction.Restriction);
             }
-            return new ServerResult<DTO.Restriction> { Data = restrictionResult, Message = "Success", Success = true };
+            return restrictionResult;
         }
 
         private DTO.Restriction ParseRestriction(Entities.Restriction restriction)
@@ -159,15 +170,15 @@ namespace PSK.Model.Services
             };
         }
 
-        private User ParseUser(Employee employee)
+        private DTO.Employee ParseUser(Entities.Employee employee)
         {
-            return new User { Name = employee.Name };
+            return new DTO.Employee { Name = employee.Name };
         }
 
-        private (List<Employee>, string) FindByNames(List<string> names)
+        private (List<Entities.Employee>, string) FindByNames(string[] names)
         {
-            Employee employee;
-            List<Employee> foundEmployees = new List<Employee>();
+            Entities.Employee employee;
+            List<Entities.Employee> foundEmployees = new List<Entities.Employee>();
             StringBuilder notFoundEmplStrBldr = new StringBuilder();
             foreach(string name in names)
             {
@@ -188,35 +199,28 @@ namespace PSK.Model.Services
             return (foundEmployees, notFoundEmplStrBldr.ToString());
         }
 
-        public ServerResult<List<DTO.Restriction>> GetCreatedRestrictions(int employeeId)
+        public List<DTO.Restriction> GetToRestrictions(int employeeId)
         {
-            List<Entities.Restriction> restrictions = _restrictionRepository.GetCreatedRestrictions(employeeId);
+            List<Entities.Restriction> restrictions = _restrictionRepository.GetToRestrictions(employeeId);
             List<DTO.Restriction> restrictionsResult = new List<DTO.Restriction>();
             foreach (Entities.Restriction restriction in restrictions)
             {
                 var restrictionResultItem = ParseRestriction(restriction);
                 restrictionsResult.Add(restrictionResultItem);
             }
-            return new ServerResult<List<DTO.Restriction>> { Data = restrictionsResult, Message = "Success", Success = true };
+            return restrictionsResult;
         }
 
-        public ServerResult<List<User>> GetLowerUsers(int leaderId)
+        public List<DTO.Employee> GetTeamMembers(int leaderId)
         {
-            List<Employee> employees = _employeeRepository.FindAllLower(leaderId);
-            List<User> users = new List<User>();
-            foreach(Employee employee in employees)
+            List<Entities.Employee> employees = _employeeRepository.FindTeamMembers(leaderId);
+            List<DTO.Employee> users = new List<DTO.Employee>();
+            foreach(Entities.Employee employee in employees)
             {
                 var user = ParseUser(employee);
                 users.Add(user);
             }
-            if(users.Count == 0)
-            {
-                return new ServerResult<List<User>> { Success = false, Message = "0 manageable users was found" };
-            }
-            else
-            {
-                return new ServerResult<List<User>> { Data = users, Message = "Success", Success = true };
-            }
+            return users;
         }
     }
 }

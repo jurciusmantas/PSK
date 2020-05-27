@@ -9,10 +9,8 @@ namespace PSK.Model.Services
     {
         ServerResult CreateRestriction(RestrictionArgs restrictionArgs);
         ServerResult CreateGlobalRestriction();
-        ServerResult<Restriction> GetRestriction(int employeeId);
-        ServerResult<List<Restriction>> GetCreatedRestrictions(int employeeId);
+        ServerResult<Restrictions> GetRestrictions(int employeeId);
         ServerResult DeleteRestriction(int id);
-        ServerResult<List<User>> GetLowerUsers(int currentUserId);
 
     }
 }

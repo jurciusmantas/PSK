@@ -44,7 +44,7 @@ namespace PSK.DB.SqlRepository
             throw new NotImplementedException();
         }
 
-        public List<Restriction> GetCreatedRestrictions(int creatorId)
+        public List<Restriction> GetToRestrictions(int creatorId)
         {
             return context.Restrictions.Where(restriction => restriction.CreatorId == creatorId).ToList();
         }

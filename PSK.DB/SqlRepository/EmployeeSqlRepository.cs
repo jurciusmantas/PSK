@@ -4,7 +4,6 @@ using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PSK.Model.DTO;
 
 namespace PSK.DB.SqlRepository
 {
@@ -39,7 +38,7 @@ namespace PSK.DB.SqlRepository
             return context.Employees.Find(id);
         }
 
-        public Employee Login(LoginArgs loginArgs)
+        public Employee Login(Model.DTO.LoginArgs loginArgs)
         {
             return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login /*&& employee.Password == loginArgs.Password*/);
         }

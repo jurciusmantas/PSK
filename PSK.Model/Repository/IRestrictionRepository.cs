@@ -7,6 +7,6 @@ namespace PSK.Model.Repository
     {
         public Restriction GetLastGlobal();
 
-        public List<Restriction> GetCreatedRestrictions(int creatorId);
+        public List<Restriction> GetToRestrictions(int creatorId);
     }
 }
