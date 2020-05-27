@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PSK.Model.DTO;
 using PSK.Model.Services;
 
 
 namespace PSK.UI.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
-
-    public class RegistrationController : Controller
+    public class RegistrationController : ControllerBase
     {
         private readonly IRegistrationService _registrationService;
 

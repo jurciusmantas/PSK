@@ -13,7 +13,7 @@ namespace PSK.Model.Entities
         [Column(TypeName = "varchar(255)")]
         public string Password { set; get; }
         public int? LeaderId { get; set; }
-        public Employee Leader { set; get; }
+        public virtual Employee Leader { set; get; }
         public virtual ICollection<EmployeeRestriction> EmployeeRestrictions { set; get; }
     }
 }

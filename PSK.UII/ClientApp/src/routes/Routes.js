@@ -52,11 +52,13 @@ class Routes extends React.Component {
             post('login?token=true', { token })
                 .then(res => res.json())
                 .then(res => {
-                    if (res.success)
+                    if (res.success) {
                         this.props.login(res.data);
+                    }
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error('POST login?token=true failed:');
+                    console.error(error);
                 })
 
         else if (this.props.currentUser)

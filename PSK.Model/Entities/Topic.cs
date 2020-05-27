@@ -10,6 +10,6 @@ namespace PSK.Model.Entities
         [Column(TypeName = "varchar(12000)")]
         public string Description { get; set; }
         public int? ParentTopicId { get; set; }
-        public Topic ParentTopic { set; get; }
+        public virtual Topic ParentTopic { set; get; }
     }
 }

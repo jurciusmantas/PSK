@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="app.config.example" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PSK.DB\PSK.DB.csproj" />
     <ProjectReference Include="..\PSK.Model\PSK.Model.csproj" />
   </ItemGroup>

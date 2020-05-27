@@ -42,6 +42,11 @@ namespace PSK.DB.SqlRepository
             return context.Days.ToList();
         }
 
+        public List<Day> GetEmployeeDays(int employeeId)
+        {
+            return context.Days.Where(d => d.EmployeeId == employeeId).ToList();
+        }
+
         public Day Update(Day updatedDay)
         {
             var day = context.Days.Attach(updatedDay);

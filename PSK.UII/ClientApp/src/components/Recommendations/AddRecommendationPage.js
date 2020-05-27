@@ -1,9 +1,14 @@
-﻿import React from "react"
+﻿import React from "react";
 import './RecommendationsPage.css';
 
-import { post } from '../../helpers/request'
-import { get } from '../../helpers/request'
+import { post } from '../../helpers/request';
+import { get } from '../../helpers/request';
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { notification } from "../../helpers/notification";
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 class AddRecommendationPage extends React.Component {
     constructor() {
@@ -11,9 +16,11 @@ class AddRecommendationPage extends React.Component {
 
         this.state = {
             topics: null,
-            loading: true,
-            topicid: "",
-            recommendedTo: "",
+            subordinates: null,
+            loadingTopics: true,
+            loadingSubordinates: true,
+            topicId: null,
+            subordinateId: null,
         }
 
         this.onSubmit = this.handleSubmit.bind(this)
@@ -23,25 +30,42 @@ class AddRecommendationPage extends React.Component {
         get('topics').then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    this.setState({ topics: res.data, loading: false })
-                    if (res.data != null) {
-                        this.setState({ topicid: res.data[0].id });
+                    this.setState({ topics: res.data, loadingTopics: false })
+                    if (res.data != null && res.data.length > 0) {
+                        this.setState({ topicId: res.data[0].id });
                     }
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.error(`GET topics failed:`);
+                console.error(error);
             })
+
+        get(`employees/${this.props.currentUser.id}/subordinates`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    this.setState({ subordinates: res.data, loadingSubordinates: false });
+                    if (res.data != null && res.data.length > 0)
+                        this.setState({ subordinateId: res.data[0].id });
+                }
+
+            })
+            .catch(reason => {
+                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed:`);
+                console.error(reason);
+            });
     }
 
-    handleKeyPress(e) {
-        if (e.key === "Enter")
-            this.handleSubmit(e);
-    }
-
-    handleOnChange = (e) => {
+    handleOnTopicChange = (e) => {
         this.setState({
-            topicid: e.target.value
+            topicId: e.target.value
+        })
+    }
+
+    handleOnSubordinateChange = (e) => {
+        this.setState({
+            subordinateId: e.target.value
         })
     }
 
@@ -49,28 +73,35 @@ class AddRecommendationPage extends React.Component {
         e.preventDefault();
 
         const {
-            topicid,
-            recommendedTo,
+            topicId,
+            subordinateId,
         } = this.state;
+        const creatorId = this.props.currentUser.id;
 
-        var createdById = 1;  //TODO: get current user id
+        if (!topicId || !subordinateId) {
+            notification('Topic and subordinate must be selected', 'error');
+            return;
+        }
 
         post('recommendations', {
-            topicid: parseInt(topicid),
-            recommendedTo: recommendedTo,
-            createdById: createdById
+            topicId: parseInt(topicId),
+            receiverId: parseInt(subordinateId),
+            creatorId: creatorId,
         })
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert("Recommendation added");
+                    this.props.history.push('/recommendations');
                 }
                 else {
-                    alert(res.message);
+                    notification('Recommendation creation failed :(', 'warn');
+                    console.warn('Recommendation creation failed:');
+                    console.warn(res.message);
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.error('POST recommendations failed:');
+                console.error(error);
             })
     }
 
@@ -83,7 +114,7 @@ class AddRecommendationPage extends React.Component {
     }
 
     showSubTopicOptions() {
-        return this.state.topics.map((topic) =>
+        return this.state.topics.map(topic =>
             topic.subTopicList.map((subTopic, index) =>
                 <option key={index} value={subTopic.id}>
                     {subTopic.name}
@@ -92,46 +123,58 @@ class AddRecommendationPage extends React.Component {
         )
     }
 
+    getSubordinatesOptions() {
+        return this.state.subordinates.map(employee =>
+            <option key={`subordinate-${employee.id}`} value={employee.id}>
+                {employee.name}
+            </option>
+        );
+    }
+
     render() {
         return (
-            <form className="wrapper" onSubmit={this.onSubmit}>
-                <h3>Add a recommendation</h3>
-                <div className="invite-holder">
+            <form className="rec-wrapper" onSubmit={this.onSubmit}>
+                <div className="rec-holder">
+                    <h2>Add a recommendation</h2>
                     <div className="row">
-                        <label>Select topic: </label>
-                        {this.state.loading || !this.state.topics ?
-                            <div>
-                                loading...
+                        {this.state.loadingTopics || !this.state.topics
+                            ? <div className="loader">
+                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
                             </div>
-                            :
-                            <select
-                                value={this.state.topicid}
-                                onChange={this.handleOnChange}>
+                            : <select
+                                onChange={this.handleOnTopicChange}>
                                 {this.showTopicOptions()}
                                 {this.showSubTopicOptions()}
                             </select>
                         }
                     </div>
                     <div className="row">
-                        <label>Assign to:</label>
-                        <input
-                            type="text"
-                            name="recommendedTo"
-                            value={this.state.recommendedTo}
-                            onChange={e => this.setState({ recommendedTo: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                            required/>
+                        {this.state.loadingSubordinates || !this.state.subordinates
+                            ? <div className="loader">
+                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
+                            </div>
+                            : <select
+                                onChange={this.handleOnSubordinateChange}>
+                                {this.getSubordinatesOptions()}
+                            </select>
+                        }
                     </div>
                     <div className="row">
-                        <button className="btn btn-dark" type="submit">Submit</button>
+                        <button className="btn btn-custom" type="submit">Submit</button>
+                        <Link to="/recommendations" className="btn btn-custom">Return</Link>
                     </div>
-                </div>
-                <div className="row">
-                    <Link to="/recommendations" className="btn btn-dark">Return</Link>
                 </div>
             </form>
         )
     }
 }
+const mapStateToProps = (state) => ({
+    currentUser: state.currentUser
+});
 
-export default AddRecommendationPage;
+const mapDispatchToProps = () => ({})
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddRecommendationPage));

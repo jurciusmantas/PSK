@@ -12,7 +12,7 @@ class NewLearningDayPage extends React.Component {
         this.state = {
             selectedDate: moment().format("YYYY-MM-DD"),
             topics: [],
-            selectedTopic: {},
+            selectedTopicId: 0,
             recommendations: [],
         };
         this.changeDate = this.changeDate.bind(this);
@@ -24,15 +24,12 @@ class NewLearningDayPage extends React.Component {
     componentDidMount() {
         get("topics").then(res => res.json()).then(res => {
             if (res.success)
-                this.setState({ topics: res.data });
+                this.setState({ topics: res.data, selectedTopicId: res.data[0].id });
         }).catch(err => {
             console.error(`GET /api/topics failed: ${err}`);
             this.setState({ topics: [] });
         });
-        // Use this when login returns user id:
-        // get(`recommendations?receiverId=${this.state.currentUser.id}`).then(res => res.json()).then(res => {
-        // for now hardcoded for use with mock repository
-        get(`recommendations?receiverId=3`).then(res => res.json()).then(res => {
+        get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
         }).catch(err => {
@@ -44,21 +41,23 @@ class NewLearningDayPage extends React.Component {
         this.setState({ selectedDate: newDate.target.value });
     }
 
-    changeTopic(selectedTopic) {
-        this.setState({ selectedTopic });
+    changeTopic(e) {
+        this.setState({ selectedTopicId: parseInt(e.target.value) });
     }
 
     createDay() {
-        // Uncomment this when login returns user id
-
-        //post('days', {
-        //    date: this.state.selectedDate,
-        //    employeeId: this.state.currentUser.id,
-        //    topicId: this.state.selectedTopic.id,
-        //}).then(r => r.json())
-        //    .then(() => {
-        //        this.props.history.push('/home');
-        //    });
+        post('days', {
+            date: this.state.selectedDate,
+            employeeId: this.props.currentUser.id,
+            topicId: this.state.selectedTopicId,
+        })
+            .then(() => {
+                this.props.history.push('/home');
+            })
+            .catch(reason => {
+                console.error(`POST days failed`);
+                console.error(reason);
+            });
     }
 
     makeTopicOptionList() {
@@ -73,11 +72,14 @@ class NewLearningDayPage extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>Create new learning day</h1>
-                <form>
-                    <div>
-                        <label htmlFor="learn-date">Date:</label>
+            <div className='day-wrapper'>
+                <div className='day-holder'>
+                <h2>Create new learning day</h2>
+                    <form>
+                        <div className='row'>
+                            <label htmlFor="learn-date">Date:</label>
+                        </div>
+                        <div className='row'>
                         <input
                             type="date"
                             id="learn-date"
@@ -86,18 +88,23 @@ class NewLearningDayPage extends React.Component {
                             min={moment().format("YYYY-MM-DD")}
                             pattern="d{4}-d{2}-d{2}"
                         />
-                    </div>
-                    <div>
-                        <label htmlFor="topics">Topic:</label>
+                        </div>
+                        <div className='row'>
+                            <label htmlFor="topics">Topic:</label>
+                        </div>
+                        <div className='row'>
                         <select
                             id="topics"
                             onChange={this.changeTopic}
                         >
                             {this.makeTopicOptionList()}
                         </select>
-                    </div>
-                    <button type="submit" className="btn btn-dark" onClick={this.createDay}>Create</button>
+                        </div>
+                        <div className='row'>
+                            <button type="submit" className="btn btn-custom" onClick={this.createDay}>Create</button>
+                        </div>
                 </form>
+                </div>
             </div>
         )
     }

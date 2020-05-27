@@ -5,6 +5,7 @@ import * as currentUserActions from '../../redux/actions/currentUserActions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './LoginPage.css';
 import { setCookie } from '../../helpers/cookie';
+import { notification } from '../../helpers/notification';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -29,9 +30,10 @@ class LoginPage extends React.Component {
             password
         } = this.state;
 
-        if (!login || !password)
+        if (!login || !password) {
+            notification('Please fill in username and password', 'error');
             return;
-        //TODO: Else - to show "no input"
+        }
 
         post('login', {
             login: login,
@@ -40,11 +42,13 @@ class LoginPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    setCookie(res.data.token);
+                    setCookie(res.data.token, res.data.expiredAt);
                     this.props.history.push('/home');
                     this.props.login(res.data);
                 }
-                //TODO: Else - to show "bad credentials"
+                else {
+                    notification('Wrong username or password', 'error');
+                }
             })
             .catch(error => console.error(error));
     }
@@ -53,18 +57,19 @@ class LoginPage extends React.Component {
         return (
             <div className='login-wrapper'>
                 <div className='login-holder'>
+                    <h2>Login</h2>
                     <div className='row'>
-                        <label>Login:</label>
                         <input
                             type='text'
+                            placeholder='Login'
                             onChange={e => this.setState({ login: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
-                        <label>Password:</label>
                         <input
                             type='password'
+                            placeholder='Password'
                             onChange={e => this.setState({ password: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                         />
@@ -72,7 +77,7 @@ class LoginPage extends React.Component {
                     <div className='row'>
                         <button
                             type="button"
-                            className="btn btn-dark"
+                            className="btn btn-custom"
                             onClick={() => this.login()}
                         >Login</button>
                     </div>

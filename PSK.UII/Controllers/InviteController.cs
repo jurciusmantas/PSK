@@ -5,7 +5,7 @@ using PSK.Model.Services;
 namespace PSK.UI.Controllers
 {
     [Route("api/[controller]")]
-    public class InviteController : Controller
+    public class InviteController : ControllerBase
     {
         private readonly IInviteService _inviteService;
 

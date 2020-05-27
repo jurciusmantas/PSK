@@ -1,12 +1,14 @@
 ﻿import React from 'react';
+import './TopicPage.css';
 import { get } from '../../helpers/request';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export default class DetailedTopicPage extends React.Component {
     constructor(props) {
         super(props);
         const queryParams = new URLSearchParams(window.location.search);
-        console.log(queryParams.get("id"));
         this.state = {
             loading: true,
             data: null,
@@ -49,9 +51,6 @@ export default class DetailedTopicPage extends React.Component {
 
         return (
             <div>
-                <h5>Subtopics</h5>
-
-
                 <table>
                     <tbody>
                         {
@@ -76,7 +75,9 @@ export default class DetailedTopicPage extends React.Component {
     render() {
         if (this.state.loading) {
             return (
-                <div>loading...</div>
+                <div className="loader">
+                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                </div>
             )
         }
         if (!this.state.data || this.state.id === null) {
@@ -85,17 +86,19 @@ export default class DetailedTopicPage extends React.Component {
             )
         }
         return (
-            <div>
-                <h3>{this.state.data.name}</h3>
-
-                <h5>Description</h5>
-                <p>{this.state.data.description}</p>
-                <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
-                <div>
-                    <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }} > Add New Subtopic </Link>
+            <div className="topic-wrapper">
+                <div className="topic-holder">
+                    <h2>{this.state.data.name}</h2>
+                    <h5>Description</h5>
+                    <p>{this.state.data.description}</p>
+                    <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
+                    <hr />
+                    <h5>Subtopics</h5>
+                    <div>
+                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }} > Add New Subtopic </Link>
+                    </div>
+                    {this.showSubtopics()}
                 </div>
-
-                {this.showSubtopics()}
             </div>
         )
     }

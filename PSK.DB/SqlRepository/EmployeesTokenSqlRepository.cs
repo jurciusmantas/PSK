@@ -3,6 +3,8 @@ using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -48,6 +50,15 @@ namespace PSK.DB.SqlRepository
             employeesToken.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedEmployeesToken;
+        }
+
+        public EmployeesToken FindByToken(string token)
+        {
+            return context.EmployeesTokens.FirstOrDefault(employeesToken => employeesToken.Token.Equals(token));
+        }
+        public List<EmployeesToken> AllEmployeesTokens(int employeeId)
+        {
+            return context.EmployeesTokens.Where(token => token.EmployeeId == employeeId).ToList();
         }
     }
 }

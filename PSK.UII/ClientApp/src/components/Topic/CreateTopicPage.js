@@ -1,5 +1,7 @@
 ﻿import React from 'react';
+import './TopicPage.css';
 import { post } from '../../helpers/request';
+import { notification } from '../../helpers/notification';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -23,7 +25,7 @@ export default class TopicPage extends React.Component {
 
     handleKeyPress(e) {
         if (e.key === "Enter")
-            console.log("abcd");
+            alert("Topic is not actually created");
     }
 
     create() {
@@ -34,52 +36,58 @@ export default class TopicPage extends React.Component {
         } = this.state;
 
         if (!name || !description) {
-            alert("please fill empty fields");
+            notification('Please fill in empty fields');
+            return;
         }
-        else {
-            post('topics', {
-                name: name,
-                description: description,
-                parentId: parentId,
+        post('topics', {
+            name: name,
+            description: description,
+            parentId: parentId,
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success)
+                    alert("TOPIC POSTED SUCCESSFULLY");
+                else {
+                    console.warn('Topic creation failed:')
+                    console.warn(res.message);
+                }
             })
-                .then(res => res.json())
-                .then(res => {
-                    alert(res.message)
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
+            .catch(error => {
+                console.error(`POST topics failed:`);
+                console.error(error);
+            })
     }
 
     render() {
         return (
-            <div>
-                <h2>Create Topic</h2>
-                <div>
-                    <label>Name:</label>
-                    <input
-                        type='text'
-                        onChange={e => this.setState({ name: e.target.value })}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                    />
-                </div>
-                <div>
-                    <label>Description:</label>
-                    <textarea cols="50"
-                        onChange={e => this.setState({ description: e.target.value })}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                    />
-                </div>
-                <div>
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={this.create}
-                    >Create</button>
+            <div className="topic-wrapper">
+                <div className="topic-holder">
+                    <h2>Create Topic</h2>
+                    <div className='row'>
+                        <input
+                            type='text'
+                            placeholder='Topic name'
+                            onChange={e => this.setState({ name: e.target.value })}
+                            onKeyPress={e => this.handleKeyPress(e)}
+                        />
+                    </div>
+                    <div className='row'>
+                        <textarea cols="50"
+                            onChange={e => this.setState({ description: e.target.value })}
+                            placeholder='Topic description'
+                            onKeyPress={e => this.handleKeyPress(e)}
+                        />
+                    </div>
+                    <div className='row'>
+                        <button
+                            type="button"
+                            className="btn btn-custom"
+                            onClick={() => this.create}
+                        >Create</button>
+                    </div>
                 </div>
             </div>
-
         );
     }
 }
