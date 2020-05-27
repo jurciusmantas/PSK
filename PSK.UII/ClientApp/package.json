@@ -23,7 +23,9 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rimraf": "^2.6.2",
-    "universal-cookie": "^4.0.3"
+    "universal-cookie": "^4.0.3",
+    "devextreme": "20.1-stable",
+    "devextreme-react": "20.1-stable"
   },
   "devDependencies": {
     "ajv": "^6.9.1",
@@ -33,7 +35,8 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.11.1",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "devextreme-themebuilder": "20.1-stable"
   },
   "eslintConfig": {
     "extends": "react-app"
