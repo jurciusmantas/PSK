@@ -11,7 +11,7 @@ const { store, persistor } = getStore();
 const App = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <Routes/>
+      <Routes />
     </PersistGate>
   </Provider>
 );

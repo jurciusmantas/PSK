@@ -1,5 +1,5 @@
-﻿using PSK.Model.BusinessEntities;
-using PSK.Model.Entities;
+﻿using PSK.Model.Entities;
+using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 using System.Configuration;
@@ -18,7 +18,7 @@ namespace PSK.Model.Services
             _db = db;
         }
 
-        public ServerResult<InviteArgs> Invite(InviteArgs args)
+        public ServerResult<Invite> Invite(Invite args)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace PSK.Model.Services
 
                 SendInviteMail(args.Email, token);
 
-                return new ServerResult<InviteArgs>
+                return new ServerResult<Invite>
                 {
                     Success = true
                 };
@@ -36,7 +36,7 @@ namespace PSK.Model.Services
             }
             catch (Exception e)
             {
-                return new ServerResult<InviteArgs>
+                return new ServerResult<Invite>
                 {
                     Success = false,
                     Message = e.Message,

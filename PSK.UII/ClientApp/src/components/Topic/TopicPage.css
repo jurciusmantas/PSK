@@ -1,3 +1,53 @@
+﻿.topic-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.topic-holder {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px 20px 20px 32px;
+    box-shadow: 0px 0px 5px 0px rgba(70, 72, 102, 0.5);
+    width: 100%;
+}
+
+    .topic-holder h5 {
+        margin-bottom: 15px;
+    }
+
+    .topic-holder input {
+        width: 482px;
+        height: 40px;
+    }
+
+textarea {
+    resize: none;
+    border-style: solid;
+    border-width: 1px;
+    width: 482px;
+    padding: 10px 20px 10px;
+    height: 125px;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: #bebebe;
+}
+
+textarea:focus {
+    border: 2px solid #1B8C84;
+}
+
+@media screen and (max-width: 1110px) {
+    .topic-holder {
+        width: 100%;
+    }
+}
+
+.dx-treeview {
+    padding-top: 10px;
+}
+
 .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
     background-color: transparent;
     color: #000000;

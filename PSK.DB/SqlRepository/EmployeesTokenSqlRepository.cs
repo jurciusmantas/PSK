@@ -1,8 +1,9 @@
 ﻿using PSK.DB.Contexts;
-using PSK.Model.BusinessEntities;
+using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PSK.DB.SqlRepository
@@ -38,12 +39,22 @@ namespace PSK.DB.SqlRepository
             return context.EmployeesTokens.Find(id);
         }
 
+        public List<EmployeesToken> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public EmployeesToken Update(EmployeesToken updatedEmployeesToken)
         {
             var employeesToken = context.EmployeesTokens.Attach(updatedEmployeesToken);
             employeesToken.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedEmployeesToken;
+        }
+
+        public EmployeesToken FindByToken(string token)
+        {
+            return context.EmployeesTokens.FirstOrDefault(employeesToken => employeesToken.Token.Equals(token));
         }
     }
 }
