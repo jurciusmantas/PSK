@@ -28,6 +28,8 @@ namespace PSK.Model.Services
                     throw new ArgumentNullException("Arguments are empty");
 
                 Entities.Employee employee = _employeeRepository.Login(args);
+                if (employee == null)
+                    throw new ArgumentException("Employee not found");
                 VerifyPassword(args.Password, employee.Password);
                 DeleteExpiredTokens(employee.Id);
                 string token = GetToken();
@@ -87,6 +89,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
+                        Id = employeesToken.EmployeeId,
                         Login = _employeeRepository.Get(employeesToken.EmployeeId).Name,
                         Name = _employeeRepository.Get(employeesToken.EmployeeId).Name,
                         Token = token,

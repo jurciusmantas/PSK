@@ -1,7 +1,7 @@
 import {toastr} from 'react-redux-toastr';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 
-export function notification(message, position = 'bottom-center', type='success'){
+export function notification(message, type = 'success', position = 'bottom-center'){
     let options = {
         closeOnToastrClick: true,
         position: position,

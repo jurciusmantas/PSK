@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { get } from '../../helpers/request';
+import { notification } from '../../helpers/notification';
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -33,28 +34,48 @@ class Calendar extends React.Component {
 
     componentDidMount() {
         console.warn("This thing likes running. If you notice that this message appears twice, this is not good");
+        console.log(this.props.currentUser);
         get(`days?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
-                this.setState({ userDays: res.data, userDaysLoaded: true });
+                if (res.success)
+                    this.setState({ userDays: res.data, userDaysLoaded: true });
+                else {
+                    notification('Could not load your learning days :(', 'warning');
+                    console.warn('Could not load employee days:');
+                    console.warn(res.message);
+                }
             })
             .catch(reason => {
                 console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
                 console.error(reason)
             });
+        console.log(`employees/${this.props.currentUser.id}/subordinates`)
         get(`employees/${this.props.currentUser.id}/subordinates`)
             .then(res => res.json())
             .then(res => {
-                for (let employee of res.data) {
-                    get(`days?employeeId=${employee.id}`)
-                        .then(r => r.json())
-                        .then(r => {
-                            this.setState({ subordinatesDays: this.state.subordinatesDays.concat(r.data) });
-                        })
-                        .catch(reason => {
-                            console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
-                            console.error(reason)
-                        });
+                if (res.success)
+                    for (let employee of res.data) {
+                        get(`days?employeeId=${employee.id}`)
+                            .then(r => r.json())
+                            .then(r => {
+                                if (res.success)
+                                    this.setState({ subordinatesDays: this.state.subordinatesDays.concat(r.data) });
+                                else {
+                                    console.warn(`Failed to load employee id=${employee.id} name=${employee.name} days:`)
+                                    console.warn(res.message);
+                                }
+                            })
+                            .catch(reason => {
+                                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                                console.error(reason)
+                            });
+
+                    }
+                else {
+                    notification('Could not load your subordinates days :(', 'warning');
+                    console.warn('Could not load subordinates days:')
+                    console.warn(res.message);
                 }
             })
             .then(_ => { this.setState({ subordinatesDaysLoaded: true }); })
@@ -210,7 +231,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({})
 
-export default withRouter(connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Calendar));
+)(Calendar);
