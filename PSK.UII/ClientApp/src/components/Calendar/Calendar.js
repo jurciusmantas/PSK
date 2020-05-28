@@ -192,24 +192,24 @@ class Calendar extends React.Component {
                                 >
                                     {calendar.skipFirsts.includes(items[0].weekDay) &&
                                         <CalendarDayItem
-                                        key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
-                                        skipper
-                                    />
-                                }
-                                {items.map(i => (
-                                    <CalendarDayItem
-                                        key={`calendar-day-item-${i.monthDay}`}
-                                        monthDay={i.monthDay}
-                                        userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
-                                        userDaysLoaded={this.state.userDaysLoaded}
-                                        subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
-                                        subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
-                                    />
-                                ))}
-                                {calendar.addLasts.includes(items[0].weekDay) &&
-                                    <CalendarDayItem
-                                        key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
-                                        skipper
+                                            key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
+                                            skipper
+                                        />
+                                    }
+                                    {items.map(i => (
+                                        <CalendarDayItem
+                                            key={`calendar-day-item-${i.monthDay}`}
+                                            monthDay={i.monthDay}
+                                            userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
+                                            userDaysLoaded={this.state.userDaysLoaded}
+                                            subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
+                                            subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
+                                        />
+                                    ))}
+                                    {calendar.addLasts.includes(items[0].weekDay) &&
+                                        <CalendarDayItem
+                                            key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
+                                            skipper
                                         />
                                     }
                                 </div>

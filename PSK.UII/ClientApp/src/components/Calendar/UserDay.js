@@ -5,7 +5,7 @@ export default class UserDay extends React.Component {
     render() {
         return (
             <div className='user-day'>
-                <Link to={`topic?=${this.props.topicId}`}>{this.props.topicName}</Link>
+                <Link to={`topic?id=${this.props.topicId}`}>{this.props.topicName}</Link>
             </div>
         )
     }

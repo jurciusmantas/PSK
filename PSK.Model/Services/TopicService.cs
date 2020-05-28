@@ -18,15 +18,20 @@ namespace PSK.Model.Services
         public ServerResult<List<Topic>> GetTopics()
         {
             var topicTree = ConvertToTree(_topicRepository.Get());
-
             return new ServerResult<List<Topic>> { Data = topicTree, Message = "Success", Success = true };
         }
 
         public ServerResult<Topic> GetTopic(int id)
         {
             var bTopic = _topicRepository.Get(id);
-            var bSubtopic = _topicRepository.GetSubtopics(id);
+            if (bTopic == null)
+                return new ServerResult<Topic>
+                {
+                    Success = false,
+                    Message = "Not found"
+                };
 
+            var bSubtopic = _topicRepository.GetSubtopics(id);
             var subtopics = new List<Topic>();
 
             foreach (var top in bSubtopic )
@@ -37,7 +42,11 @@ namespace PSK.Model.Services
 
             var topic = new Topic { Id = bTopic.Id, Description = bTopic.Description, Name = bTopic.Name, SubTopicList = subtopics };
 
-            return new ServerResult<Topic> { Data = topic, Message = "Success", Success = true };
+            return new ServerResult<Topic> 
+            { 
+                Data = topic,  
+                Success = true 
+            };
         }
 
         private List<Topic> ConvertToTree(List<Entities.Topic> topicList)
