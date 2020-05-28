@@ -83,7 +83,7 @@ export default class TopicPage extends React.Component {
                         <button
                             type="button"
                             className="btn btn-custom"
-                            onClick={() => this.create}
+                            onClick={() => this.create()}
                         >Create</button>
                     </div>
                 </div>

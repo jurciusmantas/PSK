@@ -28,7 +28,7 @@ namespace PSK.Model.Logging
                     _logger.Information("{Login}: {DecorateeClassName}.Login unsuccessful", args.Login, _decorateeClassName);
                     return result;
                 }
-                _logger.Information("{Login}: {DecorateeClassName}.Login() successful", result.Data, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.Login() successful", result.Data.Employee.Name, _decorateeClassName);
                 return result;
             }
             catch(Exception e)
@@ -43,7 +43,7 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.LoginToken(token);
-                _logger.Information("{Login}: {DecorateeClassName}.LoginToken success", result.Data, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.LoginToken success", result.Data.Employee.Name, _decorateeClassName);
                 if (!result.Success)
                 {
                     _logger.Information("{DecorateeClassName}.LoginToken unsuccessful", _decorateeClassName);
