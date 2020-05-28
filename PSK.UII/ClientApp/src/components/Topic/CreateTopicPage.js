@@ -2,8 +2,10 @@
 import './TopicPage.css';
 import { post } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class TopicPage extends React.Component {
+class TopicPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -11,47 +13,29 @@ export default class TopicPage extends React.Component {
         this.state = {
             name: null,
             description: null,
-            parentId: query.get("parent"),
+            parentId: parseInt(query.get("parent")),
         };
     }
 
-    componentDidMount() {
-        window.addEventListener("keypress", this.handleKeyPress);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("keypress", this.handleKeyPress);
-    }
-
-    handleKeyPress(e) {
-        if (e.key === "Enter")
-            alert("Topic is not actually created");
-    }
-
     create() {
-        const {
-            name,
-            description,
-            parentId
-        } = this.state;
-
-        if (!name || !description) {
-            notification('Please fill in empty fields');
+        if (!this.state.name || !this.state.description) {
+            notification('Please fill in empty fields', 'error');
             return;
         }
+
         post('topics', {
-            name: name,
-            description: description,
-            parentId: parentId,
+            name: this.state.name,
+            description: this.state.description,
+            parentId: this.state.parentId,
         })
             .then(res => res.json())
             .then(res => {
-                if (res.success)
-                    alert("TOPIC POSTED SUCCESSFULLY");
-                else {
-                    console.warn('Topic creation failed:')
-                    console.warn(res.message);
+                if (res.success){
+                    notification('Topic created successfully');
+                    this.props.history.push('topics');
                 }
+                else 
+                    notification('Topic creation failed: ' + res.message, 'error');
             })
             .catch(error => {
                 console.error(`POST topics failed:`);
@@ -69,21 +53,19 @@ export default class TopicPage extends React.Component {
                             type='text'
                             placeholder='Topic name'
                             onChange={e => this.setState({ name: e.target.value })}
-                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
                         <textarea cols="50"
                             onChange={e => this.setState({ description: e.target.value })}
                             placeholder='Topic description'
-                            onKeyPress={e => this.handleKeyPress(e)}
                         />
                     </div>
                     <div className='row'>
                         <button
                             type="button"
                             className="btn btn-custom"
-                            onClick={() => this.create}
+                            onClick={() => this.create()}
                         >Create</button>
                     </div>
                 </div>
@@ -91,3 +73,20 @@ export default class TopicPage extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        currentUser: state.currentUser,
+    }
+}
+  
+  const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+
+    }
+}
+  
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TopicPage));
