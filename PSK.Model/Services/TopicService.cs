@@ -62,6 +62,20 @@ namespace PSK.Model.Services
 
         public ServerResult CreateTopic(Topic args)
         {
+            if (args == null)
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "No arguments"
+                };
+
+            if (string.IsNullOrEmpty(args.Name))
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "No name"
+                };
+
             var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description};
 
             if (args.ParentId.HasValue)
@@ -69,9 +83,11 @@ namespace PSK.Model.Services
                 var parentTopic = _topicRepository.Get(args.ParentId.Value);
 
                 if (parentTopic == null)
-                {
-                    return new ServerResult { Message = "Parent topic does not exist", Success = false };
-                }
+                    return new ServerResult 
+                    { 
+                        Message = "Parent topic does not exist", 
+                        Success = false 
+                    };
 
                 newTopic.ParentTopic = parentTopic;
                 newTopic.ParentTopicId = args.ParentId.Value;
@@ -79,7 +95,7 @@ namespace PSK.Model.Services
 
             _topicRepository.Add(newTopic);
 
-            return new ServerResult { Message = "success", Success = true };
+            return new ServerResult { Success = true };
         }
     }
 }

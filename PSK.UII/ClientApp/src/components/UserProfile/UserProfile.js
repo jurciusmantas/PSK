@@ -6,7 +6,6 @@ import {
     Label,
     Button,
 } from 'reactstrap';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './UserProfile.css';
 import { get } from '../../helpers/request';
@@ -144,7 +143,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
   
-export default withRouter(connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserProfile));
+)(UserProfile);
