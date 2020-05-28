@@ -27,7 +27,7 @@ namespace PSK.Model.Services
 
         public List<Employee> GetSubordinates(int employeeId)
         {
-            return _employeeRep.FindTeamMembers(employeeId)
+            return _employeeRep.GetSubordinates(employeeId)
                 .Select(e => EntityToDTO(e)).ToList();
         }
 

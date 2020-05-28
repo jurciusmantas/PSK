@@ -12,11 +12,14 @@ class RestrictionsPage extends React.Component {
         super(props);
         this.state = {
             loading1: true,
+            loading2: true,
             consecutiveDays: null,
             maxDaysPerMonth: null,
             maxDaysPerQuarter: null,
             maxDaysPerYear: null,
-            creatorId: null,
+            restriction: null,
+            restrictions: null,
+            creatorId: 1,
             applyTo: 2,
             selectedEmployees: [],
             displaySelectField: false,
@@ -27,15 +30,12 @@ class RestrictionsPage extends React.Component {
     }
 
     componentDidMount() {
-        let employeeId = 1;
-        get(`restrictions?id=${employeeId}`)
+        get(`restrictions/${this.state.creatorId}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({
-                        restriction: res.data.restriction,
-                        restrictions: res.data.restrictionsList,
-                        users: res.data.teamMembers,
+                        restriction: res.data,
                         loading1: false
                     })
                     console.log(res.data);
@@ -47,6 +47,30 @@ class RestrictionsPage extends React.Component {
             .catch(reason => {
                 console.error(reason);
             })
+        get(`restrictions?id=${this.state.creatorId}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    this.setState({
+                        restrictions: res.data,
+                        loading2: false
+                    })
+                    console.log(res.data);
+                }
+                else {
+                    console.log(res.message);
+                }
+            })
+            .catch(reason => {
+                console.error(reason);
+            })
+        get(`employees/${this.state.creatorId}/subordinates`)
+            .then(res => res.json())
+            .then(res => { this.setState({ users: res.data }); })
+            .catch(reason => {
+                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
+                console.error(reason)
+            });
     }
 
     showRestriction() {
@@ -83,7 +107,13 @@ class RestrictionsPage extends React.Component {
     }
     showRestrictionsList() {
         var restrictions = this.state.restrictions || [];
-        if (restrictions != null && restrictions.length > 0) {
+        if (this.state.loading2) {
+            return <div>Loading...</div>
+        }
+        else if (restrictions.length == 0) {
+            return <div>You do not have any restrictions created</div>
+        }
+        else {
             return (
                 <table>
                     <thead>
@@ -121,9 +151,6 @@ class RestrictionsPage extends React.Component {
                 </table>
             );
         }
-        else {
-            return <div>You do not have any restrictions created</div>
-        }   
     }
 
     deleteRestriction(e) {
@@ -132,6 +159,7 @@ class RestrictionsPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     alert(res.message);
+                    window.location.reload();
                 }
                 else {
                     alert(res.message);
@@ -154,9 +182,9 @@ class RestrictionsPage extends React.Component {
             MaxDaysPerMonth: parseInt(this.state.maxDaysPerMonth),
             MaxDaysPerQuarter: parseInt(this.state.maxDaysPerQuarter),
             MaxDaysPerYear: parseInt(this.state.maxDaysPerYear),
-            CreatorId: 1,
+            CreatorId: parseInt(this.state.creatorId),
             ApplyTo: parseInt(this.state.applyTo),
-            UserNames: this.state.selectedEmployees.map((selectedEmployee) => {
+            UserIds: this.state.selectedEmployees.map((selectedEmployee) => {
                 return selectedEmployee.value
             })
         })
@@ -164,6 +192,7 @@ class RestrictionsPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     alert(res.message);
+                    window.location.reload();
                 }
                 else {
                     alert(res.message);
@@ -178,7 +207,7 @@ class RestrictionsPage extends React.Component {
         let selectField = null;
         if (this.state.displaySelectField) {
             let options = this.state.users.map(function (user) {
-                return { value: user.name, label: user.name };
+                return { value: user.id, label: user.name };
             });
             selectField = (
                 <tr>

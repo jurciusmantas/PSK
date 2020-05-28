@@ -55,12 +55,8 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public List<Employee> FindTeamMembers(int leaderId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<Employee> FindAllLower(int leaderId)
+        public List<Employee> GetAllSubordinates(int leaderId)
         {
             throw new NotImplementedException();
         }

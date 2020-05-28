@@ -1,12 +1,11 @@
 ﻿using PSK.Model.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace PSK.Model.Repository
 {
     public interface IRestrictionRepository : IRepository<Restriction>
     {
-        public Restriction GetLastGlobal();
-
-        public List<Restriction> GetToRestrictions(int creatorId);
+        public (List<Restriction>, List<int>) GetRestrictionsTo(int creatorId);
     }
 }

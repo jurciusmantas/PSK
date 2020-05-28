@@ -56,19 +56,19 @@ namespace PSK.DB.SqlRepository
             return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
         }
 
-        public List<Employee> FindTeamMembers(int leaderId)
+        public List<Employee> GetSubordinates(int employeeId)
         {
-            return context.Employees.Where(employee => employee.LeaderId == leaderId).ToList();
+            return context.Employees.Where(e => e.LeaderId == employeeId).ToList();
         }
 
-        public List<Employee> FindAllLower(int leaderId)
+        public List<Employee> GetAllSubordinates(int leaderId)
         {
             List<Employee> employees = new List<Employee>();
-            var teamMembers = FindTeamMembers(leaderId);
+            var teamMembers = GetSubordinates(leaderId);
             employees.AddRange(teamMembers);
             foreach (Employee employee in teamMembers)
             {
-                List<Employee> allLower = FindAllLower(employee.Id) ?? new List<Employee>();
+                List<Employee> allLower = GetAllSubordinates(employee.Id) ?? new List<Employee>();
                 if (allLower.Count > 0) { employees.AddRange(allLower); }
             } 
             return employees;

@@ -12,6 +12,6 @@ namespace PSK.Model.DTO
         public int MaxDaysPerMonth { get; set; }
         public int CreatorId { get; set; }
         public int ApplyTo { get; set; }
-        public string[] UserNames { get; set; }
+        public int[] UserIds { get; set; }
     }
 }

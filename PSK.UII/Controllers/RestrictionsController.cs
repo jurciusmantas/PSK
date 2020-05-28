@@ -19,10 +19,16 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<Restrictions> GetCreatedRestrictions([FromQuery(Name = "id")] int employeeId)
+        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "id")] int employeeId)
         {
-            return _restrictionService.GetRestrictions(employeeId);
+            return _restrictionService.GetRestrictionsTo(employeeId);
         }
+        [HttpGet("{id}")]
+        public ServerResult<Restriction> GetRestriction([FromRoute(Name = "id")] int employeeId)
+        {
+            return _restrictionService.GetRestrictionFrom(employeeId);
+        }
+
         [HttpDelete]
         public ServerResult DeleteRestriction([FromQuery(Name = "id")]int id)
         {
