@@ -1,0 +1,22 @@
+.general-info-wrapper .row {
+    margin: 0px;
+    justify-content: unset;
+    padding: 0px 0px 0px 0px;
+}
+
+.general-info-wrapper .row label{
+    white-space: nowrap;
+}
+
+.user-profile-buttons-holder{
+    padding-top: 20px;
+}
+
+.user-profile-button{
+    margin: 0px 10px;
+}
+
+.user-profile-button.active{
+    background-color: #363b40;
+    border-color: #363b40;
+}

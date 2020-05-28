@@ -17,12 +17,11 @@ namespace PSK.Model.Authorization
             try
             {
                 EmployeesToken empToken = _employeesTokenRepository.FindByToken(token);
+                if (empToken == null)
+                    return false;
                 int result = DateTime.Compare(empToken.ExpiredAt, DateTime.Now);
 
-                if (result < 1 || result == 0)
-                    return false;
-                else
-                    return true;
+                return result >= 1;
             }
             catch
             {

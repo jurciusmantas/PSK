@@ -1,5 +1,7 @@
 ﻿using PSK.Model.DTO;
+using PSK.Model.Helpers;
 using PSK.Model.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,21 +18,29 @@ namespace PSK.Model.Services
 
         public ServerResult CreateRecommendation(Recommendation recommendation)
         {
-            _recRep.Add(DTOToEntity(recommendation));
-            return new ServerResult() { Success = true };
+            try
+            {
+                _recRep.Add(recommendation.DTOToEntity());
+                return new ServerResult() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ServerResult() { Success = false, Message = e.Message };
+            }
+
         }
 
         public ServerResult<Recommendation> GetRecommendation(int id)
         {
             Entities.Recommendation dbRec = _recRep.Get(id);
             if (dbRec != null)
-                return new ServerResult<Recommendation>() { Success = true, Data = EntityToDTO(dbRec) };
+                return new ServerResult<Recommendation>() { Success = true, Data = dbRec.EntityToDTO() };
             return new ServerResult<Recommendation>() { Success = false, Message = "Recommendation not found" };
         }
 
         public ServerResult<List<Recommendation>> GetRecommendations()
         {
-            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => EntityToDTO(r)).ToList() };
+            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => r.EntityToDTO()).ToList() };
         }
 
         public ServerResult<List<Recommendation>> GetReceivedRecommendations(int receiverId)
@@ -38,43 +48,68 @@ namespace PSK.Model.Services
             return new ServerResult<List<Recommendation>>()
             {
                 Success = true,
-                Data = _recRep.GetReceivedRecommendations(receiverId)
-                              .Select(r => EntityToDTO(r)).ToList()
+                Data = _recRep.GetReceivedRecommendations(receiverId).Select(r => r.EntityToDTO()).ToList()
             };
         }
 
         public ServerResult<List<Recommendation>> GetCreatedRecommendations(int creatorId)
         {
-            return new ServerResult<List<Recommendation>>()
+            try
             {
-                Success = true,
-                Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => EntityToDTO(r)).ToList()
-            };
+                return new ServerResult<List<Recommendation>>()
+                {
+                    Success = true,
+                    Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => r.EntityToDTO()).ToList()
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServerResult<List<Recommendation>>()
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
         }
 
-        private Recommendation EntityToDTO(Entities.Recommendation entity)
+        public ServerResult UpdateRecommendation(Recommendation rec)
         {
-            return new Recommendation()
+            try
             {
-                Id = entity.Id,
-                ReceiverId = entity.ReceiverId,
-                CreatorId = entity.CreatorId,
-                TopicId = entity.TopicId,
-                CreatorName = entity.Creator?.Name,
-                ReceiverName = entity.Receiver?.Name,
-                TopicName = entity.Topic?.Name
-            };
+                Entities.Recommendation dbRec = _recRep.Get(rec.Id);
+                if (dbRec == null)
+                    return new ServerResult()
+                    {
+                        Success = false,
+                        Message = "Recommendation does not exist"
+                    };
+                dbRec.TopicId = rec.TopicId;
+                dbRec.ReceiverId = rec.ReceiverId;
+                dbRec.CreatorId = rec.CreatorId;
+                _recRep.Update(dbRec);
+                return new ServerResult() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ServerResult()
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
         }
 
-        private Entities.Recommendation DTOToEntity(Recommendation dto)
+        public ServerResult DeleteRecommendation(int id)
         {
-            return new Entities.Recommendation()
+            try
             {
-                Id = dto.Id,
-                CreatorId = dto.CreatorId,
-                ReceiverId = dto.ReceiverId,
-                TopicId = dto.TopicId
-            };
+                _recRep.Delete(id);
+                return new ServerResult() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ServerResult() { Success = false, Message = e.Message };
+            }
         }
     }
 }

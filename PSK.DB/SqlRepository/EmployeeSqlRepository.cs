@@ -3,6 +3,7 @@ using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace PSK.DB.SqlRepository
@@ -40,7 +41,7 @@ namespace PSK.DB.SqlRepository
 
         public Employee Login(Model.DTO.LoginArgs loginArgs)
         {
-            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login /*&& employee.Password == loginArgs.Password*/);
+            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login);
         }
 
         public Employee Update(Employee updatedEmployee)
@@ -77,6 +78,20 @@ namespace PSK.DB.SqlRepository
         public List<Employee> Get()
         {
             throw new System.NotImplementedException();
+        }
+
+        public List<Topic> GetEmployeesActiveTopics(int employeeId)
+        {
+            return context.Topics.FromSqlRaw(@"
+                SELECT t.Id, t.Name, t.Description, t.ParentTopicId
+                FROM days AS d
+                INNER JOIN employees AS e ON d.EmployeeId = e.Id
+                INNER JOIN topics AS t ON d.TopicId = t.Id
+                LEFT JOIN topiccompletions AS tc ON t.id = tc.`TopicId`
+                WHERE 
+                    e.Id = {0} AND tc.id IS NULL
+                GROUP BY t.Id;
+            ", employeeId).ToList();
         }
     }
 }

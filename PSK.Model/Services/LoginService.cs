@@ -1,5 +1,6 @@
 ﻿using PSK.Model.DTO;
 using PSK.Model.Entities;
+using PSK.Model.Helpers;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace PSK.Model.Services
                     throw new ArgumentNullException("Arguments are empty");
 
                 Entities.Employee employee = _employeeRepository.Login(args);
+                if (employee == null)
+                    throw new ArgumentException("Employee not found");
                 VerifyPassword(args.Password, employee.Password);
                 DeleteExpiredTokens(employee.Id);
                 string token = GetToken();
@@ -45,9 +48,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Id = employee.Id,
-                        Login = args.Login,
-                        Name = employee.Name,
+                        Employee = employee.EntityToDTO(),
                         Token = token,
                         ExpiredAt = expiredAt.ToString()
                     }
@@ -87,8 +88,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Login = _employeeRepository.Get(employeesToken.EmployeeId).Name,
-                        Name = _employeeRepository.Get(employeesToken.EmployeeId).Name,
+                        Employee = _employeeRepository.Get(employeesToken.EmployeeId).EntityToDTO(),
                         Token = token,
                         ExpiredAt = employeesToken.ExpiredAt.ToString()
                     },

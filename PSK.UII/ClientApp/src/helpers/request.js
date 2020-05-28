@@ -2,16 +2,13 @@ import { authError } from '../redux/actions/currentUserActions';
 import getStore from '../redux/store';
 import { getCookie } from './cookie';
 
-var token = 'Token ' + getCookie('AuthToken');
-const { store } = getStore();
-
 export function get(url, params = {}) {
     return fetch('./api/' + url, {
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Token ' + getCookie('AuthToken'),
         }
     })
     .then(res => handleErrors(res));
@@ -23,7 +20,7 @@ export function post(url, params = {}) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Token ' + getCookie('AuthToken'),
         },
         body: JSON.stringify(params)
     })
@@ -36,7 +33,7 @@ export function put(url, params = {}) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Token ' + getCookie('AuthToken'),
         },
         body: JSON.stringify(params)
     })
@@ -48,14 +45,15 @@ export function del(url, params = {}) {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + getCookie('AuthToken'),
         },
     })
 }
 
 function handleErrors(response) {
     if (response.status === 401) {
-        store.dispatch(authError());
+        getStore().dispatch(authError());
         window.location.reload();
         return Promise.reject()
     }

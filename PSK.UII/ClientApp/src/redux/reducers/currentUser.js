@@ -6,9 +6,9 @@ import {
 
 const initialState = {
     id: null,
-    login: null,
     name: null,
     token: null,
+    email: null,
     expiredAt: null,
     authError: false,
 }
@@ -17,8 +17,8 @@ export default (state = initialState, action) => {
     switch(action.type){
         case LOGIN_SUCCESS: {
             state.id = action.id;
-            state.login = action.login;
             state.name = action.name;
+            state.email = action.email;
             state.token = action.token;
             state.expiredAt = action.expiredAt;
             state.authError = false;

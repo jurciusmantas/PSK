@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import './TopicPage.css';
 import { post } from '../../helpers/request';
+import { notification } from '../../helpers/notification';
 
 export default class TopicPage extends React.Component {
     constructor(props) {
@@ -24,7 +25,7 @@ export default class TopicPage extends React.Component {
 
     handleKeyPress(e) {
         if (e.key === "Enter")
-            console.log("abcd");
+            alert("Topic is not actually created");
     }
 
     create() {
@@ -35,22 +36,27 @@ export default class TopicPage extends React.Component {
         } = this.state;
 
         if (!name || !description) {
-            alert("please fill empty fields");
+            notification('Please fill in empty fields');
+            return;
         }
-        else {
-            post('topics', {
-                name: name,
-                description: description,
-                parentId: parentId,
+        post('topics', {
+            name: name,
+            description: description,
+            parentId: parentId,
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success)
+                    alert("TOPIC POSTED SUCCESSFULLY");
+                else {
+                    console.warn('Topic creation failed:')
+                    console.warn(res.message);
+                }
             })
-                .then(res => res.json())
-                .then(res => {
-                    alert(res.message)
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
+            .catch(error => {
+                console.error(`POST topics failed:`);
+                console.error(error);
+            })
     }
 
     render() {

@@ -5,6 +5,8 @@ import { put, get } from '../../helpers/request'
 import { Link, withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { notification } from "../../helpers/notification";
+import { connect } from 'react-redux';
 
 class EditRecommendationsPage extends React.Component {
     constructor() {
@@ -13,49 +15,76 @@ class EditRecommendationsPage extends React.Component {
         this.state = {
             recommendation: null,
             topics: null,
-            loading1: true,
-            loading2: true,
+            subordinates: null,
+            loadingRecommendation: true,
+            loadingTopics: true,
+            loadingSubordinates: true,
             topicId: null,
-            recommendedTo: "",
-            id: query.get("id"),
+            subordinateId: null,
+            recommendationId: query.get("id"),
         }
-        this.onSubmit = this.handleSubmit.bind(this)
+        this.onSubmit = this.handleSubmit.bind(this);
+        this.handleOnTopicChange = this.handleOnTopicChange.bind(this);
+        this.handleOnSubordinateChange = this.handleOnSubordinateChange.bind(this);
     }
 
     componentDidMount() {
-        get(`recommendations/${this.state.id}`)
+        get(`recommendations/${this.state.recommendationId}`)
             .then(res => res.json())
             .then(res => {
+                console.log(`GET recommendations/${this.state.recommendationId} finished`)
+                console.log(res);
                 if (res.success) {
-                    this.setState({ recommendation: res.data, loading1: false, topicId: res.data.topicId, recommendedTo: res.data.receiverName })
+                    this.setState({
+                        recommendation: res.data,
+                        loadingRecommendation: false,
+                        topicId: res.data.topicId,
+                        subordinateId: res.data.receiverId
+                    })
                 }
                 else {
-                    console.warn(`GET recommendations/${this.state.id} failed: ${res.message}`);
+                    console.warn(`Cannot get recommendation:`);
+                    console.warn(res.message);
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`GET recommendations/${this.state.recommendationId} failed:`);
+                console.error(error);
+            });
         get(`topics`)
-            .then(r => r.json())
-            .then(r => {
-                if (r.success) {
-                    this.setState({ topics: r.data, loading2: false })
+            .then(res => res.json())
+            .then(res => {
+                console.log(`GET topics finished`);
+                console.log(res);
+                if (res.success) {
+                    this.setState({ topics: res.data, loadingTopics: false })
                 }
                 else {
-                    console.error(`GET topics failed: ${r.message}`);
+                    console.warn(`Cannot load topics:`);
+                    console.warn(res.message);
                 }
             })
-            .catch(error => console.error(error));
-    }
-
-    handleKeyPress(e) {
-        if (e.key === "Enter")
-            this.handleSubmit(e);
-    }
-
-    handleOnChange = (e) => {
-        this.setState({
-            topicId: e.target.value
-        })
+            .catch(error => {
+                console.error(`GET topics failed:`);
+                console.error(error);
+            });
+        get(`employees/${this.props.currentUser.id}/subordinates`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(`GET employees/${this.props.currentUser.id}/subordinates finished`)
+                console.log(res);
+                if (res.success) {
+                    this.setState({ subordinates: res.data, loadingSubordinates: false });
+                }
+                else {
+                    console.warn('Cannot load subordinates:');
+                    console.warn(res.message);
+                }
+            })
+            .catch(reason => {
+                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`);
+                console.error(reason);
+            })
     }
 
     handleSubmit(e) {
@@ -63,33 +92,38 @@ class EditRecommendationsPage extends React.Component {
 
         const {
             topicId,
-            recommendedTo,
+            subordinateId,
+            recommendationId
         } = this.state;
 
-        const createdById = 1; //TODO: get current user id
+        const creatorId = this.props.currentUser.id
 
-        put('recommendations/' + this.state.id, {
-            topicid: parseInt(topicId),
-            recommendedTo: recommendedTo,
-            createdById: createdById
+        put(`recommendations/${recommendationId}`, {
+            topicId: parseInt(topicId),
+            receiverId: parseInt(subordinateId),
+            creatorId: creatorId
         })
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert("Recommendation updated successfully");
+                    notification("Updated!");
+                    this.props.history.push('/recommendations');
                 }
                 else {
-                    alert(res.message);
+                    notification("Error updating :(", 'error');
+                    console.warn("Cannot update recommendation:");
+                    console.warn(res.message);
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`PUT recommendations/${recommendationId} failed:`)
+                console.error(error)
+            });
     }
 
-
-
     showTopicOptions() {
-        return this.state.topics.map((topic, index) =>
-            <option key={index} value={topic.id}>
+        return this.state.topics.map(topic =>
+            <option key={`topic-${topic.id}`} value={topic.id}>
                 {topic.name}
             </option>
         )
@@ -97,12 +131,26 @@ class EditRecommendationsPage extends React.Component {
 
     showSubTopicOptions() {
         return this.state.topics.map((topic) =>
-            topic.subTopicList.map((subTopic, index) =>
-                <option key={index} value={subTopic.id}>
+            topic.subTopicList.map((subTopic) =>
+                <option key={`topic-${subTopic.id}`} value={subTopic.id}>
                     {subTopic.name}
                 </option>
             )
         )
+    }
+
+    getSubordinatesOptions() {
+        return this.state.subordinates.map(employee =>
+            <option key={`subordinate-${employee.id}`} value={employee.id}>{employee.name}</option>
+        );
+    }
+
+    handleOnTopicChange(e) {
+        this.setState({ topicId: e.target.value })
+    }
+
+    handleOnSubordinateChange(e) {
+        this.setState({ subordinateId: e.target.value });
     }
 
     render() {
@@ -112,9 +160,9 @@ class EditRecommendationsPage extends React.Component {
                     <h2>Edit recommendation</h2>
                     <div className='info'>
                         <div className="row">
-                            {this.state.loading1 || !this.state.recommendation
+                            {this.state.loadingRecommendation || !this.state.recommendation
                                 ? <div className="loader">
-                                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
                                 </div>
                                 : <div>
                                     <h5>Current data:</h5>
@@ -126,36 +174,41 @@ class EditRecommendationsPage extends React.Component {
                     </div>
                     <div className='newData'>
                         <div className="row">
-                            {this.state.loading1 || !this.state.recommendation || this.state.loading2 || !this.state.topics
+                            {this.state.loadingRecommendation
+                                || !this.state.recommendation
+                                || this.state.loadingTopics
+                                || !this.state.topics
+                                || this.state.loadingSubordinates
+                                || !this.state.subordinates
                                 ? <div className="loader">
-                                    <FontAwesomeIcon icon={faSpinner} class="fa-spin" height="20px" />
+                                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
                                 </div>
                                 : <div>
                                     <h5>Enter new data:</h5>
                                     <div className='row'>
                                         <select
-                                            value={this.state.topicId}
-                                            onChange={this.handleOnChange}
+                                            defaultValue={this.state.topicId}
+                                            onChange={this.handleOnTopicChange}
                                         >
                                             {this.showTopicOptions()}
                                             {this.showSubTopicOptions()}
                                         </select>
                                     </div>
                                     <div className='row'>
-                                        <input
-                                            type="text"
-                                            defaultValue={this.state.recommendedTo}
-                                            onChange={e => this.setState({ recommendedTo: e.target.value })}
-                                            onKeyPress={e => this.handleKeyPress(e)}
-                                            required />
+                                        <select
+                                            defaultValue={this.state.subordinateId}
+                                            onChange={this.handleOnSubordinateChange}
+                                        >
+                                            {this.getSubordinatesOptions()}
+                                        </select>
                                     </div>
                                 </div>
                             }
                         </div>
                     </div>
                     <div className="row">
-                        <Link to="/recommendations" className="btn btn-custom">Return</Link>
                         <button className="btn btn-custom" type="submit">Submit</button>
+                        <Link to="/recommendations" className="btn btn-custom">Return</Link>
                     </div>
                 </div>
             </form>
@@ -163,4 +216,13 @@ class EditRecommendationsPage extends React.Component {
     }
 }
 
-export default withRouter(EditRecommendationsPage);
+const mapStateToProps = (state) => ({
+    currentUser: state.currentUser
+});
+
+const mapDispatchToProps = () => ({})
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EditRecommendationsPage));
