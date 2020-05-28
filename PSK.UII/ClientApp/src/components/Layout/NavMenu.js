@@ -62,7 +62,7 @@ export class NavMenu extends Component {
                   <NavLink tag={Link} className="text-dark" to="/home">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/topic">Topics</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/topics">Topics</NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/recommendations">Recommendations</NavLink>
@@ -71,7 +71,7 @@ export class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/invite">Invite</NavLink>
                 </NavItem>
                 <NavItem>
-                  <Button className="nav-button-with-icon" onClick={() => this.props.history.push('/user_profile')}>
+                  <Button className="nav-button-with-icon" onClick={() => this.props.history.push('/user-profile')}>
                     <div className="button-with-icon-wrapper">
                       <Label>Profile</Label>
                       <FontAwesomeIcon icon={faUser} />
