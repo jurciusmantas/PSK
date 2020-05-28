@@ -43,8 +43,8 @@ class LoginPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     setCookie(res.data.token, res.data.expiredAt);
-                    this.props.history.push('/home');
                     this.props.login(res.data);
+                    this.props.history.push('/home');                  
                 }
                 else {
                     notification('Wrong username or password', 'error');
