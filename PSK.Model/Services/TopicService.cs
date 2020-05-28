@@ -9,10 +9,16 @@ namespace PSK.Model.Services
     public class TopicService : ITopicService
     {
         private readonly ITopicRepository _topicRepository;
+        private readonly ITopicCompletionRepository _topicCompletionRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public TopicService(ITopicRepository topicRepository)
+        public TopicService(ITopicRepository topicRepository
+            , ITopicCompletionRepository topicCompletionRepository
+            , IEmployeeRepository employeeRepository)
         {
             _topicRepository = topicRepository;
+            _topicCompletionRepository = topicCompletionRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public ServerResult<List<Topic>> GetTopics()
@@ -103,6 +109,43 @@ namespace PSK.Model.Services
             }
 
             _topicRepository.Add(newTopic);
+
+            return new ServerResult { Success = true };
+        }
+
+        public ServerResult MarkAsCompleted(TopicCompletion args)
+        {
+            if (args == null)
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "No arguments"
+                };
+
+            var topic = _topicRepository.Get(args.TopicId);
+            if (topic == null)
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "Topic not found"
+                };
+
+            var employee = _employeeRepository.Get(args.EmployeeId);
+            if (employee == null)
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "Employee not found"
+                };
+
+            _topicCompletionRepository.Add(new Entities.TopicCompletion
+            {
+                TopicId = topic.Id,
+                Topic = topic,
+                EmployeeId = employee.Id,
+                Employee = employee,
+                CompletedOn = DateTime.Now,
+            });
 
             return new ServerResult { Success = true };
         }

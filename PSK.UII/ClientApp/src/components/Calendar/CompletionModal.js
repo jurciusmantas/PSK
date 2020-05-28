@@ -7,8 +7,11 @@ import {
     ModalFooter,
 } from 'reactstrap';
 import Loader from '../Loader/loader';
+import { post } from '../../helpers/request';
+import { notification } from '../../helpers/notification';
+import { connect } from 'react-redux';
 
-export default class CompletionModal extends React.Component{
+class CompletionModal extends React.Component{
     constructor(props){
         super(props);
 
@@ -19,6 +22,20 @@ export default class CompletionModal extends React.Component{
 
     markAsCompleted(){
         this.setState({ loading: true })
+        post('topics/completed', {
+            topicId: this.props.topicId,
+            employeeId: this.props.currentUser.id,
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.props.close();
+                if (res.success)
+                    notification('Marked as completed successfuly');
+                else
+                    notification('Error while marking as completed - ' + res.message, 'error');
+
+                this.setState({ loading: false });
+            })
     }
 
     render(){
@@ -56,3 +73,14 @@ export default class CompletionModal extends React.Component{
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    currentUser: state.currentUser
+});
+
+const mapDispatchToProps = () => ({})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CompletionModal);

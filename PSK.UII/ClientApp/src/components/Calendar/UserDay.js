@@ -27,7 +27,7 @@ export default class UserDay extends React.Component {
                     isOpen={this.state.completionModalOpen}
                     close={() => this.setState({ completionModalOpen: false })}
                     topicName={this.props.topicName}
-                    topicId={this.topicId}
+                    topicId={this.props.topicId}
                     yearMonth={this.props.yearMonth}
                     monthDay={this.props.monthDay}
                 />
