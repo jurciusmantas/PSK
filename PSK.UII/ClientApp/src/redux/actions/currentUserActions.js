@@ -5,7 +5,6 @@ import {
 } from '../constants';
 
 export function loginSuccess(currentUser) {
-    console.log('currentUser - ', currentUser);
     return {
         type: LOGIN_SUCCESS,
         id: currentUser.employee.id,
