@@ -64,6 +64,20 @@ button.add-day-btn {
     color: whitesmoke;
 }
 
+.user-day > svg {
+    float: right;
+    color: whitesmoke;
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.user-day > svg:hover {
+    float: right;
+    color: white;
+    width: 1rem;
+    height: 1rem;
+}
+
 .subordinate-day {
     border: 2px solid #343a40;
     color: #343a40;
