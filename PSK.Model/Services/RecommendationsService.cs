@@ -1,4 +1,5 @@
 ﻿using PSK.Model.DTO;
+using PSK.Model.Helpers;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                _recRep.Add(DTOToEntity(recommendation));
+                _recRep.Add(recommendation.DTOToEntity());
                 return new ServerResult() { Success = true };
             }
             catch (Exception e)
@@ -33,13 +34,13 @@ namespace PSK.Model.Services
         {
             Entities.Recommendation dbRec = _recRep.Get(id);
             if (dbRec != null)
-                return new ServerResult<Recommendation>() { Success = true, Data = EntityToDTO(dbRec) };
+                return new ServerResult<Recommendation>() { Success = true, Data = dbRec.EntityToDTO() };
             return new ServerResult<Recommendation>() { Success = false, Message = "Recommendation not found" };
         }
 
         public ServerResult<List<Recommendation>> GetRecommendations()
         {
-            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => EntityToDTO(r)).ToList() };
+            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => r.EntityToDTO()).ToList() };
         }
 
         public ServerResult<List<Recommendation>> GetReceivedRecommendations(int receiverId)
@@ -47,8 +48,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<Recommendation>>()
             {
                 Success = true,
-                Data = _recRep.GetReceivedRecommendations(receiverId)
-                              .Select(r => EntityToDTO(r)).ToList()
+                Data = _recRep.GetReceivedRecommendations(receiverId).Select(r => r.EntityToDTO()).ToList()
             };
         }
 
@@ -59,7 +59,7 @@ namespace PSK.Model.Services
                 return new ServerResult<List<Recommendation>>()
                 {
                     Success = true,
-                    Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => EntityToDTO(r)).ToList()
+                    Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => r.EntityToDTO()).ToList()
                 };
             }
             catch (Exception e)
@@ -110,31 +110,6 @@ namespace PSK.Model.Services
             {
                 return new ServerResult() { Success = false, Message = e.Message };
             }
-        }
-
-        private Recommendation EntityToDTO(Entities.Recommendation entity)
-        {
-            return new Recommendation()
-            {
-                Id = entity.Id,
-                ReceiverId = entity.ReceiverId,
-                CreatorId = entity.CreatorId,
-                TopicId = entity.TopicId,
-                CreatorName = entity.Creator?.Name,
-                ReceiverName = entity.Receiver?.Name,
-                TopicName = entity.Topic?.Name
-            };
-        }
-
-        private Entities.Recommendation DTOToEntity(Recommendation dto)
-        {
-            return new Entities.Recommendation()
-            {
-                Id = dto.Id,
-                CreatorId = dto.CreatorId,
-                ReceiverId = dto.ReceiverId,
-                TopicId = dto.TopicId
-            };
         }
     }
 }

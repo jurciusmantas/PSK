@@ -1,10 +1,9 @@
-﻿using PSK.Model.Entities;
-using PSK.Model.DTO;
+﻿using PSK.Model.DTO;
 using PSK.Model.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
+using PSK.Model.Helpers;
 
 namespace PSK.Model.Services
 {
@@ -21,7 +20,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                Entities.Day learningDay = _dayRepository.Add(DTOToEntity(args));
+                Entities.Day learningDay = _dayRepository.Add(args.DTOToEntity());
                 return new ServerResult() { Success = true };
             }
             catch (Exception e)
@@ -43,7 +42,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<DTO.Day>>()
             {
                 Success = true,
-                Data = _dayRepository.Get().Select(d => EntityToDTO(d)).ToList()
+                Data = _dayRepository.Get().Select(d => d.EntityToDTO()).ToList()
             };
         }
 
@@ -52,33 +51,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<DTO.Day>>()
             {
                 Success = true,
-                Data = _dayRepository.GetEmployeeDays(employeeId)
-                                     .Select(d => EntityToDTO(d)).ToList()
-            };
-        }
-
-        private DTO.Day EntityToDTO(Entities.Day day)
-        {
-            return new DTO.Day()
-            {
-                Id = day.Id,
-                EmployeeId = day.EmployeeId,
-                EmployeeName = day.Employee.Name,
-                TopicId = day.TopicId,
-                TopicName = day.Topic.Name,
-                Date = day.Date.ToShortDateString()
-            };
-        }
-
-        private Entities.Day DTOToEntity(DTO.Day day)
-        {
-            DateTime date = DateTime.Parse(day.Date);
-            return new Entities.Day()
-            {
-                Id = day.Id,
-                Date = date,
-                EmployeeId = day.EmployeeId,
-                TopicId = day.TopicId,
+                Data = _dayRepository.GetEmployeeDays(employeeId).Select(d => d.EntityToDTO()).ToList()
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using PSK.DB.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using PSK.DB.Contexts;
 using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Collections.Generic;

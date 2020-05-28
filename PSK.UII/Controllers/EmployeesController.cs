@@ -35,5 +35,15 @@ namespace PSK.UI.Controllers
                 Data = _employeesService.GetSubordinates(employeeId)
             };
         }
+
+        [HttpGet("profile/{id}")]
+        public ServerResult<EmployeeProfile> Get([FromRoute] int id)
+        {
+            return new ServerResult<EmployeeProfile>()
+            {
+                Success = true,
+                Data = _employeesService.GetProfile(id)
+            };
+        }
     }
 }
