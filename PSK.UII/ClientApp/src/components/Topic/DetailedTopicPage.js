@@ -19,10 +19,6 @@ export default class DetailedTopicPage extends React.Component {
         this.setDetails();
     }
 
-    assign() {
-        alert("Assigned");
-    }
-
     setDetails() {
         get(`topics/${this.state.id}`).then(res => res.json())
             .then(res => {
@@ -84,11 +80,10 @@ export default class DetailedTopicPage extends React.Component {
                     <h2>{this.state.data.name}</h2>
                     <h5>Description</h5>
                     <p>{this.state.data.description}</p>
-                    <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
                     <hr />
                     <h5>Subtopics</h5>
                     <div>
-                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }} > Add New Subtopic </Link>
+                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }}>Add New Subtopic</Link>
                     </div>
                     {this.showSubtopics()}
                 </div>

@@ -8,5 +8,6 @@ namespace PSK.Model.IServices
         ServerResult<List<Topic>> GetTopics();
         ServerResult<Topic> GetTopic(int id);
         ServerResult CreateTopic(Topic args);
+        ServerResult MarkAsCompleted(TopicCompletion args);
     }
 }
