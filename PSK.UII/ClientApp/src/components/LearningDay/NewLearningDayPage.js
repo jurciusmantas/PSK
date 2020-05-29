@@ -90,17 +90,17 @@ class NewLearningDayPage extends React.Component {
         })
 
         if (monthCounter > this.state.restriction.maxDaysPerMonth) {
-            notification('Too many days in one month :(', 'error');
+            notification('Could not add new learning day. Maximum days in this month reached', 'error');
             return false;
         }
 
         if (quarterCounter > this.state.restriction.maxDaysPerQuarter) {
-            notification('Too many days in one quarter :(', 'error');
+            notification('Could not add new learning day. Maximum days in this quarter reached', 'error');
             return false;
         }
 
         if (yearCounter > this.state.restriction.maxDaysPerYear) {
-            notification('Too many days in one year :(', 'error');
+            notification('Could not add new learning day. Maximum days in this year reached', 'error');
             return false;
         }
 

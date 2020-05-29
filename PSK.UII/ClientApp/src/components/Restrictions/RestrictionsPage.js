@@ -6,7 +6,9 @@ import { get } from '../../helpers/request'
 import { del } from '../../helpers/request'
 import Select from 'react-select';
 import ReactDOM from "react-dom";
+import { connect } from 'react-redux';
 import { notification } from '../../helpers/notification';
+import '../Topic/TopicPage.css';
 
 class RestrictionsPage extends React.Component {
     constructor(props) {
@@ -20,7 +22,6 @@ class RestrictionsPage extends React.Component {
             maxDaysPerYear: null,
             restriction: null,
             restrictions: null,
-            creatorId: 1,
             applyTo: 2,
             selectedEmployees: [],
             displaySelectField: false,
@@ -31,7 +32,7 @@ class RestrictionsPage extends React.Component {
     }
 
     componentDidMount() {
-        get(`restrictions/${this.state.creatorId}`)
+        get(`restrictions/${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -49,7 +50,7 @@ class RestrictionsPage extends React.Component {
             .catch(reason => {
                 console.error(reason);
             })
-        get(`restrictions?id=${this.state.creatorId}`)
+        get(`restrictions?id=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -67,7 +68,7 @@ class RestrictionsPage extends React.Component {
             .catch(reason => {
                 console.error(reason);
             })
-        get(`employees/${this.state.creatorId}/subordinates`)
+        get(`employees/${this.props.currentUser.id}/subordinates`)
             .then(res => res.json())
             .then(res => { this.setState({ users: res.data }); })
             .catch(reason => {
@@ -97,11 +98,11 @@ class RestrictionsPage extends React.Component {
                     </tr>
                     <tr>
                         <td><label>Max Days per Quarter</label></td>
-                        <td>{restriction.maxDaysPerYear}</td>
+                        <td>{restriction.maxDaysPerQuarter}</td>
                     </tr>
                     <tr>
                         <td><label>Max Days per Year</label></td>
-                        <td>{restriction.maxDaysPerQuarter}</td>
+                        <td>{restriction.maxDaysPerYear}</td>
 
                     </tr>
                 </table>
@@ -185,7 +186,7 @@ class RestrictionsPage extends React.Component {
             MaxDaysPerMonth: parseInt(this.state.maxDaysPerMonth),
             MaxDaysPerQuarter: parseInt(this.state.maxDaysPerQuarter),
             MaxDaysPerYear: parseInt(this.state.maxDaysPerYear),
-            CreatorId: parseInt(this.state.creatorId),
+            CreatorId: parseInt(this.props.currentUser.id),
             ApplyTo: parseInt(this.state.applyTo),
             UserIds: this.state.selectedEmployees.map((selectedEmployee) => {
                 return selectedEmployee.value
@@ -317,19 +318,27 @@ class RestrictionsPage extends React.Component {
     render() {
         return (
             <div>
-                <div>
-                    <h6>Current Restriction</h6>
-                    {this.showRestriction()}
+                <div className='topic-wrapper'>
+                    <div className='topic-holder'>
+                        <h6>Current Restriction</h6>
+                        {this.showRestriction()}
+                    </div>                   
                 </div>
                 <br/>
                 <br />
-                <div>
-                    <h6>My restrictions</h6>
-                    {this.showRestrictionsList()}
+                <div className='topic-wrapper'>
+                    <div className='topic-holder'>
+                        <h6>My created restrictions</h6>
+                        {this.showRestrictionsList()}
+                    </div>
                 </div>
                 <br/>
                 <br/>
-                <div>{this.showCreationForm()}</div>
+                <div className='topic-wrapper'>
+                    <div className='topic-holder'>
+                        {this.showCreationForm()}
+                    </div>   
+                </div>
             </div>
             )
        
@@ -351,4 +360,19 @@ class RestrictionsPage extends React.Component {
     };
 }
 
-export default RestrictionsPage;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        currentUser: state.currentUser,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RestrictionsPage);
