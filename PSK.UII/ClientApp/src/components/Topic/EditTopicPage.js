@@ -27,7 +27,6 @@ class EditTopicPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    console.log(res.data);
                     this.setState({
                         topic: res.data,
                         topicName: res.data.name,
@@ -72,13 +71,12 @@ class EditTopicPage extends React.Component {
             .then(res => {
                 if (res.success) {
                     notification("Updated!");
-                    this.props.history.push('/topics');
+                    this.props.history.push(`topic?id=${topicId}`);
                 }
                 else {
                     notification(res.message, 'error');
                     console.warn("Cannot update topic");
                     console.warn(res.message);
-                    console.log(res);
                     this.setState({
                         topic: res.data,
                         topicName: res.data.name,
