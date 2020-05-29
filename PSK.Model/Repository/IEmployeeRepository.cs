@@ -7,7 +7,8 @@ namespace PSK.Model.Repository
     {
         public Employee Login(DTO.LoginArgs loginArgs);
         public Employee FindByName(string name);
-        List<Employee> GetSubordinates(int employeeId);
+        public List<Employee> GetSubordinates(int employeeId);
+        public List<Employee> GetAllSubordinates(int leaderId);
         List<Topic> GetEmployeesActiveTopics(int employeeId);
     }
 }
