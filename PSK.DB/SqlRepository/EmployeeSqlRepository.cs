@@ -83,7 +83,7 @@ namespace PSK.DB.SqlRepository
         public List<Topic> GetEmployeesActiveTopics(int employeeId)
         {
             return context.Topics.FromSqlRaw(@"
-                SELECT t.Id, t.Name, t.Description, t.ParentTopicId
+                SELECT t.Id, t.Name, t.Description, t.ParentTopicId, t.RowVersion
                 FROM days AS d
                 INNER JOIN employees AS e ON d.EmployeeId = e.Id
                 INNER JOIN topics AS t ON d.TopicId = t.Id
