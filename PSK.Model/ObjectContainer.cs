@@ -17,6 +17,7 @@ namespace PSK.Model
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
             container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
             container.Register<IEmployeesService, EmployeesService>(Lifestyle.Scoped);
+            container.Register<IRestrictionService, RestrictionService>(Lifestyle.Scoped);
 
             InitializeLogging(logFile, logLevel);
             
@@ -24,6 +25,11 @@ namespace PSK.Model
 
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
             container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<ITopicService, TopicLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IRecommendationsService, RecommendationsLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IRegistrationService, RegistrationLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<ILearningDayService, LearningDayLoggingDecorator>(Lifestyle.Scoped);
+
         }
 
         private static void InitializeLogging(string logFile, LogLevel logLevel)

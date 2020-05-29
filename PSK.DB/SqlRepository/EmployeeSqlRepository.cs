@@ -4,6 +4,7 @@ using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -56,20 +57,33 @@ namespace PSK.DB.SqlRepository
             return context.Employees.FirstOrDefault(employee => employee.Name.Equals(name));
         }
 
-        public List<Employee> Get()
-        {
-            return context.Employees.ToList();
-        }
-
         public List<Employee> GetSubordinates(int employeeId)
         {
             return context.Employees.Where(e => e.LeaderId == employeeId).ToList();
         }
 
+        public List<Employee> GetAllSubordinates(int leaderId)
+        {
+            List<Employee> employees = new List<Employee>();
+            var teamMembers = GetSubordinates(leaderId);
+            employees.AddRange(teamMembers);
+            foreach (Employee employee in teamMembers)
+            {
+                List<Employee> allLower = GetAllSubordinates(employee.Id) ?? new List<Employee>();
+                if (allLower.Count > 0) { employees.AddRange(allLower); }
+            } 
+            return employees;
+        }
+
+        public List<Employee> Get()
+        {
+            return context.Employees.ToList();
+        }
+
         public List<Topic> GetEmployeesActiveTopics(int employeeId)
         {
             return context.Topics.FromSqlRaw(@"
-                SELECT t.Id, t.Name, t.Description, t.ParentTopicId
+                SELECT t.Id, t.Name, t.Description, t.ParentTopicId, t.RowVersion
                 FROM days AS d
                 INNER JOIN employees AS e ON d.EmployeeId = e.Id
                 INNER JOIN topics AS t ON d.TopicId = t.Id
