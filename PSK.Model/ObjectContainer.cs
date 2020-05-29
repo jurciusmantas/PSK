@@ -34,6 +34,10 @@ namespace PSK.Model
 
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
             container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<ITopicService, TopicLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IRecommendationsService, RecommendationsLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<IRegistrationService, RegistrationLoggingDecorator>(Lifestyle.Scoped);
+            container.RegisterDecorator<ILearningDayService, LearningDayLoggingDecorator>(Lifestyle.Scoped);
 
             InitializePlugins<IEmployeeRepository>(container, "Repository", pluginsDllPaths[1], Lifestyle.Scoped);
             
