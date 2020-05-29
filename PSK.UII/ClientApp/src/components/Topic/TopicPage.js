@@ -42,6 +42,9 @@ export default class TopicPage extends React.Component {
     }
 
     render() {
+        if (this.state.loading || !this.state.data)
+            return <Loader />
+
         return (
             <div className="topic-wrapper">
                 <div className="topic-holder">
@@ -56,22 +59,18 @@ export default class TopicPage extends React.Component {
                             </Link>
                         </React.Fragment>
                     }
-                    { this.state.loading || !this.state.data ?
-                        <Loader/>
-                        :
-                        <div>
-                            <TreeView
-                                id="simple-treeview"
-                                items={this.state.data}
-                                displayExpr="name"
-                                itemRender={this.renderTreeViewItem}
-                                itemsExpr="subTopicList"
-                                parentIdExpr="parentTopicId"
-                                keyExpr="id"
-                                searchMode="contains"
-                                searchEnabled={true} />
-                        </div>
-                    }
+                    <div>
+                        <TreeView
+                            id="simple-treeview"
+                            items={this.state.data}
+                            displayExpr="name"
+                            itemRender={this.renderTreeViewItem}
+                            itemsExpr="subTopicList"
+                            parentIdExpr="parentTopicId"
+                            keyExpr="id"
+                            searchMode="contains"
+                            searchEnabled={true} />
+                    </div>
                 </div>
             </div>
         );

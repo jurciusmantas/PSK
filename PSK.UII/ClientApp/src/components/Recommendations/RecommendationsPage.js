@@ -4,9 +4,8 @@ import './RecommendationsPage.css';
 
 import { get, del } from '../../helpers/request'
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { notification } from "../../helpers/notification";
+import Loader from '../Loader/loader';
 
 class RecommendationsPage extends React.Component {
     constructor(props) {
@@ -88,51 +87,44 @@ class RecommendationsPage extends React.Component {
     }
 
     render() {
+        if (this.state.loadingBy || this.state.loadingTo)
+            return <Loader />
+
         return (
             <div className="rec-wrapper">
                 <div className='rec-holder'>
                     <h2>Recommended topics to learn for you:</h2>
                     <div className="row">
-                        {this.state.loadingBy || !this.state.recommendedTo
-                            ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                            </div>
-                            : <table>
-                                <thead>
-                                    <tr>
-                                        <th className="topicColumn">Topic</th>
-                                        <th className="creatorColumn">Created by</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.showRecommendationList()}
-                                </tbody>
-                            </table>
-                        }
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="topicColumn">Topic</th>
+                                    <th className="creatorColumn">Created by</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.showRecommendationList()}
+                            </tbody>
+                        </table>                        
                     </div>
                     <h2>Recommendations you have created:</h2>
                     <div className="row">
                         <Link to='add-recommendation' className="btn btn-custom">Add recommendation</Link>
                     </div>
                     <div className="row">
-                        {this.state.loadingTo || !this.state.recommendedBy
-                            ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                            </div>
-                            : <table>
-                                <thead>
-                                    <tr>
-                                        <th className="topicColumn">Topic</th>
-                                        <th className="creatorColumn">Created for</th>
-                                        <th className="link" />
-                                        <th className="link" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.showCreatedRecommendationsList()}
-                                </tbody>
-                            </table>
-                        }
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="topicColumn">Topic</th>
+                                    <th className="creatorColumn">Created for</th>
+                                    <th className="link" />
+                                    <th className="link" />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.showCreatedRecommendationsList()}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

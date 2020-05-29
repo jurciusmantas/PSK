@@ -1,8 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import CompletionModal from './CompletionModal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import Loader from '../Loader/loader';
 
 export default class UserDay extends React.Component {
     constructor(props){
@@ -18,10 +17,7 @@ export default class UserDay extends React.Component {
             <React.Fragment>
                 <div className='user-day'>
                     <Link to={`topic?id=${this.props.topicId}`}>{this.props.topicName}</Link>
-                    <FontAwesomeIcon 
-                        icon={faCheck}
-                        onClick={() => this.setState({ completionModalOpen: true })}
-                    />
+                    <Loader/>
                 </div>
                 <CompletionModal
                     isOpen={this.state.completionModalOpen}
