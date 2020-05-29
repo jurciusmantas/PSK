@@ -13,7 +13,9 @@ export default class CalendarDayItem extends React.Component {
             <div className='calendar-day-item'>
                 <div>
                     {this.props.monthDay}
-                    {this.props.userDays.map(day =>
+                    {this.props.userDays
+                        .filter(day => day.date === (`${this.props.yearMonth}-` + (this.props.monthDay > 10 ? `${this.props.monthDay}` : `0${this.props.monthDay}`)))
+                        .map(day =>
                         (<UserDay
                             key={`user-day-${day.id}`}
                             topicName={day.topicName}
@@ -22,7 +24,9 @@ export default class CalendarDayItem extends React.Component {
                             monthDay={this.props.monthDay}
                         />)
                     )}
-                    {this.props.subordinatesDays.map(day => (
+                    {this.props.subordinatesDays
+                        .filter(day => day.date === (`${this.props.yearMonth}-` + (this.props.monthDay > 10 ? `${this.props.monthDay}` : `0${this.props.monthDay}`)))
+                        .map(day => (
                         <SubordinateDay
                             key={`subordinate-day-${day.id}`}
                             topicId={day.topicId}

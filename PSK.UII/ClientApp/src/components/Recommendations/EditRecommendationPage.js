@@ -31,8 +31,6 @@ class EditRecommendationsPage extends React.Component {
         get(`recommendations/${this.state.recommendationId}`)
             .then(res => res.json())
             .then(res => {
-                console.log(`GET recommendations/${this.state.recommendationId} finished`)
-                console.log(res);
                 if (res.success) {
                     this.setState({
                         recommendation: res.data,
@@ -53,8 +51,6 @@ class EditRecommendationsPage extends React.Component {
         get(`topics`)
             .then(res => res.json())
             .then(res => {
-                console.log(`GET topics finished`);
-                console.log(res);
                 if (res.success) {
                     this.setState({ topics: res.data, loadingTopics: false })
                 }
@@ -70,8 +66,6 @@ class EditRecommendationsPage extends React.Component {
         get(`employees/${this.props.currentUser.id}/subordinates`)
             .then(res => res.json())
             .then(res => {
-                console.log(`GET employees/${this.props.currentUser.id}/subordinates finished`)
-                console.log(res);
                 if (res.success) {
                     this.setState({ subordinates: res.data, loadingSubordinates: false });
                 }

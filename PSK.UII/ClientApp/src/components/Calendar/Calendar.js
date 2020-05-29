@@ -199,9 +199,9 @@ class Calendar extends React.Component {
                                             key={`calendar-day-item-${i.monthDay}`}
                                             monthDay={i.monthDay}
                                             yearMonth={currentMonth}
-                                            userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
+                                            userDays={this.state.userDays}
                                             userDaysLoaded={this.state.userDaysLoaded}
-                                            subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
+                                            subordinatesDays={this.state.subordinatesDays}
                                             subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
                                         />
                                     ))}
