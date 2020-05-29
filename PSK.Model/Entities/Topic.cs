@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace PSK.Model.Entities
 {
@@ -11,5 +13,8 @@ namespace PSK.Model.Entities
         public string Description { get; set; }
         public int? ParentTopicId { get; set; }
         public virtual Topic ParentTopic { set; get; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }
