@@ -3,7 +3,6 @@ using PSK.Model.Services;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.Model.Logging
 {
@@ -36,7 +35,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{User}: {_decorateeClassName}.CreateRecommendation {Name} failed {NewLine} {Exception}", recommendation.CreatorName, _decorateeClassName, recommendation.TopicName);
+                _logger.Error(e, "{User}: {DecorateeClassName}.CreateRecommendation {Name} failed {NewLine} {Exception}", recommendation.CreatorName, _decorateeClassName, recommendation.TopicName);
                 throw;
             }
         }
@@ -57,7 +56,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.DeleteRecommendation failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.DeleteRecommendation failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -78,7 +77,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetCreatedRecommendations failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetCreatedRecommendations failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -99,7 +98,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetReceivedRecommendations failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetReceivedRecommendations failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -120,7 +119,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetRecommendation failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetRecommendation failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -141,7 +140,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetRecommendations failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetRecommendations failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -162,7 +161,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{User}: {_decorateeClassName}.UpdateRecommendation failed {NewLine} {Exception}", rec.CreatorName, _decorateeClassName);
+                _logger.Error(e, "{User}: {DecorateeClassName}.UpdateRecommendation failed {NewLine} {Exception}", rec.CreatorName, _decorateeClassName);
                 throw;
             }
         }

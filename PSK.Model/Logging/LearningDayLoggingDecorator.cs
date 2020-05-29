@@ -28,15 +28,15 @@ namespace PSK.Model.Logging
 
                 if (!result.Success)
                 {
-                    _logger.Information("User {Login}: {DecorateeClassName}.AddNewLearningDay unsuccessful", args.EmployeeName, _decorateeClassName);
+                    _logger.Information("{Login}: {DecorateeClassName}.AddNewLearningDay unsuccessful", args.EmployeeName, _decorateeClassName);
                     return result;
                 }
-                _logger.Information("User {User}: added {Topic} to learning day successfully", args.EmployeeName, args.TopicName);
+                _logger.Information("{User}: added {Topic} to a learning day successfully", args.EmployeeName, args.TopicName);
                 return result;
             }
             catch (Exception e)
             {
-                _logger.Error(e, "User {Login}: {_decorateeClassName}.AddNewLearningDay failed {NewLine} {Exception}", args.EmployeeName);
+                _logger.Error(e, "{Login}: {DecorateeClassName}.AddNewLearningDay failed {NewLine} {Exception}", _decorateeClassName, args.EmployeeName);
                 throw;
             }
         }
@@ -78,7 +78,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetDays failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetDays failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -99,7 +99,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetEmployeeDays failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.GetEmployeeDays failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }

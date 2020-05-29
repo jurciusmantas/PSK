@@ -2,8 +2,6 @@
 using PSK.Model.Services;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PSK.Model.Logging
 {
@@ -36,7 +34,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{Email}: {_decorateeClassName}.AddNewUser failed {NewLine} {Exception}", args.Email, _decorateeClassName); ;
+                _logger.Error(e, "{Email}: {DecorateeClassName}.AddNewUser failed {NewLine} {Exception}", args.Email, _decorateeClassName); ;
                 throw;
             }
         }
@@ -57,7 +55,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.GetEmailFromToken failed {NewLine} {Exception}", _decorateeClassName); ;
+                _logger.Error(e, "{DecorateeClassName}.GetEmailFromToken failed {NewLine} {Exception}", _decorateeClassName); ;
                 throw;
             }
         }
