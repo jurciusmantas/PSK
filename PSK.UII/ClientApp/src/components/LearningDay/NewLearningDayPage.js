@@ -28,27 +28,42 @@ class NewLearningDayPage extends React.Component {
         get("topics").then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ topics: res.data, selectedTopicId: res.data[0].id });
+            else {
+                notification("Cannot load topics :(","error")
+                console.warn("Cannot load topics")
+                console.warn(res.message)
+            }
         }).catch(err => {
-            console.error(`GET /api/topics failed: ${err}`);
+            console.error(`GET /api/topics failed:`);
+            console.error(err)
             this.setState({ topics: [] });
         });
         get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
+            else {
+                console.warn(`Cannot load recommendations for receiver id=${this.props.currentUser.id}:`)
+                console.warn(res.message)
+            }
         }).catch(err => {
-            console.error(`GET /api/recommendations failed: ${err}`);
+            console.error(`GET /api/recommendations failed:`);
+            console.error(err)
         })
         get(`restrictions/${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    this.setState({
-                        restriction: res.data
-                    })
+                    this.setState({ restriction: res.data })
+                }
+                else {
+                    notification("Cannot load restrictions", "error")
+                    console.warn("Cannot load restrictions")
+                    console.warn(res.message)
                 }
             })
             .catch(err => {
-                console.error(`GET /api/restrictions failed: ${err}`);
+                console.error(`GET /api/restrictions failed:`);
+                console.error(err)
             })
         get(`days?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
@@ -56,38 +71,42 @@ class NewLearningDayPage extends React.Component {
                 if (res.success) {
                     this.setState({ userDays: res.data });
                 }
+                else {
+                    notification("Cannot load your learning days :(", "error")
+                    console.warn("Cannot load employee days")
+                    console.warn(res.message)
+                }
             })
             .catch(reason => {
                 console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                console.error(reason)
             });
     }
 
 
     checkIfValidForRestriction(newDate) {
-
-        if (this.state.restriction == null)
-            return;
-
+        if (this.state.restriction === null) {
+            return true;
+        }
+        const dateObject = new Date(newDate)
         var monthCounter = 1;
         var yearCounter = 1;
         var quarterCounter = 1;
 
-        var quarter = this.getQuarter(newDate)
+        var quarter = this.getQuarter(dateObject)
 
-        this.state.userDays.map((dat) => {
-            const { date } = dat
-            
-            var d = new Date(date);
-
-            if (d.getMonth() == newDate.getMonth())
+        for (let d of this.state.userDays) {
+            const { date } = d
+            const dObj = new Date(date)
+            if (dObj.getMonth() === dateObject.getMonth())
                 monthCounter++;
 
-            if (d.getFullYear() == newDate.getFullYear())
+            if (dObj.getFullYear() === dateObject.getFullYear())
                 yearCounter++;
 
-            if (this.getQuarter(d) == quarter)
+            if (this.getQuarter(dObj) === quarter)
                 quarterCounter++;
-        })
+        }
 
         if (monthCounter > this.state.restriction.maxDaysPerMonth) {
             notification('Could not add new learning day. Maximum days in this month reached', 'error');
@@ -103,7 +122,6 @@ class NewLearningDayPage extends React.Component {
             notification('Could not add new learning day. Maximum days in this year reached', 'error');
             return false;
         }
-
         return true;
     }
 
@@ -112,23 +130,23 @@ class NewLearningDayPage extends React.Component {
     }
 
     checkConsecutiveDays(newDate) {
+        if (this.state.userDays === null) {
+            return true;
+        }
 
-        if (this.state.userDays == null)
-            return;
+        if (this.state.restriction === null) {
+            return true;
+        }
 
-        var days = []
-        this.state.userDays.map((d) => {
-            const { date } = d
-            days.push(Date.parse(date));
-            
-        })
-        days.push(Date.parse(newDate));
+        const parsed = Date.parse(newDate)
+        const days = this.state.userDays.map((d) => Date.parse(d.date))
+        days.push(parsed);
         days.sort();
 
-        var consecutiveDays = 1;
+        let consecutiveDays = 1;
 
         for (var i = 0; i < days.length - 1; i++) {
-            if (days[i + 1] - days[i] == 86400000) {
+            if (days[i + 1] - days[i] === 86400000) {
                 consecutiveDays++;
                 if (consecutiveDays > this.state.restriction.consecutiveDays) {
                     notification('Cannot add more consecutive dates :(', 'error');
@@ -142,10 +160,9 @@ class NewLearningDayPage extends React.Component {
     }
 
     changeDate(newDate) {
-
-        if (!this.checkIfValidForRestriction(new Date(newDate)) ||
-            !this.checkConsecutiveDays(new Date(newDate).toLocaleDateString())) {
-
+        if (!this.checkIfValidForRestriction(newDate) ||
+            !this.checkConsecutiveDays(newDate)) {
+            notification("Please select another day", "warning")
             return;
         }
 
@@ -157,13 +174,11 @@ class NewLearningDayPage extends React.Component {
     }
 
     createDay() {
-
-        if (!this.checkIfValidForRestriction(new Date(this.state.selectedDate)) ||
-            !this.checkConsecutiveDays(new Date(this.state.selectedDate).toLocaleDateString())) {
-
+        if (!this.checkIfValidForRestriction(this.state.selectedDate) ||
+            !this.checkConsecutiveDays(this.state.selectedDate)) {
             return;
         }
-               
+
         post('days', {
             date: this.state.selectedDate,
             employeeId: this.props.currentUser.id,
@@ -176,8 +191,6 @@ class NewLearningDayPage extends React.Component {
                 console.error(`POST days failed`);
                 console.error(reason);
             });
-
-        
     }
 
     makeTopicOptionList() {
@@ -194,36 +207,36 @@ class NewLearningDayPage extends React.Component {
         return (
             <div className='day-wrapper'>
                 <div className='day-holder'>
-                <h2>Create new learning day</h2>
+                    <h2>Create new learning day</h2>
                     <form>
                         <div className='row'>
                             <label htmlFor="learn-date">Date:</label>
                         </div>
                         <div className='row'>
-                        <input
-                            type="date"
-                            id="learn-date"
-                            defaultValue={this.state.selectedDate}
-                            onChange={this.changeDate}
-                            min={moment().format("YYYY-MM-DD")}
-                            pattern="d{4}-d{2}-d{2}"
-                        />
+                            <input
+                                type="date"
+                                id="learn-date"
+                                defaultValue={this.state.selectedDate}
+                                onChange={this.changeDate}
+                                min={moment().format("YYYY-MM-DD")}
+                                pattern="d{4}-d{2}-d{2}"
+                            />
                         </div>
                         <div className='row'>
                             <label htmlFor="topics">Topic:</label>
                         </div>
                         <div className='row'>
-                        <select
-                            id="topics"
-                            onChange={this.changeTopic}
-                        >
-                            {this.makeTopicOptionList()}
-                        </select>
+                            <select
+                                id="topics"
+                                onChange={this.changeTopic}
+                            >
+                                {this.makeTopicOptionList()}
+                            </select>
                         </div>
                         <div className='row'>
-                            <button type="submit" className="btn btn-custom" onClick={this.createDay}>Create</button>
+                            <button type="button" className="btn btn-custom" onClick={this.createDay}>Create</button>
                         </div>
-                </form>
+                    </form>
                 </div>
             </div>
         )

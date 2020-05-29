@@ -35,6 +35,7 @@ class Calendar extends React.Component {
         get(`days?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
+                console.log(res.data)
                 if (res.success)
                     this.setState({ userDays: res.data, userDaysLoaded: true });
                 else {
@@ -199,9 +200,9 @@ class Calendar extends React.Component {
                                             key={`calendar-day-item-${i.monthDay}`}
                                             monthDay={i.monthDay}
                                             yearMonth={currentMonth}
-                                            userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
+                                            userDays={this.state.userDays}
                                             userDaysLoaded={this.state.userDaysLoaded}
-                                            subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
+                                            subordinatesDays={this.state.subordinatesDays}
                                             subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
                                         />
                                     ))}

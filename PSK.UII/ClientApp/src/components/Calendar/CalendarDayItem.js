@@ -4,6 +4,7 @@ import SubordinateDay from './SubordinateDay';
 
 export default class CalendarDayItem extends React.Component {
     render() {
+        console.log(`Rendering ${this.props.yearMonth}-${this.props.monthDay}`)
         if (this.props.skipper)
             return (
                 <div className='skipper' />
@@ -13,7 +14,9 @@ export default class CalendarDayItem extends React.Component {
             <div className='calendar-day-item'>
                 <div>
                     {this.props.monthDay}
-                    {this.props.userDays.map(day =>
+                    {this.props.userDays
+                        .filter(day => day.date === (`${this.props.yearMonth}-` + (this.props.monthDay > 10 ? `${this.props.monthDay}` : `0${this.props.monthDay}`)))
+                        .map(day =>
                         (<UserDay
                             key={`user-day-${day.id}`}
                             topicName={day.topicName}
@@ -22,7 +25,9 @@ export default class CalendarDayItem extends React.Component {
                             monthDay={this.props.monthDay}
                         />)
                     )}
-                    {this.props.subordinatesDays.map(day => (
+                    {this.props.subordinatesDays
+                        .filter(day => day.date === (`${this.props.yearMonth}-` + (this.props.monthDay > 10 ? `${this.props.monthDay}` : `0${this.props.monthDay}`)))
+                        .map(day => (
                         <SubordinateDay
                             key={`subordinate-day-${day.id}`}
                             topicId={day.topicId}
