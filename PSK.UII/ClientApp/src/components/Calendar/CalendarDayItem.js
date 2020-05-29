@@ -4,7 +4,6 @@ import SubordinateDay from './SubordinateDay';
 
 export default class CalendarDayItem extends React.Component {
     render() {
-        console.log(`Rendering ${this.props.yearMonth}-${this.props.monthDay}`)
         if (this.props.skipper)
             return (
                 <div className='skipper' />

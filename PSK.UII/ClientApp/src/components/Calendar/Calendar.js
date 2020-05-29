@@ -35,7 +35,6 @@ class Calendar extends React.Component {
         get(`days?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
-                console.log(res.data)
                 if (res.success)
                     this.setState({ userDays: res.data, userDaysLoaded: true });
                 else {
