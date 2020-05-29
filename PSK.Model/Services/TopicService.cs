@@ -29,13 +29,13 @@ namespace PSK.Model.Services
 
             var subtopics = new List<Topic>();
 
-            foreach (var top in bSubtopic )
+            foreach (var top in bSubtopic)
             {
                 var subtop = new Topic { Id = top.Id, Description = top.Description, Name = top.Name };
                 subtopics.Add(subtop);
             }
 
-            var topic = new Topic { Id = bTopic.Id, Description = bTopic.Description, Name = bTopic.Name, SubTopicList = subtopics };
+            var topic = new Topic { Id = bTopic.Id, Description = bTopic.Description, Name = bTopic.Name, SubTopicList = subtopics, RowVersion = bTopic.RowVersion };
 
             return new ServerResult<Topic> { Data = topic, Message = "Success", Success = true };
         }
@@ -62,7 +62,7 @@ namespace PSK.Model.Services
 
         public ServerResult CreateTopic(Topic args)
         {
-            var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description};
+            var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description };
 
             if (args.ParentId.HasValue)
             {
@@ -80,6 +80,44 @@ namespace PSK.Model.Services
             _topicRepository.Add(newTopic);
 
             return new ServerResult { Message = "success", Success = true };
+        }
+
+        public ServerResult<Topic> UpdateTopic(Topic topic)
+        {
+            try
+            {
+                Entities.Topic dbTopic = _topicRepository.Get(topic.Id);
+                if (dbTopic == null)
+                    return new ServerResult<Topic>()
+                    {
+                        Success = false,
+                        Message = "Topic does not exist",
+                    };
+
+                if (!topic.RowVersion.SequenceEqual(dbTopic.RowVersion))
+                {
+                    return new ServerResult<Topic>()
+                    {
+                        Success = false,
+                        Message = "Already updated. Try again.",
+                        Data = new Topic { Description = dbTopic.Description, Name = dbTopic.Name, RowVersion = dbTopic.RowVersion }
+                    };
+                }
+                dbTopic.Name = topic.Name;
+                dbTopic.Description = topic.Description;
+                dbTopic.RowVersion = topic.RowVersion;
+                _topicRepository.Update(dbTopic);
+                return new ServerResult<Topic>() { Success = true };
+            }
+
+            catch (Exception e)
+            {
+                return new ServerResult<Topic>()
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
         }
     }
 }

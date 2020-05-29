@@ -84,7 +84,8 @@ export default class DetailedTopicPage extends React.Component {
                     <h2>{this.state.data.name}</h2>
                     <h5>Description</h5>
                     <p>{this.state.data.description}</p>
-                    <button className="btn btn-dark" onClick={this.assign}>Assign!</button>
+                    <button className="btn btn-custom" onClick={this.assign}>Assign!</button>
+                    <Link className="btn btn-custom" to={{ pathname: "/edit-topic", search: `?id=${this.state.id}` }} > Edit </Link>
                     <hr />
                     <h5>Subtopics</h5>
                     <div>
