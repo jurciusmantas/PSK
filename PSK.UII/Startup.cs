@@ -115,20 +115,26 @@ namespace PSK.UI
 
         private void InitializeContainer()
         {
-
+            string repositoryPluginDirectoryName = Configuration.GetSection("Plugins")
+                .GetValue<string>("RepositoriesDirectory");
+            string servicePluginDirectoryName = Configuration.GetSection("Plugins")
+                .GetValue<string>("ServicesDirectory");
+            string pluginsDirectoriesPath = Configuration.GetSection("Plugins")
+                .GetValue<string>("PluginsDirectoriesPath");
+            string[] pluginsDirectoriesNames = { repositoryPluginDirectoryName, servicePluginDirectoryName };
             string file = Configuration.GetSection("Logging").GetValue<string>("File");
             LogLevel level = Configuration.GetSection("Logging").GetValue<LogLevel>("Level");
-            Model.ObjectContainer.InitializeContainer(container, file, level);
+            Model.ObjectContainer.InitializeContainer(container, file, level, pluginsDirectoriesNames, pluginsDirectoriesPath);
         }
 
         private void InjectRepositories()
         {
-            container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
-            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
-            container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
-            container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
-            container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
-            container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Scoped);
+            container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Singleton);
+            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Singleton);
+            container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Singleton);
+            container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Singleton);
+            container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Singleton);
+            container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Singleton);
         }
     }
 }

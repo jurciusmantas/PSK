@@ -1,22 +1,30 @@
-﻿using PSK.Model.Logging;
+﻿using PSK.Model.IServices;
+using PSK.Model.Logging;
+using PSK.Model.Repository;
 using PSK.Model.Services;
 using Serilog;
 using SimpleInjector;
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace PSK.Model
 {
     public class ObjectContainer
     {
-        public static void InitializeContainer(Container container, string logFile, LogLevel logLevel)
+        public static void InitializeContainer(Container container, string logFile, LogLevel logLevel, 
+            string[] pluginsDirectoriesNames, string pluginsDirectoryPath)
         {
-            container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
+            container.Options.AllowOverridingRegistrations = true;
+            /*container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
             container.Register<IRecommendationsService, RecommendationsService>(Lifestyle.Scoped);
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
             container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
             container.Register<IEmployeesService, EmployeesService>(Lifestyle.Scoped);
+            */
 
             InitializeLogging(logFile, logLevel);
             
@@ -24,6 +32,42 @@ namespace PSK.Model
 
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
             container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
+
+            /*InitializePlugins<IEmployeeRepository>(container, "Repository", pluginsDirectoriesNames[0], 
+                pluginsDirectoryPath, Lifestyle.Singleton);*/
+            InitializePlugins<IEmployeesService>(container, "", "Service", 
+                pluginsDirectoryPath, Lifestyle.Scoped);
+        }
+
+        private static void InitializePlugins<T>(Container container, string directoryPath, string classNameEndsWith,
+            string pluginsDirectory, Lifestyle lifestyle)
+        {
+            var abstractions = (
+                from type in typeof(T).Assembly.GetExportedTypes()
+                where type.IsInterface
+                where type.Name.EndsWith(classNameEndsWith)
+                select type).ToArray();
+
+            string pluginDirectory = Path.Combine(pluginsDirectory, directoryPath);
+
+            var pluginAssemblies =
+                from file in new DirectoryInfo(pluginDirectory).GetFiles()
+                where file.Extension.ToLower() == ".dll"
+                select Assembly.LoadFile(file.FullName);
+
+            var implementationTypes =
+                from assembly in pluginAssemblies
+                from type in assembly.GetExportedTypes()
+                where abstractions.Any(r => r.IsAssignableFrom(type))
+                where !type.IsAbstract
+                where !type.IsGenericTypeDefinition
+                select type;
+
+            foreach (var type in implementationTypes)
+            {
+                var abstraction = abstractions.Single(r => r.IsAssignableFrom(type));
+                container.Register(abstraction, type, lifestyle);
+            }
         }
 
         private static void InitializeLogging(string logFile, LogLevel logLevel)

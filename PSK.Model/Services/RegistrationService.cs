@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using PSK.Model.DTO;
 using PSK.Model.Entities;
+using PSK.Model.IServices;
 using PSK.Model.Repository;
 
 namespace PSK.Model.Services
