@@ -20,6 +20,7 @@ import CreateTopicPage from '../components/Topic/CreateTopicPage';
 import DetailedTopicPage from '../components/Topic/DetailedTopicPage';
 import EditTopicPage from '../components/Topic/EditTopicPage';
 import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
+import RestrictionsPage from '../components/Restrictions/RestrictionsPage';
 import UserProfile from '../components/UserProfile/UserProfile';
 
 const NotFoundPageWraped = () =>
@@ -43,6 +44,7 @@ class Routes extends React.Component {
                 { component: EditRecommendationsPage, path: "/edit-recommendation" },
                 { component: CreateTopicPage, path: "/add-topic" },
                 { component: NewLearningDayPage, path: "/add-day" },
+                { component: RestrictionsPage, path: "/restrictions"},
                 { component: UserProfile, path: "/user-profile" },
             ]
         }

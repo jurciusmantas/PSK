@@ -59,5 +59,12 @@ namespace PSK.DB.MockRepository
         {
             throw new NotImplementedException();
         }
+
+
+        public List<Employee> GetAllSubordinates(int leaderId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
