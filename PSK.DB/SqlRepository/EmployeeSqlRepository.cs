@@ -77,7 +77,7 @@ namespace PSK.DB.SqlRepository
 
         public List<Employee> Get()
         {
-            throw new System.NotImplementedException();
+            return context.Employees.ToList();
         }
 
         public List<Topic> GetEmployeesActiveTopics(int employeeId)

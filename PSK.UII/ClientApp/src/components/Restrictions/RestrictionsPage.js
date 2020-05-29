@@ -6,6 +6,7 @@ import { get } from '../../helpers/request'
 import { del } from '../../helpers/request'
 import Select from 'react-select';
 import ReactDOM from "react-dom";
+import { notification } from '../../helpers/notification';
 
 class RestrictionsPage extends React.Component {
     constructor(props) {
@@ -38,10 +39,11 @@ class RestrictionsPage extends React.Component {
                         restriction: res.data,
                         loading1: false
                     })
-                    console.log(res.data);
                 }
                 else {
-                    console.log(res.message);
+                    notification('Cannot get restrictions :(', 'error');
+                    console.warn(`Cannot get restrictions:`);
+                    console.warn(res.message);
                 }
             })
             .catch(reason => {
@@ -55,10 +57,11 @@ class RestrictionsPage extends React.Component {
                         restrictions: res.data,
                         loading2: false
                     })
-                    console.log(res.data);
                 }
                 else {
-                    console.log(res.message);
+                    notification('Cannot get restriction :(', 'error');
+                    console.warn(`Cannot get restriction:`);
+                    console.warn(res.message);
                 }
             })
             .catch(reason => {
@@ -158,11 +161,11 @@ class RestrictionsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert(res.message);
+                    notification('Deleted');
                     window.location.reload();
                 }
                 else {
-                    alert(res.message);
+                    notification('Something went wrong while deleting', 'error');
                 }
             })
             .catch(error => {
@@ -191,16 +194,18 @@ class RestrictionsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    alert(res.message);
+                    notification("Success");
                     window.location.reload();
                 }
                 else {
-                    alert(res.message);
+                    notification("Couldn't get the response", 'error');
                 }
             })
             .catch(error => {
                 console.log(error);
             })
+        
+
     }
 
     showCreationForm() {
