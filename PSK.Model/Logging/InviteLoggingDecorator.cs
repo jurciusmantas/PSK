@@ -21,12 +21,12 @@ namespace PSK.Model.Logging
             try
             {
                 // TODO: get user id
-                _logger.Information("User {User}: invite {Email}", "TODO", args.Email);
+                _logger.Information("{User}: invite {Email}", "TODO", args.Email);
                 return _decoratee.Invite(args);
             }
             catch (Exception e)
             {
-                _logger.Error(e, "User {User}: invite {Email} failed: {Newline} {Exception}", "TODO", args.Email);
+                _logger.Error(e, "{User}: invite {Email} failed: {Newline} {Exception}", "TODO", args.Email);
                 throw;
             }
         }
