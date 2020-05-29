@@ -8,7 +8,7 @@ using PSK.Model.IServices;
 
 namespace PSK.Model.Services
 {
-    class LearningDayService : ILearningDayService
+    public class LearningDayService : ILearningDayService
     {
         private readonly IDayRepository _dayRepository;
 

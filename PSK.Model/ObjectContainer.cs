@@ -14,59 +14,67 @@ namespace PSK.Model
     public class ObjectContainer
     {
         public static void InitializeContainer(Container container, string logFile, LogLevel logLevel, 
-            string[] pluginsDirectoriesNames, string pluginsDirectoryPath)
+            string[] pluginsDllPaths)
         {
+
             container.Options.AllowOverridingRegistrations = true;
-            /*container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
+            container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IInviteService, InviteService>(Lifestyle.Scoped);
             container.Register<ITopicService, TopicService>(Lifestyle.Scoped);
             container.Register<IRecommendationsService, RecommendationsService>(Lifestyle.Scoped);
             container.Register<IRegistrationService, RegistrationService>(Lifestyle.Scoped);
             container.Register<ILearningDayService, LearningDayService>(Lifestyle.Scoped);
             container.Register<IEmployeesService, EmployeesService>(Lifestyle.Scoped);
-            */
 
             InitializeLogging(logFile, logLevel);
             
             container.RegisterInstance(Log.Logger);
 
+            InitializePlugins<IEmployeesService>(container, "Service", pluginsDllPaths[0], Lifestyle.Scoped);
+
             container.RegisterDecorator<ILoginService, LoginLoggingDecorator>(Lifestyle.Scoped);
             container.RegisterDecorator<IInviteService, InviteLoggingDecorator>(Lifestyle.Scoped);
 
-            /*InitializePlugins<IEmployeeRepository>(container, "Repository", pluginsDirectoriesNames[0], 
-                pluginsDirectoryPath, Lifestyle.Singleton);*/
-            InitializePlugins<IEmployeesService>(container, "", "Service", 
-                pluginsDirectoryPath, Lifestyle.Scoped);
+            InitializePlugins<IEmployeeRepository>(container, "Repository", pluginsDllPaths[1], Lifestyle.Singleton);
+            
         }
 
-        private static void InitializePlugins<T>(Container container, string directoryPath, string classNameEndsWith,
-            string pluginsDirectory, Lifestyle lifestyle)
+        private static void InitializePlugins<T>(Container container, string classNameEndsWith,
+            string pluginsDirectoryPath, Lifestyle lifestyle)
         {
-            var abstractions = (
-                from type in typeof(T).Assembly.GetExportedTypes()
-                where type.IsInterface
-                where type.Name.EndsWith(classNameEndsWith)
-                select type).ToArray();
-
-            string pluginDirectory = Path.Combine(pluginsDirectory, directoryPath);
-
-            var pluginAssemblies =
-                from file in new DirectoryInfo(pluginDirectory).GetFiles()
-                where file.Extension.ToLower() == ".dll"
-                select Assembly.LoadFile(file.FullName);
-
-            var implementationTypes =
-                from assembly in pluginAssemblies
-                from type in assembly.GetExportedTypes()
-                where abstractions.Any(r => r.IsAssignableFrom(type))
-                where !type.IsAbstract
-                where !type.IsGenericTypeDefinition
-                select type;
-
-            foreach (var type in implementationTypes)
+            if (pluginsDirectoryPath != "")
             {
-                var abstraction = abstractions.Single(r => r.IsAssignableFrom(type));
-                container.Register(abstraction, type, lifestyle);
+                try
+                {
+                    var abstractions = (
+                        from type in typeof(T).Assembly.GetExportedTypes()
+                        where type.IsInterface
+                        where type.Name.EndsWith(classNameEndsWith)
+                        select type).ToArray();
+
+                    var pluginAssemblies =
+                        from file in new DirectoryInfo(pluginsDirectoryPath).GetFiles()
+                        where file.Extension.ToLower() == ".dll"
+                        select Assembly.LoadFrom(file.FullName);
+
+                    var implementationTypes =
+                        from assembly in pluginAssemblies
+                        from type in assembly.GetExportedTypes()
+                        where abstractions.Any(r => r.IsAssignableFrom(type))
+                        where !type.IsAbstract
+                        where !type.IsGenericTypeDefinition
+                        select type;
+
+                    foreach (var type in implementationTypes)
+                    {
+                        var abstraction = abstractions.Single(r => r.IsAssignableFrom(type));
+                        container.Register(abstraction, type, lifestyle);
+                    }
+                }
+                catch(Exception e)
+                {
+                    Log.Logger.Error("Injection " + classNameEndsWith + " from outside dll failed. Details: " + e.Message);
+                }
             }
         }
 

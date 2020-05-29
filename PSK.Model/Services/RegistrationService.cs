@@ -7,7 +7,7 @@ using PSK.Model.Repository;
 
 namespace PSK.Model.Services
 {
-    class RegistrationService : IRegistrationService
+    public class RegistrationService : IRegistrationService
     {
         private readonly IIncomingEmployeeRepository _incomingEmployeeRepository;
         private readonly IEmployeeRepository _employeeRepository;

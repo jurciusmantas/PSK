@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace PSK.Model.Services
 {
-    class RecommendationsService : IRecommendationsService
+    public class RecommendationsService : IRecommendationsService
     {
         private readonly IRecommendationsRepository _recRep;
 
