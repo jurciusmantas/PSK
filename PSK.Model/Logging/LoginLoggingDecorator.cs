@@ -28,12 +28,12 @@ namespace PSK.Model.Logging
                     _logger.Information("{Login}: {DecorateeClassName}.Login unsuccessful", args.Login, _decorateeClassName);
                     return result;
                 }
-                _logger.Information("{Login}: {DecorateeClassName}.Login() successful", result.Data, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.Login() successful", result.Data.Employee.Name, _decorateeClassName);
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.Error(e, "{Login}: {_decorateeClassName}.Login failed {NewLine} {Exception}", args.Login, _decorateeClassName);
+                _logger.Error(e, "{Login}: {DecorateeClassName}.Login failed {NewLine} {Exception}", args.Login, _decorateeClassName);
                 throw;
             }
         }
@@ -43,7 +43,7 @@ namespace PSK.Model.Logging
             try
             {
                 ServerResult<User> result = _decoratee.LoginToken(token);
-                _logger.Information("{Login}: {DecorateeClassName}.LoginToken success", result.Data, _decorateeClassName);
+                _logger.Information("{Login}: {DecorateeClassName}.LoginToken success", result.Data.Employee.Name, _decorateeClassName);
                 if (!result.Success)
                 {
                     _logger.Information("{DecorateeClassName}.LoginToken unsuccessful", _decorateeClassName);
@@ -51,9 +51,9 @@ namespace PSK.Model.Logging
                 }
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.Error(e, "{_decorateeClassName}.LoginToken failed {NewLine} {Exception}", _decorateeClassName);
+                _logger.Error(e, "{DecorateeClassName}.LoginToken failed {NewLine} {Exception}", _decorateeClassName);
                 throw;
             }
         }
@@ -68,7 +68,7 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.Logout failed {Newline} {Exception}", _decorateeClassName, e);
-                throw; 
+                throw;
             }
         }
     }

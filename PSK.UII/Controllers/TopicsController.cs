@@ -34,6 +34,12 @@ namespace PSK.UI.Controllers
             return _topicService.CreateTopic(args);
         }
 
+        [HttpPut("{id}")]
+        public ServerResult<Topic> UpdateTopic([FromRoute(Name = "id")] int id, [FromBody] Topic topic)
+        {
+            return _topicService.UpdateTopic(topic);
+        }
+
         [HttpPost]
         [Route("completed")]
         public ServerResult MarkAsCompleted([FromBody] TopicCompletion args)
