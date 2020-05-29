@@ -25,7 +25,7 @@ namespace PSK.Model.Services
             {
                 var token = GenerateToken();
 
-                _db.Add(new IncomingEmployee {Email = args.Email, Token = token, LeaderId = 1 });
+                _db.Add(new IncomingEmployee {Email = args.Email, Token = token, LeaderId = args.LeaderId });
 
                 SendInviteMail(args.Email, token);
 

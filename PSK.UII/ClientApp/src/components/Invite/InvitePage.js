@@ -1,6 +1,8 @@
 ﻿import React from "react"
 import './InvitePage.css';
 import { post } from '../../helpers/request'
+import { connect } from 'react-redux';
+import { notification } from "../../helpers/notification";
 
 class InvitePage extends React.Component {
     constructor() {
@@ -8,7 +10,8 @@ class InvitePage extends React.Component {
 
         this.state = {
             email: '',
-            loading: false
+            leaderId: null,
+            submitting: false
         }
 
         this.onSubmit = this.handleSubmit.bind(this)
@@ -16,6 +19,8 @@ class InvitePage extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        var leaderId = this.props.currentUser.id;
+
         const {
             email
         } = this.state;
@@ -24,25 +29,30 @@ class InvitePage extends React.Component {
             return;
         }
 
-        this.setState({ loading: true });
+        this.setState({ submitting: true });
 
         post('invite', {
-            email: email
+            email: email,
+            leaderId: leaderId
         })
             .then(res => res.json())
             .then(res => {
-                this.setState({ loading: false });
+                this.setState({ submitting: false });
                 if (res.success) {
+                    notification("Sent!");
                     this.setState({
                         email: ''
                     });
+                }
+                else {
+                    notification('Invite could not be sent', 'error');
                 }
             })
             .catch(error => console.error(error));
     }
 
     handleKeyPress(e) {
-        if (e.key === "Enter") 
+        if (e.key === "Enter")
             this.handleSubmit(e);
     }
 
@@ -62,14 +72,23 @@ class InvitePage extends React.Component {
                         />
                     </div>
                     <div className="row">
-                        <button className="btn btn-custom" type="submit" disabled={this.state.loading}>
-                            {this.state.loading ? "Submitting..." : "Submit"}
+                        <button className="btn btn-custom" type="submit" disabled={this.state.submitting}>
+                            {this.state.submitting ? "Submitting..." : "Submit"}
                         </button>
                     </div>
                 </div>
             </form>
-            )
+        )
     }
 }
 
-export default InvitePage;
+const mapStateToProps = (state) => ({
+    currentUser: state.currentUser
+});
+
+const mapDispatchToProps = () => ({})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(InvitePage);

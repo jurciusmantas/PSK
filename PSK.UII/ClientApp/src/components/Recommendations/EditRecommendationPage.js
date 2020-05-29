@@ -3,10 +3,9 @@ import './RecommendationsPage.css';
 
 import { put, get } from '../../helpers/request'
 import { Link, withRouter } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { notification } from "../../helpers/notification";
 import { connect } from 'react-redux';
+import Loader from '../Loader/loader';
 
 class EditRecommendationsPage extends React.Component {
     constructor() {
@@ -154,6 +153,10 @@ class EditRecommendationsPage extends React.Component {
     }
 
     render() {
+        if (this.state.loadingRecommendation || this.state.loadingTopics || this.state.loadingSubordinates 
+            || !this.state.recommendation || !this.state.topics || !this.state.subordinates)
+            return <Loader />
+
         return (
             <form className="rec-wrapper" onSubmit={this.onSubmit}>
                 <div className="rec-holder">
@@ -161,9 +164,7 @@ class EditRecommendationsPage extends React.Component {
                     <div className='info'>
                         <div className="row">
                             {this.state.loadingRecommendation || !this.state.recommendation
-                                ? <div className="loader">
-                                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                                </div>
+                                ? <Loader/>
                                 : <div>
                                     <h5>Current data:</h5>
                                     <p><b>Topic: </b>{this.state.recommendation.topicName}</p>
@@ -174,36 +175,26 @@ class EditRecommendationsPage extends React.Component {
                     </div>
                     <div className='newData'>
                         <div className="row">
-                            {this.state.loadingRecommendation
-                                || !this.state.recommendation
-                                || this.state.loadingTopics
-                                || !this.state.topics
-                                || this.state.loadingSubordinates
-                                || !this.state.subordinates
-                                ? <div className="loader">
-                                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
+                            <div>
+                                <h5>Enter new data:</h5>
+                                <div className='row'>
+                                    <select
+                                        defaultValue={this.state.topicId}
+                                        onChange={this.handleOnTopicChange}
+                                    >
+                                        {this.showTopicOptions()}
+                                        {this.showSubTopicOptions()}
+                                    </select>
                                 </div>
-                                : <div>
-                                    <h5>Enter new data:</h5>
-                                    <div className='row'>
-                                        <select
-                                            defaultValue={this.state.topicId}
-                                            onChange={this.handleOnTopicChange}
-                                        >
-                                            {this.showTopicOptions()}
-                                            {this.showSubTopicOptions()}
-                                        </select>
-                                    </div>
-                                    <div className='row'>
-                                        <select
-                                            defaultValue={this.state.subordinateId}
-                                            onChange={this.handleOnSubordinateChange}
-                                        >
-                                            {this.getSubordinatesOptions()}
-                                        </select>
-                                    </div>
+                                <div className='row'>
+                                    <select
+                                        defaultValue={this.state.subordinateId}
+                                        onChange={this.handleOnSubordinateChange}
+                                    >
+                                        {this.getSubordinatesOptions()}
+                                    </select>
                                 </div>
-                            }
+                            </div>
                         </div>
                     </div>
                     <div className="row">

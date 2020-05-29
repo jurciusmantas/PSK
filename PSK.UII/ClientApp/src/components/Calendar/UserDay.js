@@ -18,7 +18,7 @@ export default class UserDay extends React.Component {
             <React.Fragment>
                 <div className='user-day'>
                     <Link to={`topic?id=${this.props.topicId}`}>{this.props.topicName}</Link>
-                    <FontAwesomeIcon 
+                    <FontAwesomeIcon
                         icon={faCheck}
                         onClick={() => this.setState({ completionModalOpen: true })}
                     />

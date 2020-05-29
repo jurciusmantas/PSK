@@ -4,11 +4,10 @@ import './RecommendationsPage.css';
 import { post } from '../../helpers/request';
 import { get } from '../../helpers/request';
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { notification } from "../../helpers/notification";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import Loader from '../Loader/loader';
 
 class AddRecommendationPage extends React.Component {
     constructor() {
@@ -132,32 +131,26 @@ class AddRecommendationPage extends React.Component {
     }
 
     render() {
+        if (this.state.loadingSubordinates || !this.state.subordinates
+            || this.state.loadingTopics || !this.state.topics)
+            return <Loader />
+
         return (
             <form className="rec-wrapper" onSubmit={this.onSubmit}>
                 <div className="rec-holder">
                     <h2>Add a recommendation</h2>
                     <div className="row">
-                        {this.state.loadingTopics || !this.state.topics
-                            ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                            </div>
-                            : <select
-                                onChange={this.handleOnTopicChange}>
-                                {this.showTopicOptions()}
-                                {this.showSubTopicOptions()}
-                            </select>
-                        }
+                        <select
+                            onChange={this.handleOnTopicChange}>
+                            {this.showTopicOptions()}
+                            {this.showSubTopicOptions()}
+                        </select>
                     </div>
                     <div className="row">
-                        {this.state.loadingSubordinates || !this.state.subordinates
-                            ? <div className="loader">
-                                <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                            </div>
-                            : <select
-                                onChange={this.handleOnSubordinateChange}>
-                                {this.getSubordinatesOptions()}
-                            </select>
-                        }
+                        <select
+                            onChange={this.handleOnSubordinateChange}>
+                            {this.getSubordinatesOptions()}
+                        </select>
                     </div>
                     <div className="row">
                         <button className="btn btn-custom" type="submit">Submit</button>

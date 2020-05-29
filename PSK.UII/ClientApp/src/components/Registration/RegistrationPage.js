@@ -2,9 +2,8 @@
 import './RegistrationPage.css';
 import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { notification } from "../../helpers/notification";
+import Loader from '../Loader/loader';
 
 class RegistrationPage extends React.Component {
     constructor() {
@@ -100,11 +99,7 @@ class RegistrationPage extends React.Component {
             )
         }
         if (this.state.loading) {
-            return (
-                <div className="loader">
-                    <FontAwesomeIcon icon={faSpinner} className="fa-spin" height="20px" />
-                </div>
-            )
+            return <Loader/>
         }
 
         return (

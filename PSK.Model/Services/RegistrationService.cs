@@ -29,7 +29,7 @@ namespace PSK.Model.Services
                     Name = args.FullName.Trim(),
                     Email = emp.Email,
                     Password = HashPassword(args.Password),
-                    LeaderId = 1,
+                    LeaderId = emp.LeaderId,
                 });
                 _incomingEmployeeRepository.Delete(emp.Id);
 
