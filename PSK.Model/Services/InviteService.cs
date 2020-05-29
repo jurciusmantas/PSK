@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using PSK.Model.IServices;
 
 namespace PSK.Model.Services
 {

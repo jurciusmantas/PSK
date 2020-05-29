@@ -1,7 +1,7 @@
 ﻿using PSK.Model.DTO;
 using System.Collections.Generic;
 
-namespace PSK.Model.Services
+namespace PSK.Model.IServices
 {
     public interface ILearningDayService
     {

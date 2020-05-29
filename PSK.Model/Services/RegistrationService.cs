@@ -2,11 +2,12 @@
 using System.Security.Cryptography;
 using PSK.Model.DTO;
 using PSK.Model.Entities;
+using PSK.Model.IServices;
 using PSK.Model.Repository;
 
 namespace PSK.Model.Services
 {
-    class RegistrationService : IRegistrationService
+    public class RegistrationService : IRegistrationService
     {
         private readonly IIncomingEmployeeRepository _incomingEmployeeRepository;
         private readonly IEmployeeRepository _employeeRepository;

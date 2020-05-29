@@ -1,6 +1,6 @@
 ﻿using PSK.Model.DTO;
 
-namespace PSK.Model.Services
+namespace PSK.Model.IServices
 {
     public interface ILoginService
     {

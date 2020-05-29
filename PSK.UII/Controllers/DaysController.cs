@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSK.Model.DTO;
-using PSK.Model.Services;
+using PSK.Model.IServices;
 using System.Collections.Generic;
 
 namespace PSK.UI.Controllers

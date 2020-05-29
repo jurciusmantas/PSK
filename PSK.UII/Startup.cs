@@ -115,22 +115,31 @@ namespace PSK.UI
 
         private void InitializeContainer()
         {
-
+            string repositoryPluginDllName = Configuration.GetSection("Plugins")
+                .GetValue<string>("RepositoriesDllPath");
+            string servicePluginDllName = Configuration.GetSection("Plugins")
+                .GetValue<string>("ServicesDllPath");
+            string[] pluginsDirectoriesNames = { servicePluginDllName, repositoryPluginDllName};
             string file = Configuration.GetSection("Logging").GetValue<string>("File");
             LogLevel level = Configuration.GetSection("Logging").GetValue<LogLevel>("Level");
-            Model.ObjectContainer.InitializeContainer(container, file, level);
+            Model.ObjectContainer.InitializeContainer(container, file, level, pluginsDirectoriesNames);
         }
 
         private void InjectRepositories()
         {
-            container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
-            container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
-            container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
-            container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
-            container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
-            container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Scoped);
-            container.Register<IRestrictionRepository, RestrictionSqlRepository>(Lifestyle.Scoped);
-            container.Register<ITopicCompletionRepository, TopicCompletionSqlRepository>(Lifestyle.Scoped);
+            string repositoryPluginDllName = Configuration.GetSection("Plugins")
+                .GetValue<string>("RepositoriesDllPath");
+            if (repositoryPluginDllName == "")
+            {
+                container.Register<IIncomingEmployeeRepository, IncomingEmployeeSqlRepository>(Lifestyle.Scoped);
+                container.Register<IEmployeeRepository, EmployeeSqlRepository>(Lifestyle.Scoped);
+                container.Register<ITopicRepository, TopicSqlRepository>(Lifestyle.Scoped);
+                container.Register<IRecommendationsRepository, RecommendationsSqlRepository>(Lifestyle.Scoped);
+                container.Register<IDayRepository, DaySqlRepository>(Lifestyle.Scoped);
+                container.Register<IEmployeesTokenRepository, EmployeesTokenSqlRepository>(Lifestyle.Scoped);
+                container.Register<ITopicCompletionRepository, TopicCompletionSqlRepository>(Lifestyle.Scoped);
+                container.Register<IRestrictionRepository, RestrictionSqlRepository>(Lifestyle.Scoped);
+            }
         }
     }
 }
