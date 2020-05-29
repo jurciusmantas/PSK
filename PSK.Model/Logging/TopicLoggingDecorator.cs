@@ -102,5 +102,26 @@ namespace PSK.Model.Logging
                 throw;
             }
         }
+        
+        public ServerResult<Topic> UpdateTopic(Topic topic)
+        {
+            try
+            {
+                ServerResult<Topic> result = _decoratee.UpdateTopic(topic);
+
+                if (!result.Success)
+                {
+                    _logger.Information("{DecorateeClassName}.UpdateTopic unsuccessful", _decorateeClassName);
+                    return result;
+                }
+                _logger.Information("Topic {Topic} updated successfully", topic.Name);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.UpdateTopic failed {NewLine} {Exception}", _decorateeClassName);
+                throw;
+            }
+        }
     }
 }
