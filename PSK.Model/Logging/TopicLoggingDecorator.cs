@@ -81,5 +81,26 @@ namespace PSK.Model.Logging
                 throw;
             }
         }
+
+        public ServerResult MarkAsCompleted(TopicCompletion args)
+        {
+            try
+            {
+                ServerResult result = _decoratee.MarkAsCompleted(args);
+
+                if (!result.Success)
+                {
+                    _logger.Information("{DecorateeClassName}.MarkAsCompleted unsuccessful", _decorateeClassName);
+                    return result;
+                }
+                _logger.Information("{DecorateeClassName}.MarkAsCompleted successful", _decorateeClassName);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.MarkAsCompleted failed {NewLine} {Exception}", _decorateeClassName);
+                throw;
+            }
+        }
     }
 }
