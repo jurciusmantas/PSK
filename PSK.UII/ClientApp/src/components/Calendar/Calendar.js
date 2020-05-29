@@ -2,10 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import CalendarDayItem from './CalendarDayItem';
 import './Calendar.css';
-
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
 import { get } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
 
@@ -40,7 +38,7 @@ class Calendar extends React.Component {
                 if (res.success)
                     this.setState({ userDays: res.data, userDaysLoaded: true });
                 else {
-                    notification('Could not load your learning days :(', 'warning');
+                    notification('Could not load your learning days', 'warning');
                     console.warn('Could not load employee days:');
                     console.warn(res.message);
                 }
@@ -71,7 +69,7 @@ class Calendar extends React.Component {
 
                     }
                 else {
-                    notification('Could not load your subordinates days :(', 'warning');
+                    notification('Could not load your subordinates days', 'warning');
                     console.warn('Could not load subordinates days:')
                     console.warn(res.message);
                 }
@@ -192,24 +190,25 @@ class Calendar extends React.Component {
                                 >
                                     {calendar.skipFirsts.includes(items[0].weekDay) &&
                                         <CalendarDayItem
-                                        key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
-                                        skipper
-                                    />
-                                }
-                                {items.map(i => (
-                                    <CalendarDayItem
-                                        key={`calendar-day-item-${i.monthDay}`}
-                                        monthDay={i.monthDay}
-                                        userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
-                                        userDaysLoaded={this.state.userDaysLoaded}
-                                        subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
-                                        subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
-                                    />
-                                ))}
-                                {calendar.addLasts.includes(items[0].weekDay) &&
-                                    <CalendarDayItem
-                                        key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
-                                        skipper
+                                            key={`skipper-before-${calendar.skipFirsts.indexOf(items[0].weekDay)}`}
+                                            skipper
+                                        />
+                                    }
+                                    {items.map(i => (
+                                        <CalendarDayItem
+                                            key={`calendar-day-item-${i.monthDay}`}
+                                            monthDay={i.monthDay}
+                                            yearMonth={currentMonth}
+                                            userDays={this.selectDay(this.state.userDays, `${currentMonth}-${i.monthDay}`)}
+                                            userDaysLoaded={this.state.userDaysLoaded}
+                                            subordinatesDays={this.selectDay(this.state.subordinatesDays, `${currentMonth}-${i.monthDay}`)}
+                                            subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
+                                        />
+                                    ))}
+                                    {calendar.addLasts.includes(items[0].weekDay) &&
+                                        <CalendarDayItem
+                                            key={`skipper-after-${calendar.addLasts.indexOf(items[0].weekDay)}`}
+                                            skipper
                                         />
                                     }
                                 </div>

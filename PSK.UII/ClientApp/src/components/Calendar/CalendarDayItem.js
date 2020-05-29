@@ -18,6 +18,8 @@ export default class CalendarDayItem extends React.Component {
                             key={`user-day-${day.id}`}
                             topicName={day.topicName}
                             topicId={day.topicId}
+                            yearMonth={this.props.yearMonth}
+                            monthDay={this.props.monthDay}
                         />)
                     )}
                     {this.props.subordinatesDays.map(day => (

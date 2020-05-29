@@ -39,5 +39,12 @@ namespace PSK.UI.Controllers
         {
             return _topicService.UpdateTopic(topic);
         }
+
+        [HttpPost]
+        [Route("completed")]
+        public ServerResult MarkAsCompleted([FromBody] TopicCompletion args)
+        {
+            return _topicService.MarkAsCompleted(args);
+        }
     }
 }
