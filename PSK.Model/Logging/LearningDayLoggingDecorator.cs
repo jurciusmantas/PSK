@@ -28,7 +28,7 @@ namespace PSK.Model.Logging
 
                 if (!result.Success)
                 {
-                    _logger.Information("{Login}: {DecorateeClassName}.AddNewLearningDay unsuccessful", args.EmployeeName, _decorateeClassName);
+                    _logger.Information("{User}: {DecorateeClassName}.AddNewLearningDay unsuccessful", args.EmployeeName, _decorateeClassName);
                     return result;
                 }
                 _logger.Information("{User}: added {Topic} to a learning day successfully", args.EmployeeName, args.TopicName);
@@ -36,7 +36,7 @@ namespace PSK.Model.Logging
             }
             catch (Exception e)
             {
-                _logger.Error(e, "{Login}: {DecorateeClassName}.AddNewLearningDay failed {NewLine} {Exception}", _decorateeClassName, args.EmployeeName);
+                _logger.Error(e, "{User}: {DecorateeClassName}.AddNewLearningDay failed {NewLine} {Exception}", args.EmployeeName, _decorateeClassName);
                 throw;
             }
         }

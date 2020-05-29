@@ -27,7 +27,7 @@ namespace PSK.Model.Logging
 
                 if (!result.Success)
                 {
-                    _logger.Information("{User}: creating recommendation {Name} unsuccessful", recommendation.CreatorName, recommendation.TopicName);
+                    _logger.Information("{User}: {DecorateeClassName}.CreateRecommendation unsuccessful", recommendation.CreatorName, _decorateeClassName);
                     return result;
                 }
                 _logger.Information("{User}: {Recommendation} recommendation added successfully", recommendation.CreatorName, recommendation.TopicName);
