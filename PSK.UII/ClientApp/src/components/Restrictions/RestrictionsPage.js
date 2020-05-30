@@ -195,7 +195,7 @@ class RestrictionsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    notification("Success");
+                    notification(res.message);
                     window.location.reload();
                 }
                 else {
@@ -246,6 +246,7 @@ class RestrictionsPage extends React.Component {
                                 <input
                                     type='number'
                                     min='1'
+                                    max='366'
                                     onChange={e => this.setState({ consecutiveDays: e.target.value })}
                                     required
                                 />
@@ -259,6 +260,7 @@ class RestrictionsPage extends React.Component {
                                 <input
                                     type='number'
                                     min='1'
+                                    max='31'
                                     onChange={e => this.setState({ maxDaysPerMonth: e.target.value })}
                                     required
                                 />
@@ -271,7 +273,8 @@ class RestrictionsPage extends React.Component {
                             <td>
                                 <input
                                     type='number'
-                                    min='1'
+                                    min={this.state.maxDaysPerMonth || '1'}
+                                    max='93'
                                     onChange={e => this.setState({ maxDaysPerQuarter: e.target.value })}
                                     required
                                 />
@@ -284,7 +287,8 @@ class RestrictionsPage extends React.Component {
                             <td>
                                 <input
                                     type='number'
-                                    min='1'
+                                    min={this.state.maxDaysPerQuarter || '1'}
+                                    max='366'
                                     onChange={e => this.setState({ maxDaysPerYear: e.target.value })}
                                     required
                                 />
