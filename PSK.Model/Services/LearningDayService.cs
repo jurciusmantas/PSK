@@ -14,17 +14,17 @@ namespace PSK.Model.Services
         private readonly IDayRepository _dayRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITopicRepository _topicRepository;
-        private readonly IRestrictionService _restrictionService;
+        private readonly ITopicCompletionRepository _topicCompletionRepository;
 
         public LearningDayService(IDayRepository dayRepository
             , IEmployeeRepository employeeRepository
             , ITopicRepository topicRepository
-            , IRestrictionService restrictionService)
+            , ITopicCompletionRepository topicCompletionRepository)
         {
             _dayRepository = dayRepository;
             _employeeRepository = employeeRepository;
             _topicRepository = topicRepository;
-            _restrictionService = restrictionService;
+            _topicCompletionRepository = topicCompletionRepository;
         }
 
         public ServerResult AddNewLearningDay(DTO.Day args)
@@ -52,11 +52,13 @@ namespace PSK.Model.Services
             }
             catch (Exception e)
             {
-                // assuming errors happen as exceptions. No idea what kind though
-                return new ServerResult() { Success = false, Message = e.Message };
+                return new ServerResult 
+                { 
+                    Success = false, 
+                    Message = e.Message 
+                };
                 throw;
             }
-
         }
 
         public ServerResult DeleteLearningDay(int id)
@@ -75,11 +77,56 @@ namespace PSK.Model.Services
 
         public ServerResult<List<DTO.Day>> GetEmployeeDays(int employeeId)
         {
-            return new ServerResult<List<DTO.Day>>()
+            try
             {
-                Success = true,
-                Data = _dayRepository.GetEmployeeDays(employeeId).Select(d => d.EntityToDTO()).ToList()
-            };
+                var employee = _employeeRepository.Get(employeeId);
+                if (employee == null)
+                    return new ServerResult<List<DTO.Day>>
+                    {
+                        Success = false,
+                        Message = "Employee not found"
+                    };
+
+                var days = _dayRepository.GetEmployeeDays(employeeId);
+                var topicCompletions = _topicCompletionRepository.GetEmployeesCompletions(employeeId);
+                
+                var result = new List<DTO.Day>();
+
+                foreach(var day in days)
+                {
+                    var dayDto = day.EntityToDTO();
+
+                    if (topicCompletions != null && topicCompletions.Count > 0)
+                    {
+                        
+                        var completionsByTopic = topicCompletions.Where(c => c.TopicId == day.TopicId).ToList();
+                        if (completionsByTopic != null && completionsByTopic.Count > 0)
+                        {
+                            var latestTopicCompletion = completionsByTopic.OrderByDescending(c => c.CompletedOn).First();
+
+                            if (latestTopicCompletion != null && latestTopicCompletion.CompletedOn >= day.Date)
+                                dayDto.Completed = true;
+                        }
+                    }
+
+                    result.Add(dayDto);
+                }
+
+                return new ServerResult<List<DTO.Day>>()
+                {
+                    Success = true,
+                    Data = result
+                };
+            }
+            catch(Exception e)
+            {
+                return new ServerResult<List<DTO.Day>> 
+                { 
+                    Success = false, 
+                    Message = e.Message 
+                };
+                throw;
+            }
         }
 
         private string Validate(Entities.Day newDay)

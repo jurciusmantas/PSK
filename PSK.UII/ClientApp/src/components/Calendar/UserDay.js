@@ -18,14 +18,20 @@ export default class UserDay extends React.Component {
             <React.Fragment>
                 <div className='user-day'>
                     <Link to={`topic?id=${this.props.topicId}`}>{this.props.topicName}</Link>
-                    <FontAwesomeIcon
-                        icon={faCheck}
-                        onClick={() => this.setState({ completionModalOpen: true })}
-                    />
+                    { !this.props.topicCompleted && 
+                        <FontAwesomeIcon
+                            icon={faCheck}
+                            onClick={() => this.setState({ completionModalOpen: true })}
+                        />
+                    }
                 </div>
                 <CompletionModal
                     isOpen={this.state.completionModalOpen}
-                    close={() => this.setState({ completionModalOpen: false })}
+                    close={() => {
+                        this.setState({ completionModalOpen: false })
+                        if (this.props.update)
+                            this.props.update();
+                    }}
                     topicName={this.props.topicName}
                     topicId={this.props.topicId}
                     yearMonth={this.props.yearMonth}

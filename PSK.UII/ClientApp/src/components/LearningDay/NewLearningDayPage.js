@@ -20,7 +20,6 @@ class NewLearningDayPage extends React.Component {
             loading: false,
         };
         
-        this.changeTopic = this.changeTopic.bind(this);
         this.createDay = this.createDay.bind(this);
         this.makeTopicOptionList = this.makeTopicOptionList.bind(this);
     }
@@ -160,10 +159,6 @@ class NewLearningDayPage extends React.Component {
         return true;
     }
 
-    changeTopic(e) {
-        this.setState({ selectedTopicId: parseInt(e.target.value) });
-    }
-
     createDay() {
         if (!this.checkIfValidForRestriction(this.state.selectedDate) ||
             !this.checkConsecutiveDays(this.state.selectedDate)) {
@@ -238,7 +233,7 @@ class NewLearningDayPage extends React.Component {
                             <div className='row'>
                                 <select
                                     id="topics"
-                                    onChange={this.changeTopic}
+                                    onChange={e => this.setState({ selectedTopicId: parseInt(e.target.value) })}
                                 >
                                     {this.makeTopicOptionList()}
                                 </select>

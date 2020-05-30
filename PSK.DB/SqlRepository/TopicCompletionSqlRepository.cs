@@ -50,5 +50,10 @@ namespace PSK.DB.SqlRepository
             context.SaveChanges();
             return updatedTopicCompletion;
         }
+
+        public List<TopicCompletion> GetEmployeesCompletions(int employeeId)
+        {
+            return context.TopicCompletions.Where(c => c.EmployeeId == employeeId).ToList();
+        }
     }
 }

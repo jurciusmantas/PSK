@@ -32,21 +32,8 @@ class Calendar extends React.Component {
 
     componentDidMount() {
         console.warn("This thing likes running. If you notice that this message appears twice, this is not good");
-        get(`days?employeeId=${this.props.currentUser.id}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success)
-                    this.setState({ userDays: res.data, userDaysLoaded: true });
-                else {
-                    notification('Could not load your learning days', 'warning');
-                    console.warn('Could not load employee days:');
-                    console.warn(res.message);
-                }
-            })
-            .catch(reason => {
-                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
-                console.error(reason)
-            });
+        this.getUserDays();
+        
         get(`employees/${this.props.currentUser.id}/subordinates`)
             .then(res => res.json())
             .then(res => {
@@ -150,6 +137,24 @@ class Calendar extends React.Component {
         this.props.history.push(`add-day`);
     }
 
+    getUserDays(){
+        get(`days?employeeId=${this.props.currentUser.id}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success)
+                    this.setState({ userDays: res.data, userDaysLoaded: true });
+                else {
+                    notification('Could not load your learning days', 'warning');
+                    console.warn('Could not load employee days:');
+                    console.warn(res.message);
+                }
+            })
+            .catch(reason => {
+                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                console.error(reason)
+            });
+    }
+
     render() {
         const {
             calendar,
@@ -203,6 +208,7 @@ class Calendar extends React.Component {
                                             userDaysLoaded={this.state.userDaysLoaded}
                                             subordinatesDays={this.state.subordinatesDays}
                                             subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
+                                            update={() => this.getUserDays()}
                                         />
                                     ))}
                                     {calendar.addLasts.includes(items[0].weekDay) &&
