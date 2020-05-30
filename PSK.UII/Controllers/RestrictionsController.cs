@@ -19,14 +19,16 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "id")] int employeeId)
+        public ServerResult<List<Restriction>> GetCreatedRestrictions()
         {
-            return _restrictionService.GetRestrictionsTo(employeeId);
+            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
+            return _restrictionService.GetRestrictionsTo(currEmployeeId);
         }
-        [HttpGet("{id}")]
-        public ServerResult<Restriction> GetRestriction([FromRoute(Name = "id")] int employeeId)
+        [HttpGet("active")]
+        public ServerResult<Restriction> GetRestriction()
         {
-            return _restrictionService.GetRestrictionFrom(employeeId);
+            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
+            return _restrictionService.GetRestrictionFrom(currEmployeeId);
         }
 
         [HttpDelete]
@@ -37,6 +39,8 @@ namespace PSK.UI.Controllers
         [HttpPost]
         public ServerResult CreateRestriction([FromBody] RestrictionArgs restrictionArgs)
         {
+            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
+            restrictionArgs.CreatorId = currEmployeeId;
             return _restrictionService.CreateRestriction(restrictionArgs);
         }
 
