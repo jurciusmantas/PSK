@@ -32,7 +32,7 @@ class RestrictionsPage extends React.Component {
     }
 
     componentDidMount() {
-        get(`restrictions/${this.props.currentUser.id}`)
+        get(`restrictions/active`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -42,15 +42,15 @@ class RestrictionsPage extends React.Component {
                     })
                 }
                 else {
-                    notification('Cannot get restrictions :(', 'error');
-                    console.warn(`Cannot get restrictions:`);
+                    notification('Cannot get restriction :(', 'error');
+                    console.warn(`Cannot get restriction:`);
                     console.warn(res.message);
                 }
             })
             .catch(reason => {
                 console.error(reason);
             })
-        get(`restrictions?id=${this.props.currentUser.id}`)
+        get(`restrictions`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -60,8 +60,8 @@ class RestrictionsPage extends React.Component {
                     })
                 }
                 else {
-                    notification('Cannot get restriction :(', 'error');
-                    console.warn(`Cannot get restriction:`);
+                    notification('Cannot get restrictions :(', 'error');
+                    console.warn(`Cannot get restrictions:`);
                     console.warn(res.message);
                 }
             })
@@ -186,7 +186,6 @@ class RestrictionsPage extends React.Component {
             MaxDaysPerMonth: parseInt(this.state.maxDaysPerMonth),
             MaxDaysPerQuarter: parseInt(this.state.maxDaysPerQuarter),
             MaxDaysPerYear: parseInt(this.state.maxDaysPerYear),
-            CreatorId: parseInt(this.props.currentUser.id),
             ApplyTo: parseInt(this.state.applyTo),
             UserIds: this.state.selectedEmployees.map((selectedEmployee) => {
                 return selectedEmployee.value
