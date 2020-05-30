@@ -50,5 +50,19 @@
                 ParentId = topic.ParentTopicId,
             };
         }
+
+        public static DTO.Restriction EntityToDTO(this Entities.Restriction restriction, int useCount = 0)
+        {
+            return new DTO.Restriction
+            {
+                Id = restriction.Id,
+                ConsecutiveDays = restriction.ConsecutiveDays,
+                MaxDaysPerYear = restriction.MaxDaysPerYear,
+                MaxDaysPerQuarter = restriction.MaxDaysPerQuarter,
+                MaxDaysPerMonth = restriction.MaxDaysPerMonth,
+                Global = restriction.Global,
+                UseCount = useCount
+            };
+        }
     }
 }

@@ -26,5 +26,19 @@ namespace PSK.Model.Helpers
                 TopicId = dto.TopicId
             };
         }
+
+        public static Entities.Restriction DTOToEntity(this DTO.RestrictionArgs restrictionArgs)
+        {
+            return new Entities.Restriction
+            {
+                ConsecutiveDays = restrictionArgs.ConsecutiveDays,
+                MaxDaysPerMonth = restrictionArgs.MaxDaysPerMonth,
+                MaxDaysPerQuarter = restrictionArgs.MaxDaysPerQuarter,
+                MaxDaysPerYear = restrictionArgs.MaxDaysPerYear,
+                Global = false,
+                CreatorId = restrictionArgs.CreatorId,
+                CreationDate = DateTime.Now,
+            };
+        }
     }
 }

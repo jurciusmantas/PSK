@@ -6,6 +6,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using PSK.Model.DTO;
+using PSK.Model.IServices;
+using PSK.Model.Helpers;
 
 namespace PSK.Model.Services
 {
@@ -31,7 +33,7 @@ namespace PSK.Model.Services
             {
                 return new ServerResult { Message = msg, Success = false };
             }
-            Entities.Restriction restriction = ParseRestriction(restrictionArgs);
+            Entities.Restriction restriction = restrictionArgs.DTOToEntity();
             int applyTo = restrictionArgs.ApplyTo;
             List<Entities.Employee> employees;
             string foundNames;
@@ -92,36 +94,25 @@ namespace PSK.Model.Services
             };
         }
 
-        private Entities.Restriction ParseRestriction(RestrictionArgs restrictionArgs)
-        {
-            return new Entities.Restriction
-            {
-                ConsecutiveDays = restrictionArgs.ConsecutiveDays,
-                MaxDaysPerMonth = restrictionArgs.MaxDaysPerMonth,
-                MaxDaysPerQuarter = restrictionArgs.MaxDaysPerQuarter,
-                MaxDaysPerYear = restrictionArgs.MaxDaysPerYear,
-                Global = false,
-                CreatorId = restrictionArgs.CreatorId,
-                CreationDate = DateTime.Now,
-            };
-        }
+        
 
-        public ServerResult DeleteRestriction(int id)
+        public ServerResult DeleteRestriction(int id, int employeeId)
         {
-            Entities.Restriction deletedRestriction = _restrictionRepository.Delete(id);
-            if (deletedRestriction == null)
+            string msg = ValidateRestrictionDeletion(id, employeeId);
+            if(msg != null)
             {
-                return new ServerResult { Message = "Restriction was not found", Success = false };
+                return new ServerResult { Message = msg, Success = false };
             }
+            _restrictionRepository.Delete(id);
             return new ServerResult { Message = "Success", Success = true };
         }
 
         public ServerResult<List<DTO.Restriction>> GetRestrictionsTo(int employeeId)
         { 
-            (Entities.Employee employee, ServerResult<List<DTO.Restriction>> result) = ValidateEmployee<List<DTO.Restriction>>(employeeId);
+            (Entities.Employee employee, string msg) = ValidateEmployee(employeeId);
             if (employee == null)
             {
-                return result;
+                return new ServerResult<List<DTO.Restriction>> { Message = msg, Success = false };
             }
             var restrictionsTo = GetRestrictions(employeeId);
             return new ServerResult<List<DTO.Restriction>> { Data = restrictionsTo, Success = true, Message = "Success" };
@@ -134,18 +125,18 @@ namespace PSK.Model.Services
             List<DTO.Restriction> restrictionsResult = new List<DTO.Restriction>();
             for(int i = 0; i < restrictions.Count; i++)
             {
-                restrictionsResult.Add(ParseRestriction(restrictions[i], useCounts[i]));
+                restrictionsResult.Add(restrictions[i].EntityToDTO(useCounts[i]));
             }
             return restrictionsResult;
         }
 
-        private (Entities.Employee, ServerResult<T>) ValidateEmployee<T>(int employeeId)
+        private (Entities.Employee, string msg) ValidateEmployee(int employeeId)
         {
             var employee = _employeeRepository.Get(employeeId);
 
             if (employee == null)
             {
-                return (employee, new ServerResult<T> { Message = "Employee was not found", Success = false });
+                return (employee, "Employee was not found");
             }
             else
             {
@@ -155,10 +146,10 @@ namespace PSK.Model.Services
 
         public ServerResult<DTO.Restriction> GetRestrictionFrom(int employeeId)
         {
-            (Entities.Employee employee, ServerResult<DTO.Restriction> result) = ValidateEmployee<DTO.Restriction>(employeeId);
+            (Entities.Employee employee, String msg) = ValidateEmployee(employeeId);
             if (employee == null)
             {
-                return result;
+                return new ServerResult<DTO.Restriction> { Message = msg, Success = false };
             }
             else
             {
@@ -173,23 +164,9 @@ namespace PSK.Model.Services
             if (employeeRestrictions != null && employeeRestrictions.Count > 0)
             {
                 EmployeeRestriction employeeRestriction = employeeRestrictions.OrderByDescending(er => er.Restriction.CreationDate).First();
-                restrictionResult = ParseRestriction(employeeRestriction.Restriction);
+                restrictionResult = employeeRestriction.Restriction.EntityToDTO();
             }
             return restrictionResult;
-        }
-
-        private DTO.Restriction ParseRestriction(Entities.Restriction restriction, int useCount = 0)
-        {
-            return new DTO.Restriction
-            {
-                Id = restriction.Id,
-                ConsecutiveDays = restriction.ConsecutiveDays,
-                MaxDaysPerYear = restriction.MaxDaysPerYear,
-                MaxDaysPerQuarter = restriction.MaxDaysPerQuarter,
-                MaxDaysPerMonth = restriction.MaxDaysPerMonth,
-                Global = restriction.Global,
-                UseCount = useCount
-            };
         }
 
         private (List<Entities.Employee>, string) FindByIds(int[] ids)
@@ -218,5 +195,29 @@ namespace PSK.Model.Services
             string names = employeeNotFound ? foundEmplStrBldr.ToString() : "";
             return (foundEmployees, names);
         }
+
+        private string ValidateRestrictionDeletion(int restrictionId, int employeeId)
+        {
+            (Entities.Employee employee, string msg) = ValidateEmployee(employeeId);
+            if(msg != null)
+            {
+                return msg;
+            }
+            Entities.Restriction restriction = _restrictionRepository.Get(restrictionId);
+            if (restriction == null)
+            {
+                return "Restriction was not found";
+            }
+            List<EmployeeRestriction> employeeRestrictions = employee.EmployeeRestrictions.ToList();
+            foreach(var employeeRestriction in employeeRestrictions)
+            {
+                if(employeeRestriction.RestrictionId == restrictionId)
+                {
+                    return null;
+                }
+            }
+            return "You do not have permission to delete restriction with id " + restrictionId;    
+        }
+
     }
 }

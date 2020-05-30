@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSK.Model.DTO;
-using PSK.Model.Services;
+using PSK.Model.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,8 @@ namespace PSK.UI.Controllers
         [HttpDelete]
         public ServerResult DeleteRestriction([FromQuery(Name = "id")]int id)
         {
-            return _restrictionService.DeleteRestriction(id);
+            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
+            return _restrictionService.DeleteRestriction(id, currEmployeeId);
         }
         [HttpPost]
         public ServerResult CreateRestriction([FromBody] RestrictionArgs restrictionArgs)
