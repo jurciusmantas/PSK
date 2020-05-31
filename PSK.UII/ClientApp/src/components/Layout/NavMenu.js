@@ -42,10 +42,10 @@ export class NavMenu extends Component {
     }
 
     logout() {
+        post("login/logout");
         this.props.logout();
         removeCookie('AuthToken');
         this.props.history.push('/');
-        post("login/logout");
     }
 
 
