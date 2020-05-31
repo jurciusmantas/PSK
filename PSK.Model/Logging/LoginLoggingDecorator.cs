@@ -58,11 +58,11 @@ namespace PSK.Model.Logging
             }
         }
 
-        public void Logout()
+        public void Logout(string token)
         {
             try
             {
-                _decoratee.Logout();
+                _decoratee.Logout(token);
                 _logger.Information("{DecorateeClassName}.Logout success", _decorateeClassName);
             }
             catch (Exception e)

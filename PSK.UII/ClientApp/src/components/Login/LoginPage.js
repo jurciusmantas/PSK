@@ -61,7 +61,7 @@ class LoginPage extends React.Component {
                     <div className='row'>
                         <input
                             type='text'
-                            placeholder='Login'
+                            placeholder='Email'
                             onChange={e => this.setState({ login: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                         />

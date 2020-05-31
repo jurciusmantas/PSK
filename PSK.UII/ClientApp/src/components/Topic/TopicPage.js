@@ -11,23 +11,23 @@ export default class TopicPage extends React.Component {
         super(props);
         this.state = {
             loading: true,
-            data: null
+            topicsTree: null
         }
     }
 
     componentDidMount() {
         if (this.props.data)
             this.setState({ 
-                data: this.props.data,
+                topicsTree: this.props.data,
                 loading: false,
             });
 
         else
-            get('topics')
+            get('topics?tree=true')
                 .then(res => res.json())
                 .then(res => {
                     if (res.success) {
-                        this.setState({ data: res.data, loading: false })
+                        this.setState({ topicsTree: res.data, loading: false })
                     }
                     else {
                         notification('Cannot get topics :(', 'error');
@@ -42,14 +42,14 @@ export default class TopicPage extends React.Component {
     }
 
     render() {
-        if (this.state.loading || !this.state.data)
+        if (this.state.loading || !this.state.topicsTree)
             return <Loader />
 
         return (
             <div className="topic-wrapper">
                 <div className="topic-holder">
                     { this.props.data === undefined &&
-                        <React.Fragment>
+                        <>
                             <h2>Topics</h2>
                             <Link 
                                 className="btn btn-dark" 
@@ -57,12 +57,12 @@ export default class TopicPage extends React.Component {
                             >
                                 Add New Topic 
                             </Link>
-                        </React.Fragment>
+                        </>
                     }
                     <div>
                         <TreeView
                             id="simple-treeview"
-                            items={this.state.data}
+                            items={this.state.topicsTree}
                             displayExpr="name"
                             itemRender={this.renderTreeViewItem}
                             itemsExpr="subTopicList"

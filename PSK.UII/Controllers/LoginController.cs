@@ -26,12 +26,10 @@ namespace PSK.UI.Controllers
             return _loginService.Login(args);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("logout")]
+        [HttpPost("logout")]
         public void Logout()
         {
-            _loginService.Logout();
+            _loginService.Logout(Request.Headers["Authorization"]);
         }
     }
 }
