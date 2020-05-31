@@ -84,8 +84,10 @@ export default class DetailedTopicPage extends React.Component {
     }
 
     render() {
+        if (this.state.loadingTopic)
+            return <Loader/>
         if (!this.state.topic || this.state.topicId === null)
-            return <Loader />
+            return <NotFoundPage />
 
         return (
             <div className="topic-wrapper">
