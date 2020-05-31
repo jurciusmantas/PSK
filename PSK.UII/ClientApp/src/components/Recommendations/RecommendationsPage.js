@@ -53,7 +53,7 @@ class RecommendationsPage extends React.Component {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
-                    <td>{recommendation.creatorName}</td>
+                    <td><Link to={`user-profile?id=${recommendation.creatorId}`}>{recommendation.creatorName}</Link></td>                  
                 </tr>
             )
         })
@@ -64,7 +64,7 @@ class RecommendationsPage extends React.Component {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
-                    <td><Link to={`employee?id=${recommendation.receiverId}`}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
+                    <td><Link to={`user-profile?id=${recommendation.receiverId}`}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
                     <td><button className="btn btn-custom" onClick={() => this.deleteRecommendation(recommendation.id)}>Delete</button></td>
                     <td><Link to={`edit-recommendation?id=${recommendation.id}`} className="btn btn-custom">Edit</Link></td>
                 </tr>
