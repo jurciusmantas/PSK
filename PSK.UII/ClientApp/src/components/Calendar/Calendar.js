@@ -160,7 +160,8 @@ class Calendar extends React.Component {
             calendar,
             monthBefore,
             currentMonth,
-            monthAfter
+            monthAfter,
+            monthDiff,
         } = this.state;
 
         return (
@@ -209,6 +210,7 @@ class Calendar extends React.Component {
                                             subordinatesDays={this.state.subordinatesDays}
                                             subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
                                             update={() => this.getUserDays()}
+                                            monthDiff={monthDiff}
                                         />
                                     ))}
                                     {calendar.addLasts.includes(items[0].weekDay) &&

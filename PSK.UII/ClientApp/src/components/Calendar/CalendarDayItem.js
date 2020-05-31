@@ -24,6 +24,7 @@ export default class CalendarDayItem extends React.Component {
                             yearMonth={this.props.yearMonth}
                             monthDay={this.props.monthDay}
                             update={() => this.props.update()}
+                            monthDiff={this.props.monthDiff}
                         />)
                     )}
                     {this.props.subordinatesDays
