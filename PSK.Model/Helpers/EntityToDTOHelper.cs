@@ -2,7 +2,7 @@
 {
     public static class EntityToDTOHelper
     {
-        public static DTO.Day EntityToDTO(this Entities.Day day)
+        public static DTO.Day ToDTO(this Entities.Day day)
         {
             return new DTO.Day()
             {
@@ -15,7 +15,7 @@
             };
         }
 
-        public static DTO.Recommendation EntityToDTO(this Entities.Recommendation entity)
+        public static DTO.Recommendation ToDTO(this Entities.Recommendation entity)
         {
             return new DTO.Recommendation()
             {
@@ -29,7 +29,7 @@
             };
         }
 
-        public static DTO.Employee EntityToDTO(this Entities.Employee entity)
+        public static DTO.Employee ToDTO(this Entities.Employee entity)
         {
             return new DTO.Employee()
             {
@@ -40,7 +40,7 @@
             };
         }
 
-        public static DTO.Topic EntityToDTO(this Entities.Topic topic)
+        public static DTO.Topic ToDTO(this Entities.Topic topic)
         {
             return new DTO.Topic
             {
