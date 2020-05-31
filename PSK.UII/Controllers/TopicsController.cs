@@ -16,16 +16,21 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<List<Topic>> Topics()
+        public ServerResult<List<Topic>> Topics([FromQuery(Name = "tree")] bool tree = false)
         {
-            return _topicService.GetTopics();
+            return _topicService.GetTopics(tree);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public ServerResult<Topic> GetDetailedTopic([FromRoute]int id)
         {
             return _topicService.GetTopic(id);
+        }
+
+        [HttpGet("{id}/subtopics")]
+        public ServerResult<List<Topic>> GetSubtopics([FromRoute]int id)
+        {
+            return _topicService.GetSubtopics(id);
         }
 
         [HttpPost]
@@ -40,8 +45,7 @@ namespace PSK.UI.Controllers
             return _topicService.UpdateTopic(topic);
         }
 
-        [HttpPost]
-        [Route("completed")]
+        [HttpPost("completed")]
         public ServerResult MarkAsCompleted([FromBody] TopicCompletion args)
         {
             return _topicService.MarkAsCompleted(args);

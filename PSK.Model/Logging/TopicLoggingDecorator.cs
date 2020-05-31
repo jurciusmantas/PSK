@@ -40,6 +40,19 @@ namespace PSK.Model.Logging
             }
         }
 
+        public ServerResult<List<Topic>> GetSubtopics(int id)
+        {
+            ServerResult<List<Topic>> result = _decoratee.GetSubtopics(id);
+
+            if (!result.Success)
+            {
+                _logger.Information("{DecorateeClassName}.GetSubtopics unsuccessful", _decorateeClassName);
+                return result;
+            }
+            _logger.Information("{DecorateeClassName}.GetSubtopics successful", _decorateeClassName);
+            return result;
+        }
+
         public ServerResult<Topic> GetTopic(int id)
         {
             try
@@ -61,11 +74,11 @@ namespace PSK.Model.Logging
             }
         }
 
-        public ServerResult<List<Topic>> GetTopics()
+        public ServerResult<List<Topic>> GetTopics(bool tree)
         {
             try
             {
-                ServerResult<List<Topic>> result = _decoratee.GetTopics();
+                ServerResult<List<Topic>> result = _decoratee.GetTopics(tree);
 
                 if (!result.Success)
                 {

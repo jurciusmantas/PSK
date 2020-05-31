@@ -1,4 +1,5 @@
 ﻿using PSK.Model.DTO;
+using PSK.Model.Helpers;
 using PSK.Model.IServices;
 using PSK.Model.Repository;
 using System;
@@ -22,37 +23,31 @@ namespace PSK.Model.Services
             _employeeRepository = employeeRepository;
         }
 
-        public ServerResult<List<Topic>> GetTopics()
+        public ServerResult<List<Topic>> GetTopics(bool tree)
         {
-            var topicTree = ConvertToTree(_topicRepository.Get());
-            return new ServerResult<List<Topic>> { Data = topicTree, Message = "Success", Success = true };
+            var topics = _topicRepository.Get();
+            if (tree)
+            {
+                var topicTree = ConvertToTree(topics);
+                return new ServerResult<List<Topic>> { Data = topicTree, Success = true };
+            }
+            return new ServerResult<List<Topic>> { Data = topics.Select(t => t.ToDTO()).ToList(), Success = true };
         }
 
         public ServerResult<Topic> GetTopic(int id)
         {
-            var bTopic = _topicRepository.Get(id);
-            if (bTopic == null)
+            var topic = _topicRepository.Get(id);
+            if (topic == null)
                 return new ServerResult<Topic>
                 {
                     Success = false,
                     Message = "Not found"
                 };
 
-            var bSubtopic = _topicRepository.GetSubtopics(id);
-            var subtopics = new List<Topic>();
-
-            foreach (var top in bSubtopic)
+            return new ServerResult<Topic>
             {
-                var subtop = new Topic { Id = top.Id, Description = top.Description, Name = top.Name };
-                subtopics.Add(subtop);
-            }
-
-            var topic = new Topic { Id = bTopic.Id, Description = bTopic.Description, Name = bTopic.Name, SubTopicList = subtopics, RowVersion = bTopic.RowVersion };
-
-            return new ServerResult<Topic> 
-            { 
-                Data = topic,  
-                Success = true 
+                Data = topic.ToDTO(),
+                Success = true
             };
         }
 
@@ -92,17 +87,17 @@ namespace PSK.Model.Services
                     Message = "No name"
                 };
 
-            var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description};
+            var newTopic = new Entities.Topic { Name = args.Name, Description = args.Description };
 
             if (args.ParentId.HasValue)
             {
                 var parentTopic = _topicRepository.Get(args.ParentId.Value);
 
                 if (parentTopic == null)
-                    return new ServerResult 
-                    { 
-                        Message = "Parent topic does not exist", 
-                        Success = false 
+                    return new ServerResult
+                    {
+                        Message = "Parent topic does not exist",
+                        Success = false
                     };
 
                 newTopic.ParentTopic = parentTopic;
@@ -182,6 +177,27 @@ namespace PSK.Model.Services
             catch (Exception e)
             {
                 return new ServerResult<Topic>()
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
+        }
+
+        public ServerResult<List<Topic>> GetSubtopics(int id)
+        {
+            try
+            {
+            var subtopics = _topicRepository.GetSubtopics(id);
+                return new ServerResult<List<Topic>>
+                {
+                    Success = true,
+                    Data = subtopics.Select(t => t.ToDTO()).ToList()
+                };
+            }
+            catch(Exception e)
+            {
+                return new ServerResult<List<Topic>>
                 {
                     Success = false,
                     Message = e.Message

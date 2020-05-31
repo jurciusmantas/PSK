@@ -38,7 +38,7 @@ namespace PSK.Model.Services
                         Message = "No arguments"
                     };
 
-                var dayToAdd = args.DTOToEntity();
+                var dayToAdd = args.ToEntity();
                 var error = Validate(dayToAdd);
                 if (!string.IsNullOrEmpty(error))
                     return new ServerResult
@@ -71,7 +71,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<DTO.Day>>()
             {
                 Success = true,
-                Data = _dayRepository.Get().Select(d => d.EntityToDTO()).ToList()
+                Data = _dayRepository.Get().Select(d => d.ToDTO()).ToList()
             };
         }
 
@@ -94,7 +94,7 @@ namespace PSK.Model.Services
 
                 foreach(var day in days)
                 {
-                    var dayDto = day.EntityToDTO();
+                    var dayDto = day.ToDTO();
 
                     if (topicCompletions != null && topicCompletions.Count > 0)
                     {
