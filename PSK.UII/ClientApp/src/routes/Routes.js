@@ -9,7 +9,7 @@ import { createBrowserHistory } from 'history';
 //Pages
 import Layout from '../components/Layout/Layout';
 import LoginPage from '../components/Login/LoginPage';
-import HomePage from '../components/Home/HomePage';
+import Calendar from '../components/Calendar/Calendar';
 import TopicPage from '../components/Topic/TopicPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import InvitePage from '../components/Invite/InvitePage';
@@ -40,7 +40,7 @@ class Routes extends React.Component {
 
         this.state = {
             components: [
-                { component: HomePage, path: "/home" },
+                { component: Calendar, path: "/home" },
                 { component: InvitePage, path: "/invite" },
                 { component: DetailedTopicPage, path: "/topic" },
                 { component: TopicPage, path: "/topics" },
