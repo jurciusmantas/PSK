@@ -105,12 +105,18 @@ namespace PSK.Model.Services
             }
         }
 
-        public void Logout()
+        public void Logout(string token)
         {
-            //TODO:
-            //Once authorization will be implemented (with _sessionData as service
-            //with lifestyle session to have the currently logged in user) -
-            //remove its token (call to DB too!).
+            if (!string.IsNullOrEmpty(token) && token.StartsWith("Token "))
+            {
+                token = token.Substring(6);
+                var tokenInst = _employeesTokenRepository.FindByToken(token);
+                if (tokenInst != null && tokenInst.ExpiredAt > DateTime.Now)
+                {
+                    tokenInst.ExpiredAt = DateTime.Now;
+                    _employeesTokenRepository.Update(tokenInst);
+                }     
+            }
         }
 
         private string GetToken()

@@ -6,6 +6,6 @@ namespace PSK.Model.IServices
     {
         ServerResult<User> Login(LoginArgs args);
         ServerResult<User> LoginToken(string token);
-        void Logout();
+        void Logout(string token);
     }
 }
