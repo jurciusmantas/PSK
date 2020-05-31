@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CompletionModal from './CompletionModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 export default class UserDay extends React.Component {
     constructor(props){
@@ -18,7 +19,7 @@ export default class UserDay extends React.Component {
             <React.Fragment>
                 <div className='user-day'>
                     <Link to={`topic?id=${this.props.topicId}`}>{this.props.topicName}</Link>
-                    { !this.props.topicCompleted && 
+                    { !this.props.topicCompleted && moment().date() <= this.props.monthDay &&
                         <FontAwesomeIcon
                             icon={faCheck}
                             onClick={() => this.setState({ completionModalOpen: true })}
