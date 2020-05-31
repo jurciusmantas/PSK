@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { getCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
+import { createBrowserHistory } from 'history';
 
 //Pages
 import Layout from '../components/Layout/Layout';
@@ -22,11 +23,16 @@ import EditTopicPage from '../components/Topic/EditTopicPage';
 import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 import RestrictionsPage from '../components/Restrictions/RestrictionsPage';
 import UserProfile from '../components/UserProfile/UserProfile';
+import Loader from '../components/Loader/loader';
 
 const NotFoundPageWraped = () =>
     <Layout>
         <NotFoundPage />
     </Layout>;
+
+const history = createBrowserHistory({
+    basename: 'MegstuKumpi'
+});
 
 class Routes extends React.Component {
     constructor(props) {
@@ -44,46 +50,56 @@ class Routes extends React.Component {
                 { component: EditRecommendationsPage, path: "/edit-recommendation" },
                 { component: CreateTopicPage, path: "/add-topic" },
                 { component: NewLearningDayPage, path: "/add-day" },
-                { component: RestrictionsPage, path: "/restrictions"},
+                { component: RestrictionsPage, path: "/restrictions" },
                 { component: UserProfile, path: "/user-profile" },
-            ]
+            ],
+            loading: true
         }
     }
 
     componentDidMount() {
         const token = getCookie('AuthToken');
-        if (token)
+        if (token) {
             post('login?token=true', { token })
                 .then(res => res.json())
                 .then(res => {
                     if (res.success) {
                         this.props.login(res.data);
+                        if (history.location.pathname === "/")
+                            history.push('/home');
+                        this.setState({ loading: false });
                     }
                 })
                 .catch(error => {
                     console.error('POST login?token=true failed:');
                     console.error(error);
                 })
+        }
 
-        else if (this.props.currentUser)
+        else if (this.props.currentUser) {
             this.props.logout();
+            this.setState({ loading: false });
+        }
     }
 
     render() {
+        if (this.state.loading)
+            return <Loader />
+
         const { currentUser } = this.props;
         if (!currentUser || !currentUser.token)
             return (
-                <BrowserRouter basename={'MegstuKumpi'}>
+                <Router history={history}>
                     <Switch>
                         <Route path='/' exact component={LoginPage} />
                         <Route path='/registration/:id' component={RegistrationPage} />
                         <Route component={NotFoundPage} />
                     </Switch>
-                </BrowserRouter>
+                </Router>
             )
 
         return (
-            <BrowserRouter basename={'MegstuKumpi'}>
+            <Router history={history}>
                 <Switch>
                     {
                         this.state.components.map((comp, i) => {
@@ -99,7 +115,7 @@ class Routes extends React.Component {
                     }
                     <Route component={NotFoundPageWraped} />
                 </Switch>
-            </BrowserRouter>
+            </Router>
         )
     }
 }
