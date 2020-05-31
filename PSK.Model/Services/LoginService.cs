@@ -49,7 +49,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Employee = employee.EntityToDTO(),
+                        Employee = employee.ToDTO(),
                         Token = token,
                         ExpiredAt = expiredAt.ToString()
                     }
@@ -89,7 +89,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Employee = _employeeRepository.Get(employeesToken.EmployeeId).EntityToDTO(),
+                        Employee = _employeeRepository.Get(employeesToken.EmployeeId).ToDTO(),
                         Token = token,
                         ExpiredAt = employeesToken.ExpiredAt.ToString()
                     },

@@ -21,7 +21,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                Entities.Day learningDay = _dayRepository.Add(args.DTOToEntity());
+                Entities.Day learningDay = _dayRepository.Add(args.ToEntity());
                 return new ServerResult() { Success = true };
             }
             catch (Exception e)
@@ -43,7 +43,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<DTO.Day>>()
             {
                 Success = true,
-                Data = _dayRepository.Get().Select(d => d.EntityToDTO()).ToList()
+                Data = _dayRepository.Get().Select(d => d.ToDTO()).ToList()
             };
         }
 
@@ -52,7 +52,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<DTO.Day>>()
             {
                 Success = true,
-                Data = _dayRepository.GetEmployeeDays(employeeId).Select(d => d.EntityToDTO()).ToList()
+                Data = _dayRepository.GetEmployeeDays(employeeId).Select(d => d.ToDTO()).ToList()
             };
         }
     }

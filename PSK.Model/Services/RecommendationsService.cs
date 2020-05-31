@@ -21,7 +21,7 @@ namespace PSK.Model.Services
         {
             try
             {
-                _recRep.Add(recommendation.DTOToEntity());
+                _recRep.Add(recommendation.ToEntity());
                 return new ServerResult() { Success = true };
             }
             catch (Exception e)
@@ -35,13 +35,13 @@ namespace PSK.Model.Services
         {
             Entities.Recommendation dbRec = _recRep.Get(id);
             if (dbRec != null)
-                return new ServerResult<Recommendation>() { Success = true, Data = dbRec.EntityToDTO() };
+                return new ServerResult<Recommendation>() { Success = true, Data = dbRec.ToDTO() };
             return new ServerResult<Recommendation>() { Success = false, Message = "Recommendation not found" };
         }
 
         public ServerResult<List<Recommendation>> GetRecommendations()
         {
-            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => r.EntityToDTO()).ToList() };
+            return new ServerResult<List<Recommendation>>() { Success = true, Data = _recRep.Get().Select(r => r.ToDTO()).ToList() };
         }
 
         public ServerResult<List<Recommendation>> GetReceivedRecommendations(int receiverId)
@@ -49,7 +49,7 @@ namespace PSK.Model.Services
             return new ServerResult<List<Recommendation>>()
             {
                 Success = true,
-                Data = _recRep.GetReceivedRecommendations(receiverId).Select(r => r.EntityToDTO()).ToList()
+                Data = _recRep.GetReceivedRecommendations(receiverId).Select(r => r.ToDTO()).ToList()
             };
         }
 
@@ -60,7 +60,7 @@ namespace PSK.Model.Services
                 return new ServerResult<List<Recommendation>>()
                 {
                     Success = true,
-                    Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => r.EntityToDTO()).ToList()
+                    Data = _recRep.GetCreatedRecommendations(creatorId).Select(r => r.ToDTO()).ToList()
                 };
             }
             catch (Exception e)
