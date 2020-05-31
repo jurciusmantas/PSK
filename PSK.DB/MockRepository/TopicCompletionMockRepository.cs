@@ -27,6 +27,11 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
+        public List<TopicCompletion> GetEmployeesCompletions(int employeeId)
+        {
+            throw new NotImplementedException();
+        }
+
         public TopicCompletion Update(TopicCompletion entity)
         {
             throw new NotImplementedException();
