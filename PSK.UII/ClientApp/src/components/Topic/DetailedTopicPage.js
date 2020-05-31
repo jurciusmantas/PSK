@@ -3,15 +3,19 @@ import './TopicPage.css';
 import { get } from '../../helpers/request';
 import { Link } from 'react-router-dom';
 import Loader from '../Loader/loader'
+import { notification } from '../../helpers/notification';
+import NotFoundPage from '../NotFound/NotFoundPage';
 
 export default class DetailedTopicPage extends React.Component {
     constructor(props) {
         super(props);
         const queryParams = new URLSearchParams(window.location.search);
         this.state = {
-            loading: true,
-            data: null,
-            id: queryParams.get("id"),
+            topic: null,
+            loadingTopic: true,
+            subtopics: null,
+            loadingSubtopics: true,
+            topicId: queryParams.get("id"),
         }
     }
 
@@ -20,73 +24,89 @@ export default class DetailedTopicPage extends React.Component {
     }
 
     setDetails() {
-        get(`topics/${this.state.id}`).then(res => res.json())
+        get(`topics/${this.state.topicId}`).then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    this.setState({ data: res.data, loading: false });
+                    this.setState({ topic: res.data, loadingTopic: false });
+                }
+                else {
+                    notification("Cannot load topic :(", "error");
+                    console.warn("Cannot load topic:")
+                    console.warn(res.message);
                 }
             })
             .catch(error => {
+                console.error(`GET topics/${this.state.topicId} failed:`)
                 console.error(error);
+            })
+        get(`topics/${this.state.topicId}/subtopics`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success)
+                    this.setState({ subtopics: res.data, loadingSubtopics: false })
+                else {
+                    notification("Cannot load subtopics", "warning")
+                    console.warn("Cannot load subtopics")
+                    console.warn(res.message)
+                }
+            }).catch(reason => {
+                console.error(`GET topics/${this.state.topicId}/subtopics failed:`)
+                console.error(reason)
             })
     }
 
-
-    showSubtopics() {
-        if (!this.state.data.subTopicList) {
-            return (
-                <div>Subtopics not found</div>
-            )
-        }
-        else if (Array.isArray(this.state.data.subTopicList) && this.state.data.subTopicList.length === 0) {
+    getSubtopicTable() {
+        if (Array.isArray(this.state.subtopics) && this.state.subtopics.length === 0) {
             return (
                 <div>No subtopics</div>
             )
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
-                        {
-                            this.state.data.subTopicList.map((d) => {
-                                const { id, name } = d
+            <table>
+                <tbody>
+                    {
+                        this.state.subtopics.map((d) => {
+                            const { id, name } = d
 
-                                return (
-                                    <tr key={`subtopic-list-item-${id}`}>
-                                        <td>
-                                            <Link onClick={this.forceUpdate} to={{ pathname: "/topic", search: `?id=${id}` }}>{name}</Link>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div>
+                            return (
+                                <tr key={`subtopic-list-item-${id}`}>
+                                    <td>
+                                        <Link onClick={this.forceUpdate} to={{ pathname: "/topic", search: `?id=${id}` }}>{name}</Link>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
         )
     }
 
     render() {
-        if (this.state.loading)
-            return <Loader/>
-        
-        if (!this.state.data || this.state.id === null)
-            return <div>Not found</div>
-        
+        if (!this.state.topic || this.state.topicId === null)
+            return <Loader />
+
         return (
             <div className="topic-wrapper">
                 <div className="topic-holder">
-                    <h2>{this.state.data.name}</h2>
-                    <h5>Description</h5>
-                    <p>{this.state.data.description}</p>
-                    <Link className="btn btn-custom" to={{ pathname: "/edit-topic", search: `?id=${this.state.id}` }} > Edit </Link>
+                    {this.state.loadingTopic
+                        ? <Loader />
+                        : <>
+                            <h2>{this.state.topic.name}</h2>
+                            <h5>Description</h5>
+                            <p>{this.state.topic.description}</p>
+                            <Link className="btn btn-custom" to={{ pathname: "/edit-topic", search: `?id=${this.state.topicId}` }}>Edit</Link>
+                        </>}
+
                     <hr />
                     <h5>Subtopics</h5>
                     <div>
-                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.id}` }}>Add New Subtopic</Link>
+                        <Link className="btn btn-dark" to={{ pathname: "/add-topic", search: `?parent=${this.state.topicId}` }}>Add New Subtopic</Link>
                     </div>
-                    {this.showSubtopics()}
+                    {this.state.loadingSubtopics
+                        ? <Loader />
+                        : this.getSubtopicTable()}
                 </div>
             </div>
         )

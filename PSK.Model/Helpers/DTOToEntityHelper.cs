@@ -4,7 +4,7 @@ namespace PSK.Model.Helpers
 {
     public static class DTOToEntityHelper
     {
-        public static Entities.Day DTOToEntity(this DTO.Day day)
+        public static Entities.Day ToEntity(this DTO.Day day)
         {
             DateTime date = DateTime.Parse(day.Date);
             return new Entities.Day()
@@ -16,7 +16,7 @@ namespace PSK.Model.Helpers
             };
         }
 
-        public static Entities.Recommendation DTOToEntity(this DTO.Recommendation dto)
+        public static Entities.Recommendation ToEntity(this DTO.Recommendation dto)
         {
             return new Entities.Recommendation()
             {

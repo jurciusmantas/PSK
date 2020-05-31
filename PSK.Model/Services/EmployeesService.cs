@@ -18,19 +18,19 @@ namespace PSK.Model.Services
 
         public List<Employee> Get()
         {
-            return _employeeRep.Get().Select(e => e.EntityToDTO()).ToList();
+            return _employeeRep.Get().Select(e => e.ToDTO()).ToList();
         }
 
         public Employee Get(int id)
         {
             Entities.Employee employee = _employeeRep.Get(id);
-            return employee != null ? employee.EntityToDTO() : null;
+            return employee != null ? employee.ToDTO() : null;
         }
 
         public List<Employee> GetSubordinates(int employeeId)
         {
             return _employeeRep.GetSubordinates(employeeId)
-                .Select(e => e.EntityToDTO()).ToList();
+                .Select(e => e.ToDTO()).ToList();
         }
 
         public EmployeeProfile GetProfile(int id)
@@ -44,7 +44,7 @@ namespace PSK.Model.Services
             profile.LeaderName = employee.Leader?.Name;
 
             var activeTopics = _employeeRep.GetEmployeesActiveTopics(id);
-            profile.Topics = activeTopics.Select(t => t.EntityToDTO()).ToList();
+            profile.Topics = activeTopics.Select(t => t.ToDTO()).ToList();
 
             profile.Subordinates = GetSubordinates(id);
 
