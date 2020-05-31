@@ -107,7 +107,7 @@ class UserProfile extends React.Component{
                     { activeButton === 'Subordinates' && profile &&
                         <div className='topic-wrapper'>
                             <div className='topic-holder'>
-                                <Form>
+                                <Form className="general-info-wrapper">
                                     { profile.subordinates.map(subordinate => (
                                         <Row>
                                             <Col sm={4}>

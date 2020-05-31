@@ -140,6 +140,7 @@ class RestrictionsPage extends React.Component {
                                     <td>{restriction.useCount}</td>
                                     <td>
                                         <button
+                                            className="btn btn-custom"
                                             value={restriction.id}
                                             onClick={(e) => {
                                                 if (window.confirm('Are you sure?'))
@@ -310,7 +311,7 @@ class RestrictionsPage extends React.Component {
                         {selectField}
                     </tbody>
                 </table>
-                <input type="submit" value="Submit" />
+                <button type="submit" className='btn btn-custom'>Submit</button>
             </form>
         )
     }
