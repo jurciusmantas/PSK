@@ -5,7 +5,6 @@ import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 import { del } from '../../helpers/request'
 import Select from 'react-select';
-import ReactDOM from "react-dom";
 import { connect } from 'react-redux';
 import { notification } from '../../helpers/notification';
 import '../Topic/TopicPage.css';
@@ -114,7 +113,7 @@ class RestrictionsPage extends React.Component {
         if (this.state.loading2) {
             return <div>Loading...</div>
         }
-        else if (restrictions.length == 0) {
+        else if (restrictions.length === 0) {
             return <div>You do not have any restrictions created</div>
         }
         else {
