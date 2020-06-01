@@ -13,14 +13,14 @@
     width: 100%;
 }
 
-    .topic-holder h5 {
-        margin-bottom: 0px;
-    }
+.topic-holder h5 {
+    margin-bottom: 15px;
+}
 
-    .topic-holder input {
-        width: 482px;
-        height: 40px;
-    }
+.topic-holder input {
+    width: 482px;
+    height: 40px;
+}
 
 textarea {
     resize: none;

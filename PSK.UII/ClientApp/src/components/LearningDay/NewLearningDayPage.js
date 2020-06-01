@@ -38,10 +38,11 @@ class NewLearningDayPage extends React.Component {
             console.error(err)
             this.setState({ topics: [] });
         });
-        get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
+        get(`recommendations?to=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
             else {
+                notification("Cannot load your recommendations :(", "error")
                 console.warn(`Cannot load recommendations for receiver id=${this.props.currentUser.id}:`)
                 console.warn(res.message)
             }
@@ -49,7 +50,7 @@ class NewLearningDayPage extends React.Component {
             console.error(`GET /api/recommendations failed:`);
             console.error(err)
         })
-        get(`restrictions/${this.props.currentUser.id}`)
+        get(`restrictions/active?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {

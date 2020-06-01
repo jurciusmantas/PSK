@@ -39,6 +39,7 @@ namespace PSK.Model.Services
                     };
 
                 var dayToAdd = args.ToEntity();
+                DeletePreviousCompletions(dayToAdd);
                 var error = Validate(dayToAdd);
                 if (!string.IsNullOrEmpty(error))
                     return new ServerResult
@@ -96,9 +97,9 @@ namespace PSK.Model.Services
                 {
                     var dayDto = day.ToDTO();
 
+                    /* If a day in the future with the same topic is completed - mark this day as completed aswell */
                     if (topicCompletions != null && topicCompletions.Count > 0)
                     {
-                        
                         var completionsByTopic = topicCompletions.Where(c => c.TopicId == day.TopicId).ToList();
                         if (completionsByTopic != null && completionsByTopic.Count > 0)
                         {
@@ -107,6 +108,14 @@ namespace PSK.Model.Services
                             if (latestTopicCompletion != null && latestTopicCompletion.CompletedOn >= day.Date)
                                 dayDto.Completed = true;
                         }
+                    }
+
+                    /* Only let complete the furthest day in the future with the same topic */
+                    else
+                    {
+                        var furthestDay = days.Where(d => d.TopicId == day.TopicId).OrderByDescending(d => d.Date).First();
+                        if (furthestDay.Id != day.Id)
+                            dayDto.Completed = true;
                     }
 
                     result.Add(dayDto);
@@ -185,6 +194,22 @@ namespace PSK.Model.Services
             }
 
             return string.Empty;
+        }
+
+        private void DeletePreviousCompletions(Entities.Day day)
+        {
+            var topicsCompletions = _topicCompletionRepository.GetEmployeesCompletions(day.EmployeeId);
+            if (topicsCompletions != null)
+            {
+                var foundTopicCompletions = topicsCompletions.Where(tc => tc.TopicId == day.TopicId);
+                if (foundTopicCompletions != null)
+                {
+                    foreach (var foundTopicCompletion in foundTopicCompletions)
+                    {
+                        _topicCompletionRepository.Delete(foundTopicCompletion.Id);
+                    }
+                }
+            }
         }
     }
 }

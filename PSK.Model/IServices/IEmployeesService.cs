@@ -9,5 +9,6 @@ namespace PSK.Model.IServices
         Employee Get(int id);
         List<Employee> GetSubordinates(int employeeId);
         EmployeeProfile GetProfile(int id, int currentId);
+        ServerResult<EmployeeArgs> UpdateEmployee(EmployeeArgs emplyee);
     }
 }

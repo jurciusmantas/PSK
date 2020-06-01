@@ -4,6 +4,7 @@ using PSK.Model.IServices;
 using PSK.Model.Repository;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace PSK.Model.Services
 {
@@ -54,6 +55,34 @@ namespace PSK.Model.Services
             profile.Subordinates = GetSubordinates(id);
 
             return profile;
+        }
+
+        public ServerResult<EmployeeArgs> UpdateEmployee(EmployeeArgs employee)
+        {
+            try
+            {
+                Entities.Employee dbEmployee = _employeeRep.Get(employee.Id);
+                if (dbEmployee == null)
+                    return new ServerResult<EmployeeArgs>()
+                    {
+                        Success = false,
+                        Message = "Employee does not exist",
+                    };
+
+                dbEmployee.Name = employee.Name;
+                dbEmployee.Password = employee.Password.Hash();
+
+                _employeeRep.Update(dbEmployee);
+                return new ServerResult<EmployeeArgs>() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ServerResult<EmployeeArgs>()
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
         }
     }
 }

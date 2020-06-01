@@ -7,6 +7,7 @@ import {
     Button,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './UserProfile.css';
 import { get } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
@@ -47,6 +48,11 @@ class UserProfile extends React.Component{
                         this.state.name = res.data.name;
                         this.state.email = res.data.email;
                     }
+                    else {
+                        notification("Failed to load profile", "error");
+                        console.warn("Failed to load profile: ");
+                        console.warn(res.message);
+                    }
 
                 })
                 .catch(error => {
@@ -59,19 +65,21 @@ class UserProfile extends React.Component{
         get(`employees/profile/${this.state.userId}?currentEmployeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
-                let profile = this.state.profile;
-
-                if (res.success)
-                    profile = res.data;
-
-                this.setState({ 
-                    profile: profile,
-                    loading: false
-                })
+                if (res.success) {
+                    this.setState({
+                        profile: res.data,
+                        loading: false
+                    })
+                }
+                else {
+                    notification("Cannot load employee data :(", "error")
+                    console.warn("Cannot load employee data")
+                    console.warn(res.message)
+                }
             })
             .catch(error => {
-                console.log(error);
-                notification('Failed to load your profile', 'error', 'bottom-center');
+                console.error(`GET employees/profile/${this.props.currentUser.id} failed:`)
+                console.error(error);
                 this.setState({ loading: false })
             })
     }
@@ -125,7 +133,11 @@ class UserProfile extends React.Component{
                             </Row>
                         }
                         </Form>
-                    </div>
+                        <div className="row">
+                            <Link className="btn btn-custom" to={{ pathname: "/edit-user-profile" }}>Edit info</Link>
+                        </div>
+                       
+                    </div>                    
                 </div>
                 <div>
                     <div className='user-profile-buttons-holder'>

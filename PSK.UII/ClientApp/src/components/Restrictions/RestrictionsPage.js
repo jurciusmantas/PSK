@@ -48,6 +48,7 @@ class RestrictionsPage extends React.Component {
                 }
             })
             .catch(reason => {
+                console.error(`GET restrictions/${this.props.currentUser.id} failed: `);
                 console.error(reason);
             })
         get(`restrictions?employeeId=${this.props.currentUser.id}`)
@@ -66,6 +67,7 @@ class RestrictionsPage extends React.Component {
                 }
             })
             .catch(reason => {
+                console.error(`GET restrictions/${this.props.currentUser.id} failed: `);
                 console.error(reason);
             })
         get(`employees/${this.props.currentUser.id}/subordinates`)

@@ -50,5 +50,16 @@ namespace PSK.UI.Controllers
         {
             return _topicService.MarkAsCompleted(args);
         }
+
+        [HttpGet("{id}/learnedsubordinates")]
+        public ServerResult<List<LearnedSubordinatesListItem>> LoadLearnedSubordinates([FromRoute(Name = "id")] int id/*[FromQuery(Name = "employeeId")] int employeeId */)
+        {
+            int? employeeId = null;
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+
+            return _topicService.LoadLearnedSubordinates(employeeId, id);
+        }
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
 import { Router, Route, Switch } from 'react-router-dom';
-import { getCookie } from '../helpers/cookie';
+import { getCookie, removeCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 import { createBrowserHistory } from 'history';
 
@@ -24,6 +24,7 @@ import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 import RestrictionsPage from '../components/Restrictions/RestrictionsPage';
 import UserProfile from '../components/UserProfile/UserProfile';
 import Loader from '../components/Loader/loader';
+import EditUserProfile from '../components/UserProfile/EditUserProfile';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -52,6 +53,7 @@ class Routes extends React.Component {
                 { component: NewLearningDayPage, path: "/add-day" },
                 { component: RestrictionsPage, path: "/restrictions" },
                 { component: UserProfile, path: "/user-profile" },
+                { component: EditUserProfile, path: "/edit-user-profile" },
             ],
             loading: true
         }
@@ -68,6 +70,10 @@ class Routes extends React.Component {
                         if (history.location.pathname === "/")
                             history.push('/home');
                         this.setState({ loading: false });
+                    }
+                    else {
+                        removeCookie('AuthToken');
+                        window.location.reload();
                     }
                 })
                 .catch(error => {

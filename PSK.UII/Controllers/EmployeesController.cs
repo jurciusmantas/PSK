@@ -45,5 +45,11 @@ namespace PSK.UI.Controllers
                 Data = _employeesService.GetProfile(id, currentEmployeeId)
             };
         }
+
+        [HttpPut]
+        public ServerResult<EmployeeArgs> UpdateEmployee([FromBody] EmployeeArgs employee)
+        {
+            return _employeesService.UpdateEmployee(employee);
+        }
     }
 }
