@@ -46,9 +46,14 @@ class InvitePage extends React.Component {
                 }
                 else {
                     notification('Invite could not be sent', 'error');
+                    console.warn("Could not send an invitation");
+                    console.warn(res.message);
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`POST invite failed`);
+                console.error(error);
+            });
     }
 
     handleKeyPress(e) {

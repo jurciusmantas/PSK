@@ -26,13 +26,19 @@ class AddRecommendationPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topics').then(res => res.json())
+        get('topics')
+            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loadingTopics: false })
                     if (res.data != null && res.data.length > 0) {
                         this.setState({ topicId: res.data[0].id });
                     }
+                }
+                else {
+                    notification("Could not load topics", "error");
+                    console.warn(`Cannot load topics:`);
+                    console.warn(res.message);
                 }
             })
             .catch(error => {
@@ -47,6 +53,11 @@ class AddRecommendationPage extends React.Component {
                     this.setState({ subordinates: res.data, loadingSubordinates: false });
                     if (res.data != null && res.data.length > 0)
                         this.setState({ subordinateId: res.data[0].id });
+                }
+                else {
+                    notification("Could not load subordinates", "error");
+                    console.warn(`Cannot load subordinates:`);
+                    console.warn(res.message);
                 }
 
             })

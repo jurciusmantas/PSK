@@ -44,6 +44,11 @@ class UserProfile extends React.Component{
                         this.state.name = res.data.name;
                         this.state.email = res.data.email;
                     }
+                    else {
+                        notification("Failed to load profile", "error");
+                        console.warn("Failed to load profile: ");
+                        console.warn(res.message);
+                    }
 
                 })
                 .catch(error => {
