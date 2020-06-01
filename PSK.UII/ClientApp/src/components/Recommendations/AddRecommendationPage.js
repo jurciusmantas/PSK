@@ -34,7 +34,6 @@ class AddRecommendationPage extends React.Component {
                     if (res.data != null && res.data.length > 0) {
                         this.setState({ topicId: res.data[0].id });
                     }
-                    console.log(res);
                 }
                 else {
                     notification("Could not load topics", "error");
