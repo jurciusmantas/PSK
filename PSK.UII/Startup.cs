@@ -68,7 +68,7 @@ namespace PSK.UI
             //    .UseMySql("Server=localhost;Database=DB;Password=PASS;User=USER"));
             services.AddDbContext<PSKDbContext>(options => options
                 .UseLazyLoadingProxies()
-                .UseMySql(ConfigurationManager.AppSettings["DBConnectionString"]));
+                .UseMySql("Server = localhost; Database = PSK_DB; Password = Lukas123456; User = root"));
             InitializeContainer();
             InjectRepositories();
         }

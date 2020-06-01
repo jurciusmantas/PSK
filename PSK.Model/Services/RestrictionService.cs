@@ -63,7 +63,7 @@ namespace PSK.Model.Services
                 return new ServerResult()
                 {
                     Success = false,
-                    Message = "Something wrong happened while creationing restriction"
+                    Message = "Something wrong happened while creating restriction"
                 };
             }
         }
