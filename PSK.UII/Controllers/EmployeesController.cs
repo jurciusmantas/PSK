@@ -37,12 +37,12 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet("profile/{id}")]
-        public ServerResult<EmployeeProfile> Get([FromRoute] int id)
+        public ServerResult<EmployeeProfile> Get([FromRoute] int id, [FromQuery(Name = "currentEmployeeId")] int currentEmployeeId)
         {
             return new ServerResult<EmployeeProfile>()
             {
                 Success = true,
-                Data = _employeesService.GetProfile(id)
+                Data = _employeesService.GetProfile(id, currentEmployeeId)
             };
         }
     }

@@ -33,11 +33,16 @@ namespace PSK.Model.Services
                 .Select(e => e.ToDTO()).ToList();
         }
 
-        public EmployeeProfile GetProfile(int id)
+        public EmployeeProfile GetProfile(int id, int currentId)
         {
             var profile = new EmployeeProfile();
 
-            var employee = _employeeRep.Get(id);
+
+            var employee = id != currentId ? _employeeRep.GetAllSubordinates(currentId)
+                                    .Where(x => x.Id == id).FirstOrDefault() : _employeeRep.Get(id);
+
+            
+           // var employee = _employeeRep.Get(id);
             if (employee == null)
                 return null;
 

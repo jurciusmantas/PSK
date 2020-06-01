@@ -13,21 +13,24 @@ import { notification } from '../../helpers/notification';
 import Loader from '../Loader/loader';
 import TopicPage from '../Topic/TopicPage';
 import '../Topic/TopicPage.css';
+import { Link } from 'react-router-dom';
 
 class UserProfile extends React.Component{
     constructor(props){
         super(props);
         const queryParams = new URLSearchParams(window.location.search);
+        
         this.state = {
             loading: true,
             profile: null,
             buttons: ['Subordinates', 'Topics'],
             activeButton: 'Subordinates',
             userId: queryParams.get("id"),
-            name: null,
+          name  : null,
             email: null
 
         }
+        this.updateProfile = this.updateProfile.bind(this)
     }
 
     componentDidMount() {
@@ -53,7 +56,7 @@ class UserProfile extends React.Component{
                 })
         }
 
-        get(`employees/profile/${this.state.userId}`)
+        get(`employees/profile/${this.state.userId}?currentEmployeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 let profile = this.state.profile;
@@ -72,6 +75,12 @@ class UserProfile extends React.Component{
                 this.setState({ loading: false })
             })
     }
+
+    updateProfile() {
+
+    }
+
+ 
 
     render(){
         const {
@@ -139,7 +148,7 @@ class UserProfile extends React.Component{
                                             <Col sm={4}>
                                                 <Row sm={4}>
                                                     <Label sm={2}><b>Name: </b></Label>
-                                                    <Label sm={2}>{subordinate.name}</Label>
+                                                    <Label sm={2}><Link onClick={this.updateProfile} to={`user-profile?id=${subordinate.id}`}>{subordinate.name}</Link></Label>
                                                 </Row>
                                             </Col>
                                         </Row>
