@@ -96,4 +96,21 @@ button.add-day-btn {
 
 .subordinate-day a {
     color: #343a40;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subordinate-day a:first-child{
+    max-width: 60%;
+}
+
+.subordinate-day a:last-child{
+    max-width: 40%;
+}
+
+.hide-subordinate-days, .hide-subordinate-days:hover {
+    background-color: inherit;
+    color: #343a40;
+    border: 2px solid #343a40;
 }
