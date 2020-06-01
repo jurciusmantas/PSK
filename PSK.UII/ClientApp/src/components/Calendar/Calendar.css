@@ -63,6 +63,17 @@ button.add-day-btn {
 
 .user-day a {
     color: whitesmoke;
+    color: #343a40;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.user-day a:first-child{
+    max-width: 60%;
+}
+
+.user-day a:last-child{
+    max-width: 40%;
 }
 
 .user-day > svg {
