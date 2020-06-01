@@ -36,9 +36,9 @@ class AddRecommendationPage extends React.Component {
                     }
                 }
                 else {
-                    notification("Could not load topics", "error");
-                    console.warn(`Cannot load topics:`);
-                    console.warn(res.message);
+                    notification("Cannot load topics :(", "error");
+                    console.warn("Cannot load topics")
+                    console.warn(res.message)
                 }
             })
             .catch(error => {
@@ -55,11 +55,10 @@ class AddRecommendationPage extends React.Component {
                         this.setState({ subordinateId: res.data[0].id });
                 }
                 else {
-                    notification("Could not load subordinates", "error");
-                    console.warn(`Cannot load subordinates:`);
+                    notification("Cannot load subordinates :(", "error");
+                    console.warn("Cannot load subordinates");
                     console.warn(res.message);
                 }
-
             })
             .catch(reason => {
                 console.error(`GET employees/${this.props.currentUser.id}/subordinates failed:`);

@@ -74,7 +74,7 @@ namespace PSK.Model.Services
 
                 EmployeesToken employeesToken = _employeesTokenRepository.FindByToken(token);
 
-                if (employeesToken.ExpiredAt < DateTime.Now)
+                if (employeesToken == null || employeesToken.ExpiredAt < DateTime.Now)
                 {
                     return new ServerResult<User>
                     {

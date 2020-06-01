@@ -62,19 +62,21 @@ class UserProfile extends React.Component{
         get(`employees/profile/${this.state.userId}`)
             .then(res => res.json())
             .then(res => {
-                let profile = this.state.profile;
-
-                if (res.success)
-                    profile = res.data;
-
-                this.setState({ 
-                    profile: profile,
-                    loading: false
-                })
+                if (res.success) {
+                    this.setState({
+                        profile: res.data,
+                        loading: false
+                    })
+                }
+                else {
+                    notification("Cannot load employee data :(", "error")
+                    console.warn("Cannot load employee data")
+                    console.warn(res.message)
+                }
             })
             .catch(error => {
-                console.log(error);
-                notification('Failed to load your profile', 'error', 'bottom-center');
+                console.error(`GET employees/profile/${this.props.currentUser.id} failed:`)
+                console.error(error);
                 this.setState({ loading: false })
             })
     }
