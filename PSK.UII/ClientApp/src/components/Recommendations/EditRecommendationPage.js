@@ -40,6 +40,7 @@ class EditRecommendationsPage extends React.Component {
                     })
                 }
                 else {
+                    notification("Could not load the recommendation", "error");
                     console.warn(`Cannot get recommendation:`);
                     console.warn(res.message);
                 }
@@ -55,6 +56,7 @@ class EditRecommendationsPage extends React.Component {
                     this.setState({ topics: res.data, loadingTopics: false })
                 }
                 else {
+                    notification("Could not load topics", "error");
                     console.warn(`Cannot load topics:`);
                     console.warn(res.message);
                 }
@@ -70,6 +72,7 @@ class EditRecommendationsPage extends React.Component {
                     this.setState({ subordinates: res.data, loadingSubordinates: false });
                 }
                 else {
+                    notification("Could not load your subordinates", "error");
                     console.warn('Cannot load subordinates:');
                     console.warn(res.message);
                 }

@@ -6,6 +6,7 @@ namespace PSK.Model.Repository
 {
     public interface IRestrictionRepository : IRepository<Restriction>
     {
-        public (List<Restriction>, List<int>) GetRestrictionsTo(int creatorId);
+        public (List<Restriction>, List<List<string>>) GetRestrictionsTo(int creatorId);
+        public Restriction GetLastGlobal();
     }
 }

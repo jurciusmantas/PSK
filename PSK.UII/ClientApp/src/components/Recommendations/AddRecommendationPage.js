@@ -26,7 +26,8 @@ class AddRecommendationPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topics').then(res => res.json())
+        get('topics')
+            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loadingTopics: false })

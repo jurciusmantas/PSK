@@ -46,9 +46,11 @@ class RegistrationPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
+                    notification('Registered successfully');
                     this.props.history.push('/');
                 }
                 else {
+                    notification('Registration failed', 'error');
                     console.warn('Registration failed:');
                     console.warn(res.message);
                 }

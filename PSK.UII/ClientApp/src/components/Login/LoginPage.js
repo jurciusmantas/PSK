@@ -48,9 +48,14 @@ class LoginPage extends React.Component {
                 }
                 else {
                     notification('Wrong username or password', 'error');
+                    console.warn('Wrong username or password');
+                    console.warn(res.message)
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`POST /api/login failed:`);
+                console.error(error);
+            });
     }
 
     render() {

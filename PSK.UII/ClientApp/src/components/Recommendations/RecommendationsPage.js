@@ -30,10 +30,14 @@ class RecommendationsPage extends React.Component {
                     this.setState({ recommendedTo: res.data, loadingTo: false })
                 }
                 else {
+                    notification("Could not load your recommendations", "error");
                     console.warn(`GET recommendations?to=${employeeId} failed: ${res.message}`);
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`GET recommendations?to=${employeeId} failed: `);
+                console.error(error);
+            });
 
         get(`recommendations?by=${employeeId}`)
             .then(res => res.json())
@@ -42,10 +46,14 @@ class RecommendationsPage extends React.Component {
                     this.setState({ recommendedBy: res.data, loadingBy: false })
                 }
                 else {
+                    notification("Could not load your created recommendations", "error");
                     console.warn(`GET recommendations?by=${employeeId} failed: ${res.message}`);
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.warn(`GET recommendations?by=${employeeId} failed: `);
+                console.error(error);
+            });
     }
 
     showRecommendationList() {
@@ -53,7 +61,7 @@ class RecommendationsPage extends React.Component {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
-                    <td>{recommendation.creatorName}</td>
+                    <td><Link to={`user-profile?id=${recommendation.creatorId}`}>{recommendation.creatorName}</Link></td>                  
                 </tr>
             )
         })
@@ -64,7 +72,7 @@ class RecommendationsPage extends React.Component {
             return (
                 <tr key={index}>
                     <td><Link to={`topic?id=${recommendation.topicId}`}>{recommendation.topicName}</Link></td>
-                    <td><Link to={`employee?id=${recommendation.receiverId}`}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
+                    <td><Link to={`user-profile?id=${recommendation.receiverId}`}>{recommendation.receiverName}</Link></td>{/* TODO change into normal link after employees are done */}
                     <td><button className="btn btn-custom" onClick={() => this.deleteRecommendation(recommendation.id)}>Delete</button></td>
                     <td><Link to={`edit-recommendation?id=${recommendation.id}`} className="btn btn-custom">Edit</Link></td>
                 </tr>
@@ -82,8 +90,16 @@ class RecommendationsPage extends React.Component {
                         recommendedBy: this.state.recommendedBy.filter(r => r.id !== id)
                     });
                 }
+                else {
+                    notification("Could not delete the recommendation", "error");
+                    console.warn(`GET recommendations/${id} failed: `);
+                    console.warn(res.message);
+                }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.warn(`DELETE recommendations/${id} failed: `);
+                console.error(error);
+            });
     }
 
     render() {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSK.Model.DTO;
-using PSK.Model.Services;
+using PSK.Model.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,24 +19,45 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "id")] int employeeId)
+        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "employeeId")] int employeeId)
         {
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if(currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
+            
             return _restrictionService.GetRestrictionsTo(employeeId);
         }
-        [HttpGet("{id}")]
-        public ServerResult<Restriction> GetRestriction([FromRoute(Name = "id")] int employeeId)
+        [HttpGet("active")]
+        public ServerResult<Restriction> GetRestriction([FromQuery(Name = "employeeId")] int employeeId)
         {
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
             return _restrictionService.GetRestrictionFrom(employeeId);
         }
 
         [HttpDelete]
-        public ServerResult DeleteRestriction([FromQuery(Name = "id")]int id)
+        public ServerResult DeleteRestriction([FromQuery(Name = "id")] int id, [FromQuery(Name = "employeeId")] int employeeId)
         {
-            return _restrictionService.DeleteRestriction(id);
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
+            return _restrictionService.DeleteRestriction(id, employeeId);
         }
         [HttpPost]
         public ServerResult CreateRestriction([FromBody] RestrictionArgs restrictionArgs)
         {
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                restrictionArgs.CreatorId = int.Parse(currEmployeeIdObject.ToString());
+            }
             return _restrictionService.CreateRestriction(restrictionArgs);
         }
 

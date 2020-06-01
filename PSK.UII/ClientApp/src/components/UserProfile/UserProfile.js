@@ -7,6 +7,7 @@ import {
     Button,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './UserProfile.css';
 import { get } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
@@ -17,17 +18,48 @@ import '../Topic/TopicPage.css';
 class UserProfile extends React.Component{
     constructor(props){
         super(props);
-
+        const queryParams = new URLSearchParams(window.location.search);
         this.state = {
             loading: true,
             profile: null,
-            buttons: ['Subordinates', 'My Topics'],
-            activeButton: 'Subordinates'
+            buttons: ['Subordinates', 'Topics'],
+            activeButton: 'Subordinates',
+            userId: queryParams.get("id"),
+            name: null,
+            email: null
+
         }
     }
 
-    componentDidMount(){
-        get(`employees/profile/${this.props.currentUser.id}`)
+    componentDidMount() {
+        if (this.state.userId == null) {
+            this.state.userId = this.props.currentUser.id;
+            this.state.name = this.props.currentUser.name;
+            this.state.email = this.props.currentUser.email;
+        } else {
+            get(`employees/${this.state.userId}`)
+                .then(res => res.json())
+                .then(res => {
+
+                    if (res.success) {
+                        this.state.name = res.data.name;
+                        this.state.email = res.data.email;
+                    }
+                    else {
+                        notification("Failed to load profile", "error");
+                        console.warn("Failed to load profile: ");
+                        console.warn(res.message);
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    notification('Failed to load profile', 'error', 'bottom-center');
+                    this.setState({ loading: false })
+                })
+        }
+
+        get(`employees/profile/${this.state.userId}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -69,7 +101,7 @@ class UserProfile extends React.Component{
                                 <Col sm={4}>
                                     <Row sm={4}>
                                         <Label sm={2}><b>Name: </b></Label>
-                                        <Label sm={2}>{this.props.currentUser.name}</Label>
+                                        <Label sm={2}>{this.state.name}</Label>
                                     </Row>
                                 </Col>
                             </Row>
@@ -77,7 +109,7 @@ class UserProfile extends React.Component{
                                 <Col sm={4}>
                                     <Row sm={4}>
                                         <Label sm={2}><b>Email: </b></Label>
-                                        <Label sm={2}>{this.props.currentUser.email}</Label>
+                                        <Label sm={2}>{this.state.email}</Label>
                                     </Row>
                                 </Col>
                         </Row>
@@ -92,7 +124,11 @@ class UserProfile extends React.Component{
                             </Row>
                         }
                         </Form>
-                    </div>
+                        <div className="row">
+                            <Link className="btn btn-custom" to={{ pathname: "/edit-user-profile" }}>Edit info</Link>
+                        </div>
+                       
+                    </div>                    
                 </div>
                 <div>
                     <div className='user-profile-buttons-holder'>
@@ -109,7 +145,7 @@ class UserProfile extends React.Component{
                     { activeButton === 'Subordinates' && profile &&
                         <div className='topic-wrapper'>
                             <div className='topic-holder'>
-                                <Form>
+                                <Form className="general-info-wrapper">
                                     { profile.subordinates.map(subordinate => (
                                         <Row>
                                             <Col sm={4}>
@@ -124,7 +160,7 @@ class UserProfile extends React.Component{
                             </div>
                         </div>
                     }
-                    { activeButton === 'My Topics' && profile &&
+                    { activeButton === 'Topics' && profile &&
                         <TopicPage data={profile.topics} />
                     }
                 </div>
