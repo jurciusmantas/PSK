@@ -53,27 +53,23 @@ button.add-day-btn {
 .user-day {
     border: 2px solid #343a40;
     background: #343a40;
-    padding: 1px;
     margin-top: 1px;
     margin-left: 3px;
     margin-right: 3px;
     font-size: small;
-    padding: 3px
+    padding: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .user-day a {
     color: whitesmoke;
-    color: #343a40;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.user-day a:first-child{
-    max-width: 60%;
-}
-
-.user-day a:last-child{
-    max-width: 40%;
+    text-overflow: ellipsis;
+    max-width: 80%;
 }
 
 .user-day > svg {
@@ -94,7 +90,6 @@ button.add-day-btn {
     border: 2px solid #343a40;
     color: #343a40;
     font-size: small;
-    padding: 1px;
     margin-top: 1px;
     margin-left: 3px;
     margin-right: 3px;
