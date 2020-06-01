@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PSK.Model.Services
+namespace PSK.Model.IServices
 {
     public interface IRestrictionService
     {
         ServerResult CreateRestriction(RestrictionArgs restrictionArgs);
-        ServerResult CreateGlobalRestriction();
         ServerResult<List<Restriction>> GetRestrictionsTo(int employeeId);
         ServerResult<Restriction> GetRestrictionFrom(int employeeId);
-        ServerResult DeleteRestriction(int id);
+        ServerResult DeleteRestriction(int id, int employeeId);
 
     }
 }

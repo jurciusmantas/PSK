@@ -22,8 +22,12 @@ namespace PSK.UI
 
             if (authHeader != null && authHeader.StartsWith("Token"))
             {
-                if (!_tokenValidator.Validate(authHeader.Substring("Token ".Length).Trim()))
+                var employeeId = _tokenValidator.Validate(authHeader.Substring("Token ".Length).Trim());
+                if (employeeId < 0)
                     _httpContextAccessor.HttpContext.Response.StatusCode = 401;
+                else
+                    _httpContextAccessor.HttpContext.Items.Add("currentEmployeeId", employeeId);
+                
             }
             else
             {

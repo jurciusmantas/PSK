@@ -46,13 +46,18 @@ namespace PSK.DB.SqlRepository
             throw new NotImplementedException();
         }
 
-        public (List<Restriction>, List<int>) GetRestrictionsTo(int creatorId)
+        public Restriction GetLastGlobal()
+        {
+            return context.Restrictions.Where(r => r.Global).OrderByDescending(r => r.CreationDate).First();
+        }
+
+        public (List<Restriction>, List<List<string>>) GetRestrictionsTo(int creatorId)
         {
             var restrictions = context.Restrictions.Where(restriction => restriction.CreatorId == creatorId).ToList();
             List<DateTime> dateTimes = restrictions.Select(r => r.CreationDate).ToList();
-            var useCounts = GetActiveUseCounts(dateTimes);
+            var useCountNames = GetActiveUseCounts(dateTimes);
             
-            return (restrictions, useCounts);
+            return (restrictions, useCountNames);
         }
 
         public Restriction Update(Restriction updatedRestriction)
@@ -63,37 +68,44 @@ namespace PSK.DB.SqlRepository
             return updatedRestriction;
         }
 
-        private List<int> GetActiveUseCounts(List<DateTime> restrictionCreationDates)
+        private List<List<string>> GetActiveUseCounts(List<DateTime> restrictionCreationDates)
         {
             context.Database.OpenConnection();
-            List<int> activeUseCounts = new List<int>();
+            List<List<string>> allActiveUseCountNames = new List<List<string>>();
             using (var connection = context.Database.GetDbConnection())
             {
-                using var command = connection.CreateCommand();
-                command.CommandText =
-                    @"SELECT COUNT(*) FROM 
+                var commandText = 
+                    @"SELECT * FROM 
                     (   
-                        SELECT Max(r.CreationDate) AS maxCrDate
+                        SELECT Max(r.CreationDate) AS maxCrDate, e.Name
                         FROM employeerestriction AS er
                         INNER JOIN restrictions AS r ON r.Id = er.RestrictionId
+                        INNER JOIN employees AS e ON e.Id = er.EmployeeId
                         GROUP BY er.EmployeeId
                     ) AS temp
                     WHERE maxCrDate = @date;";
-                foreach(DateTime date in restrictionCreationDates)
+               
+                foreach (DateTime date in restrictionCreationDates)
                 {
-                    if(command.Parameters.Count == 0)
+                    using var command = connection.CreateCommand();
+                    command.CommandText = commandText;
+                    command.Parameters.Add(new MySqlParameter("date", date));
+                    var reader = command.ExecuteReader();
+                    List<string> activeUseCountsNames = new List<string>();
+                    if (reader.HasRows)
                     {
-                        command.Parameters.Add(new MySqlParameter("date", date));
+                        while (reader.Read())
+                        {
+                            string name = reader.GetString(1);
+                            activeUseCountsNames.Add(name);
+                        }
                     }
-                    else
-                    {
-                        command.Parameters[0].Value = date;
-                    }
-                    var activeUseCount = command.ExecuteScalar().ToString();
-                    activeUseCounts.Add(int.Parse(activeUseCount));
+                    allActiveUseCountNames.Add(activeUseCountsNames);
+                    reader.Close();
                 }
+      
             }
-            return activeUseCounts;
+            return allActiveUseCountNames;
             
         }
     }

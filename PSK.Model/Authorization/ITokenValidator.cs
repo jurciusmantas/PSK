@@ -2,6 +2,6 @@
 {
     public interface ITokenValidator
     {
-        bool Validate(string token);
+        int Validate(string token);
     }
 }
