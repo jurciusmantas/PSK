@@ -11,5 +11,6 @@ namespace PSK.Model.IServices
         ServerResult<Topic> UpdateTopic(Topic topic);
         ServerResult MarkAsCompleted(TopicCompletion args);
         ServerResult<List<Topic>> GetSubtopics(int id);
+        ServerResult<List<LearnedSubordinatesListItem>> LoadLearnedSubordinates(int? employeeId, int topicId);
     }
 }

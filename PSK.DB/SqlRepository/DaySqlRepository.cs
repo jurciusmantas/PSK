@@ -1,6 +1,7 @@
 ﻿using PSK.DB.Contexts;
 using PSK.Model.Entities;
 using PSK.Model.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,6 +54,14 @@ namespace PSK.DB.SqlRepository
             day.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return updatedDay;
+        }
+
+        public Day GetEmployeeFeatureDayByTopic(int topicId, int employeeId)
+        {
+            return context.Days
+                .Where(d => d.TopicId == topicId && d.EmployeeId == employeeId && d.Date >= DateTime.Now)
+                .OrderBy(d => d.Date)
+                .FirstOrDefault();
         }
     }
 }

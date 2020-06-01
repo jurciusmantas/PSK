@@ -1,4 +1,5 @@
-﻿using PSK.DB.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using PSK.DB.Contexts;
 using PSK.Model.Entities;
 using PSK.Model.Repository;
 using System.Collections.Generic;
@@ -54,6 +55,11 @@ namespace PSK.DB.SqlRepository
         public List<TopicCompletion> GetEmployeesCompletions(int employeeId)
         {
             return context.TopicCompletions.Where(c => c.EmployeeId == employeeId).ToList();
+        }
+
+        public List<TopicCompletion> GetEmployeesTopicCompletions(List<int> employeesIds, int topicId)
+        {
+            return context.TopicCompletions.Where(tc => employeesIds.Contains(tc.EmployeeId) && tc.TopicId == topicId).ToList();
         }
     }
 }
