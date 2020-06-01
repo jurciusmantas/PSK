@@ -23,37 +23,49 @@ namespace PSK.Model.Services
 
         public ServerResult CreateRestriction(RestrictionArgs restrictionArgs)
         {
-            var employee = _employeeRepository.Get(restrictionArgs.CreatorId);
-            String msg = ValidateRestrictionArgs(restrictionArgs, employee);
-            if (msg != null)
+            try
             {
-                return new ServerResult { Message = msg, Success = false };
+                var employee = _employeeRepository.Get(restrictionArgs.CreatorId);
+                String msg = ValidateRestrictionArgs(restrictionArgs, employee);
+                if (msg != null)
+                {
+                    return new ServerResult { Message = msg, Success = false };
+                }
+                Entities.Restriction restriction = restrictionArgs.ToEntity();
+                int applyTo = restrictionArgs.ApplyTo;
+                List<Entities.Employee> employees;
+                string foundNames;
+                switch (applyTo)
+                {
+                    case 1:
+                        employees = _employeeRepository.GetAllSubordinates(restrictionArgs.CreatorId);
+                        restriction.Global = employee.LeaderId == null;
+                        CreateRestrictionForEmployees(restriction, employees);
+                        break;
+                    case 2:
+                        employees = _employeeRepository.GetSubordinates(restrictionArgs.CreatorId);
+                        CreateRestrictionForEmployees(restriction, employees);
+                        break;
+                    default:
+                        (employees, foundNames) = FindByIds(restrictionArgs.UserIds);
+                        CreateRestrictionForEmployees(restriction, employees);
+                        if (foundNames.Length > 0)
+                        {
+                            return new ServerResult { Message = "Restriction was added only for those employees " + foundNames, Success = true };
+                        }
+                        break;
+                }
+                return new ServerResult { Message = "Success", Success = true };
             }
-            Entities.Restriction restriction = restrictionArgs.DTOToEntity();
-            int applyTo = restrictionArgs.ApplyTo;
-            List<Entities.Employee> employees;
-            string foundNames;
-            switch (applyTo)
+            catch(Exception e)
             {
-                case 1:
-                    employees = _employeeRepository.GetAllSubordinates(restrictionArgs.CreatorId);
-                    restriction.Global = employee.LeaderId == null;
-                    CreateRestrictionForEmployees(restriction, employees);
-                    break;
-                case 2:
-                    employees = _employeeRepository.GetSubordinates(restrictionArgs.CreatorId);
-                    CreateRestrictionForEmployees(restriction, employees);
-                    break;
-                default:
-                    (employees, foundNames) = FindByIds(restrictionArgs.UserIds);
-                    CreateRestrictionForEmployees(restriction, employees);
-                    if (foundNames.Length > 0)
-                    {
-                        return new ServerResult { Message = "Restriction was added only for those employees " + foundNames, Success = true };
-                    }
-                    break;
+                Console.WriteLine(e.Message);
+                return new ServerResult()
+                {
+                    Success = false,
+                    Message = "Something wrong happened while creationing restriction"
+                };
             }
-            return new ServerResult { Message = "Success", Success = true };
         }
 
         private string ValidateRestrictionArgs(RestrictionArgs restrictionArgs, Entities.Employee employee)
@@ -126,24 +138,48 @@ namespace PSK.Model.Services
 
         public ServerResult DeleteRestriction(int id, int employeeId)
         {
-            string msg = ValidateRestrictionDeletion(id, employeeId);
-            if(msg != null)
+            try
             {
-                return new ServerResult { Message = msg, Success = false };
+                string msg = ValidateRestrictionDeletion(id, employeeId);
+                if (msg != null)
+                {
+                    return new ServerResult { Message = msg, Success = false };
+                }
+                _restrictionRepository.Delete(id);
+                return new ServerResult { Message = "Success", Success = true };
             }
-            _restrictionRepository.Delete(id);
-            return new ServerResult { Message = "Success", Success = true };
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "Something wrong happened while deleting restriction"
+                };
+            }
         }
 
         public ServerResult<List<DTO.Restriction>> GetRestrictionsTo(int employeeId)
-        { 
-            (Entities.Employee employee, string msg) = ValidateEmployee(employeeId);
-            if (employee == null)
+        {
+            try
             {
-                return new ServerResult<List<DTO.Restriction>> { Message = msg, Success = false };
+                (Entities.Employee employee, string msg) = ValidateEmployee(employeeId);
+                if (employee == null)
+                {
+                    return new ServerResult<List<DTO.Restriction>> { Message = msg, Success = false };
+                }
+                var restrictionsTo = GetRestrictions(employeeId);
+                return new ServerResult<List<DTO.Restriction>> { Data = restrictionsTo, Success = true, Message = "Success" };
             }
-            var restrictionsTo = GetRestrictions(employeeId);
-            return new ServerResult<List<DTO.Restriction>> { Data = restrictionsTo, Success = true, Message = "Success" };
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new ServerResult<List<DTO.Restriction>>
+                {
+                    Success = false,
+                    Message = "Something wrong happened while getting your restrictions"
+                };
+            }
 
         }
 
@@ -153,7 +189,7 @@ namespace PSK.Model.Services
             List<DTO.Restriction> restrictionsResult = new List<DTO.Restriction>();
             for(int i = 0; i < restrictions.Count; i++)
             {
-                restrictionsResult.Add(restrictions[i].EntityToDTO(useCountNames[i]));
+                restrictionsResult.Add(restrictions[i].ToDTO(useCountNames[i]));
             }
             return restrictionsResult;
         }
@@ -174,15 +210,27 @@ namespace PSK.Model.Services
 
         public ServerResult<DTO.Restriction> GetRestrictionFrom(int employeeId)
         {
-            (Entities.Employee employee, String msg) = ValidateEmployee(employeeId);
-            if (employee == null)
+            try
             {
-                return new ServerResult<DTO.Restriction> { Message = msg, Success = false };
+                (Entities.Employee employee, String msg) = ValidateEmployee(employeeId);
+                if (employee == null)
+                {
+                    return new ServerResult<DTO.Restriction> { Message = msg, Success = false };
+                }
+                else
+                {
+                    var restrictionFrom = GetRestriction(employee);
+                    return new ServerResult<DTO.Restriction> { Data = restrictionFrom, Success = true, Message = "Success" };
+                }
             }
-            else
+            catch(Exception e)
             {
-                var restrictionFrom = GetRestriction(employee);
-                return new ServerResult<DTO.Restriction> { Data = restrictionFrom, Success = true, Message = "Success" };
+                Console.WriteLine(e.Message);
+                return new ServerResult<DTO.Restriction>
+                {
+                    Success = false,
+                    Message = "Something wrong happened while getting your active restriction"
+                };
             }
         }
         private DTO.Restriction GetRestriction(Entities.Employee employee)
@@ -192,7 +240,7 @@ namespace PSK.Model.Services
             if (employeeRestrictions != null && employeeRestrictions.Count > 0)
             {
                 EmployeeRestriction employeeRestriction = employeeRestrictions.OrderByDescending(er => er.Restriction.CreationDate).First();
-                restrictionResult = employeeRestriction.Restriction.EntityToDTO();
+                restrictionResult = employeeRestriction.Restriction.ToDTO();
             }
             return restrictionResult;
         }

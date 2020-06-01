@@ -54,7 +54,6 @@ class RestrictionsPage extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    console.log(res.data);
                     this.setState({
                         restrictions: res.data,
                         loading2: false
@@ -215,7 +214,7 @@ class RestrictionsPage extends React.Component {
                     window.location.reload();
                 }
                 else {
-                    notification("Couldn't get the response", 'error');
+                    notification(res.message, 'error');
                 }
             })
             .catch(error => {

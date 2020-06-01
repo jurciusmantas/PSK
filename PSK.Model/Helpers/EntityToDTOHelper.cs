@@ -54,21 +54,8 @@ namespace PSK.Model.Helpers
             };
         }
 
-        public static DTO.Restriction EntityToDTO(this Entities.Restriction restriction, List<string> useCountNames = null)
+        public static DTO.Restriction ToDTO(this Entities.Restriction restriction, List<string> useCountNames = null)
         {
-            /*string useCountNamesString = null;
-            if(useCountNames != null)
-            {
-                var useCountStringBuilder = new StringBuilder();
-                for(int i = 0; i < useCountNames.Count; i++)
-                {
-                    if (i > 0) {
-                        useCountStringBuilder.Append("\n");
-                    }
-                    useCountStringBuilder.Append(useCountNames[i]);
-                }
-                useCountNamesString = useCountStringBuilder.ToString();
-            }*/
             return new DTO.Restriction
             {
                 Id = restriction.Id,

@@ -27,7 +27,7 @@ namespace PSK.Model.Helpers
             };
         }
 
-        public static Entities.Restriction DTOToEntity(this DTO.RestrictionArgs restrictionArgs)
+        public static Entities.Restriction ToEntity(this DTO.RestrictionArgs restrictionArgs)
         {
             return new Entities.Restriction
             {
