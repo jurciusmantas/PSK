@@ -27,7 +27,10 @@ namespace PSK.Model.Services
             try
             {
                 IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
-                _incomingEmployeeRepository.Delete(emp.Id);
+                foreach (IncomingEmployee incEmp in _incomingEmployeeRepository.GetAllByEmail(args.Email))
+                {
+                    _incomingEmployeeRepository.Delete(incEmp.Id);
+                }
                 var employee = new Entities.Employee
                 {
                     Name = args.FullName.Trim(),

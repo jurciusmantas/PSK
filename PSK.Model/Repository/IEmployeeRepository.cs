@@ -10,5 +10,6 @@ namespace PSK.Model.Repository
         public List<Employee> GetSubordinates(int employeeId);
         public List<Employee> GetAllSubordinates(int leaderId);
         List<Topic> GetEmployeesActiveTopics(int employeeId);
+        bool CheckIfEmailExists(string email);
     }
 }
