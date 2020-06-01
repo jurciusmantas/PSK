@@ -9,7 +9,7 @@ using PSK.DB.Contexts;
 namespace PSK.DB.Migrations
 {
     [DbContext(typeof(PSKDbContext))]
-    [Migration("20200601175427_PresentationDataSeed")]
+    [Migration("20200601193515_PresentationDataSeed")]
     partial class PresentationDataSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1022,41 +1022,13 @@ namespace PSK.DB.Migrations
                         new
                         {
                             Id = 11,
-                            CompletedOn = new DateTime(2020, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 2,
-                            TopicId = 3
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CompletedOn = new DateTime(2020, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 3,
-                            TopicId = 3
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CompletedOn = new DateTime(2020, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 4,
-                            TopicId = 3
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CompletedOn = new DateTime(2020, 5, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EmployeeId = 5,
-                            TopicId = 20
-                        },
-                        new
-                        {
-                            Id = 15,
                             CompletedOn = new DateTime(2020, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeId = 2,
                             TopicId = 14
                         },
                         new
                         {
-                            Id = 16,
+                            Id = 12,
                             CompletedOn = new DateTime(2020, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeId = 3,
                             TopicId = 13

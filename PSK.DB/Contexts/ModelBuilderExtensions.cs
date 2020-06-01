@@ -407,41 +407,13 @@ namespace PSK.DB.Contexts
                 new TopicCompletion
                 {
                     Id = 11,
-                    CompletedOn = new DateTime(2020, 5, 16),
-                    TopicId = 3,
-                    EmployeeId = 2
-                },
-                new TopicCompletion
-                {
-                    Id = 12,
-                    CompletedOn = new DateTime(2020, 5, 17),
-                    TopicId = 3,
-                    EmployeeId = 3
-                },
-                new TopicCompletion
-                {
-                    Id = 13,
-                    CompletedOn = new DateTime(2020, 5, 29),
-                    TopicId = 3,
-                    EmployeeId = 4
-                },
-                new TopicCompletion
-                {
-                    Id = 14,
-                    CompletedOn = new DateTime(2020, 5, 26),
-                    TopicId = 20,
-                    EmployeeId = 5
-                },
-                new TopicCompletion
-                {
-                    Id = 15,
                     CompletedOn = new DateTime(2020, 5, 7),
                     TopicId = 14,
                     EmployeeId = 2
                 },
                 new TopicCompletion
                 {
-                    Id = 16,
+                    Id = 12,
                     CompletedOn = new DateTime(2020, 5, 6),
                     TopicId = 13,
                     EmployeeId = 3
