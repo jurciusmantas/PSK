@@ -50,7 +50,7 @@ class NewLearningDayPage extends React.Component {
             console.error(`GET /api/recommendations failed:`);
             console.error(err)
         })
-        get(`restrictions/${this.props.currentUser.id}`)
+        get(`restrictions/active?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
