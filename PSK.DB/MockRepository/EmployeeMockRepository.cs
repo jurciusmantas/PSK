@@ -66,5 +66,9 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
+        public bool CheckIfEmailExists(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

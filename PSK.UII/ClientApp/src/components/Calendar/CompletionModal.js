@@ -36,6 +36,10 @@ class CompletionModal extends React.Component{
 
                 this.setState({ loading: false });
             })
+            .catch(reason => {
+                console.error(`POST topics/completed failed`);
+                console.error(reason);
+            });
     }
 
     render(){
