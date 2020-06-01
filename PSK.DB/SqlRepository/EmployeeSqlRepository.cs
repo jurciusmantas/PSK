@@ -92,5 +92,12 @@ namespace PSK.DB.SqlRepository
                 GROUP BY t.Id;
             ", employeeId).ToList();
         }
+
+        public bool CheckIfEmailExists(string email)
+        {
+            if (context.Employees.FirstOrDefault(employee => employee.Email.Equals(email)) != null)
+                return true;
+            return false;
+        }
     }
 }
