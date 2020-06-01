@@ -5,13 +5,22 @@ import moment from 'moment';
 import { get, post } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
 import Loader from '../Loader/loader';
+import * as calendarActions from '../../redux/actions/calendarActions';
 import './NewLearningDayPage.css';
 
 class NewLearningDayPage extends React.Component {
     constructor(props) {
         super(props);
+
+        /* Check for date in redux */
+        let selectedDate = null;
+        if(this.props.date){
+            selectedDate = this.props.date;
+            this.props.clearNewDayDate();
+        }
+
         this.state = {
-            selectedDate: moment().format("YYYY-MM-DD"),
+            selectedDate: selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             topics: [],
             selectedTopicId: 0,
             recommendations: [],
@@ -250,14 +259,17 @@ class NewLearningDayPage extends React.Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
     return {
-        currentUser: state.currentUser
+        currentUser: state.currentUser,
+        date: state.calendarReducer.date,
     };
 }
 
-function mapDispatchToProps() {
-    return {};
+const mapDispatchToProps = (dispatch, _) => {
+    return {
+        clearNewDayDate: () => dispatch(calendarActions.clearDate()),
+    };
 }
 
 export default withRouter(connect(
