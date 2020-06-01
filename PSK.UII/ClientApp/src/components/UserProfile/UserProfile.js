@@ -7,6 +7,7 @@ import {
     Button,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './UserProfile.css';
 import { get } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
@@ -116,7 +117,8 @@ class UserProfile extends React.Component{
                             </Row>
                         }
                         </Form>
-                    </div>
+                        <Link className="btn btn-custom" to={{ pathname: "/edit-user-profile" }}>Edit</Link>
+                    </div>                    
                 </div>
                 <div>
                     <div className='user-profile-buttons-holder'>
