@@ -39,7 +39,7 @@ namespace PSK.Model.Services
                     };
 
                 var dayToAdd = args.ToEntity();
-                CheckIfAlreadyCompleted(dayToAdd);
+                DeletePreviousCompletions(dayToAdd);
                 var error = Validate(dayToAdd);
                 if (!string.IsNullOrEmpty(error))
                     return new ServerResult
@@ -196,7 +196,7 @@ namespace PSK.Model.Services
             return string.Empty;
         }
 
-        private void CheckIfAlreadyCompleted(Entities.Day day)
+        private void DeletePreviousCompletions(Entities.Day day)
         {
             var topicsCompletions = _topicCompletionRepository.GetEmployeesCompletions(day.EmployeeId);
             if (topicsCompletions != null)

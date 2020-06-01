@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../helpers/request';
 import { Router, Route, Switch } from 'react-router-dom';
-import { getCookie } from '../helpers/cookie';
+import { getCookie, removeCookie } from '../helpers/cookie';
 import * as currentUserActions from '../redux/actions/currentUserActions';
 import { createBrowserHistory } from 'history';
 
@@ -70,6 +70,10 @@ class Routes extends React.Component {
                         if (history.location.pathname === "/")
                             history.push('/home');
                         this.setState({ loading: false });
+                    }
+                    else {
+                        removeCookie('AuthToken');
+                        window.location.reload();
                     }
                 })
                 .catch(error => {

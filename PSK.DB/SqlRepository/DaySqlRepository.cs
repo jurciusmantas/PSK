@@ -56,7 +56,7 @@ namespace PSK.DB.SqlRepository
             return updatedDay;
         }
 
-        public Day GetEmployeeFeatureDayByTopic(int topicId, int employeeId)
+        public Day GetEmployeeFutureDayByTopic(int topicId, int employeeId)
         {
             return context.Days
                 .Where(d => d.TopicId == topicId && d.EmployeeId == employeeId && d.Date >= DateTime.Now)
