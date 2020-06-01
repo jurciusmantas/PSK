@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using PSK.Model.DTO;
 using PSK.Model.Entities;
@@ -12,12 +13,14 @@ namespace PSK.Model.Services
     {
         private readonly IIncomingEmployeeRepository _incomingEmployeeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IRestrictionRepository _restrictionRepository;
 
         public RegistrationService(IIncomingEmployeeRepository incomingEmployeeRepository,
-            IEmployeeRepository employeeRepository)
+            IEmployeeRepository employeeRepository, IRestrictionRepository restrictionRepository)
         {
             _incomingEmployeeRepository = incomingEmployeeRepository;
             _employeeRepository = employeeRepository;
+            _restrictionRepository = restrictionRepository;
         }
 
         public ServerResult AddNewUser(Registration args)
@@ -25,14 +28,22 @@ namespace PSK.Model.Services
             try
             {
                 IncomingEmployee emp = _incomingEmployeeRepository.FindByToken(args.Token);
-                _employeeRepository.Add(new Entities.Employee
+                _incomingEmployeeRepository.Delete(emp.Id);
+                var employee = new Entities.Employee
                 {
                     Name = args.FullName.Trim(),
                     Email = emp.Email,
                     Password = args.Password.Hash(),
                     LeaderId = emp.LeaderId,
-                });
-                _incomingEmployeeRepository.Delete(emp.Id);
+                };
+                var globalRestriction = _restrictionRepository.GetLastGlobal();
+                if (globalRestriction != null)
+                {
+                    employee.EmployeeRestrictions = new List<EmployeeRestriction> { 
+                        new EmployeeRestriction { Restriction = globalRestriction } 
+                    };
+                }
+                _employeeRepository.Add(employee);
 
                 return new ServerResult
                 {

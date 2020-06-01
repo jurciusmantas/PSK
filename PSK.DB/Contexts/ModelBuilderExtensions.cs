@@ -184,6 +184,51 @@ namespace PSK.DB.Contexts
                     EmployeeId = 5
                 }
                 );
+            modelBuilder.Entity<Restriction>().HasData(
+                new Restriction
+                {
+                    Id = 1,
+                    ConsecutiveDays = 3,
+                    MaxDaysPerYear = 36, 
+                    MaxDaysPerQuarter = 9,
+                    MaxDaysPerMonth = 3,
+                    Global = true,
+                    CreationDate = new DateTime(2020, 3, 8),
+                    CreatorId = 1,
+                }
+            );
+            modelBuilder.Entity<EmployeeRestriction>().HasData(
+                new EmployeeRestriction
+                {
+                    Id = 1,
+                    RestrictionId = 1,
+                    EmployeeId = 2
+                },
+                new EmployeeRestriction
+                {
+                    Id = 7,
+                    RestrictionId = 1,
+                    EmployeeId = 3
+                },
+                new EmployeeRestriction
+                {
+                    Id = 8,
+                    RestrictionId = 1,
+                    EmployeeId = 4
+                },
+                new EmployeeRestriction
+                {
+                    Id = 9,
+                    RestrictionId = 1,
+                    EmployeeId = 5
+                },
+                new EmployeeRestriction
+                {
+                    Id = 10,
+                    RestrictionId = 1,
+                    EmployeeId = 6
+                }
+            );
         }
     }
 }
