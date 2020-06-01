@@ -48,6 +48,7 @@
                 Name = topic.Name,
                 Description = topic.Description,
                 ParentId = topic.ParentTopicId,
+                RowVersion = topic.RowVersion
             };
         }
     }
