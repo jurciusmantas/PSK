@@ -38,7 +38,7 @@ class NewLearningDayPage extends React.Component {
             console.error(err)
             this.setState({ topics: [] });
         });
-        get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
+        get(`recommendations?to=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
             else {
