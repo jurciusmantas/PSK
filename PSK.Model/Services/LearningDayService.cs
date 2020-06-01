@@ -39,6 +39,7 @@ namespace PSK.Model.Services
                     };
 
                 var dayToAdd = args.ToEntity();
+                CheckIfAlreadyCompleted(dayToAdd);
                 var error = Validate(dayToAdd);
                 if (!string.IsNullOrEmpty(error))
                     return new ServerResult
@@ -185,6 +186,22 @@ namespace PSK.Model.Services
             }
 
             return string.Empty;
+        }
+
+        private void CheckIfAlreadyCompleted(Entities.Day day)
+        {
+            var topicsCompletions = _topicCompletionRepository.GetEmployeesCompletions(day.EmployeeId);
+            if (topicsCompletions != null)
+            {
+                var foundTopicCompletions = topicsCompletions.Where(tc => tc.TopicId == day.TopicId);
+                if (foundTopicCompletions != null)
+                {
+                    foreach (var foundTopicCompletion in foundTopicCompletions)
+                    {
+                        _topicCompletionRepository.Delete(foundTopicCompletion.Id);
+                    }
+                }
+            }
         }
     }
 }
