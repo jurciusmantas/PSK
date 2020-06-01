@@ -110,39 +110,45 @@ class Calendar extends React.Component {
             });
     }
 
-    getSubordinateDays(){       
-        get(`employees/${this.props.currentUser.id}/subordinates`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success)
-                    for (let employee of res.data) {
-                        get(`days?employeeId=${employee.id}`)
-                            .then(r => r.json())
-                            .then(r => {
-                                if (res.success)
-                                    this.setState({ subordinatesDays: this.state.subordinatesDays.concat(r.data) });
-                                else {
-                                    console.warn(`Failed to load employee id=${employee.id} name=${employee.name} days:`)
-                                    console.warn(res.message);
-                                }
-                            })
-                            .catch(reason => {
-                                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
-                                console.error(reason)
-                            });
+    showSubordinateDays(){
+        if (!this.state.subordinatesDaysLoaded)    
+            get(`employees/${this.props.currentUser.id}/subordinates`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success)
+                        for (let employee of res.data) {
+                            get(`days?employeeId=${employee.id}`)
+                                .then(r => r.json())
+                                .then(r => {
+                                    if (res.success)
+                                        this.setState({ 
+                                            subordinatesDays: this.state.subordinatesDays.concat(r.data),
+                                            subordinateDaysShown: true, 
+                                        });
+                                    else {
+                                        console.warn(`Failed to load employee id=${employee.id} name=${employee.name} days:`)
+                                        console.warn(res.message);
+                                    }
+                                })
+                                .catch(reason => {
+                                    console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                                    console.error(reason)
+                                });
 
+                        }
+                    else {
+                        notification('Could not load your subordinates days', 'warning');
+                        console.warn('Could not load subordinates days:')
+                        console.warn(res.message);
                     }
-                else {
-                    notification('Could not load your subordinates days', 'warning');
-                    console.warn('Could not load subordinates days:')
-                    console.warn(res.message);
-                }
-            })
-            .then(_ => this.setState({ subordinatesDaysLoaded: true }))
-            .catch(reason => {
-                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
-                console.error(reason)
-            });
+                })
+                .then(_ => this.setState({ subordinatesDaysLoaded: true }))
+                .catch(reason => {
+                    console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
+                    console.error(reason)
+                });
+        else
+            this.setState({ subordinateDaysShown: true })
     }
 
     render() {
@@ -154,7 +160,8 @@ class Calendar extends React.Component {
             monthDiff,
             userDays,
             subordinatesDays,
-            subordinatesDaysLoaded
+            subordinatesDaysLoaded,
+            subordinateDaysShown,
         } = this.state;
 
         return (
@@ -183,14 +190,24 @@ class Calendar extends React.Component {
                         >
                             Add learning day
                         </button>
-                        { !subordinatesDaysLoaded && 
+                        { (!subordinatesDaysLoaded || !subordinateDaysShown) &&
                             <button
                                 type="button"
                                 className="btn btn-custom"
                                 style={{float: 'right'}}
-                                onClick={() => this.getSubordinateDays()}
+                                onClick={() => this.showSubordinateDays()}
                             >
                                 Show subordinate days
+                            </button>
+                        }
+                        { subordinatesDaysLoaded && subordinateDaysShown &&
+                            <button
+                                type="button"
+                                className="btn btn-custom hide-subordinate-days"
+                                style={{float: 'right'}}
+                                onClick={() => this.setState({ subordinateDaysShown: false })}
+                            >
+                                Hide subordinate days
                             </button>
                         }
                     </div>
@@ -215,7 +232,7 @@ class Calendar extends React.Component {
                                             monthDay={i.monthDay}
                                             yearMonth={currentMonth}
                                             userDays={userDays}
-                                            subordinatesDays={subordinatesDays}
+                                            subordinatesDays={subordinateDaysShown ? subordinatesDays : []}
                                             update={() => this.getUserDays()}
                                             monthDiff={monthDiff}
                                         />

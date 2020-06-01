@@ -13,14 +13,17 @@ namespace PSK.Model.Services
         private readonly ITopicRepository _topicRepository;
         private readonly ITopicCompletionRepository _topicCompletionRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDayRepository _dayRepository;
 
         public TopicService(ITopicRepository topicRepository
             , ITopicCompletionRepository topicCompletionRepository
-            , IEmployeeRepository employeeRepository)
+            , IEmployeeRepository employeeRepository
+            , IDayRepository dayRepository)
         {
             _topicRepository = topicRepository;
             _topicCompletionRepository = topicCompletionRepository;
             _employeeRepository = employeeRepository;
+            _dayRepository = dayRepository;
         }
 
         public ServerResult<List<Topic>> GetTopics(bool tree)
@@ -203,6 +206,49 @@ namespace PSK.Model.Services
                     Message = e.Message
                 };
             }
+        }
+
+        public ServerResult<List<LearnedSubordinatesListItem>> LoadLearnedSubordinates(int? employeeId, int topicId)
+        {
+            if (employeeId == null)
+                return null;
+
+            var res = new List<LearnedSubordinatesListItem>();
+
+            var allSubordinates = _employeeRepository.GetAllSubordinates(employeeId.Value);
+            if (allSubordinates != null && allSubordinates.Count > 0)
+            {
+                var completions = _topicCompletionRepository.GetEmployeesTopicCompletions(allSubordinates.Select(s => s.Id).ToList(), topicId);
+                foreach(var subordinate in allSubordinates)
+                {
+                    /* Check if allready completed */
+                    var completion = completions.FirstOrDefault(tc => tc.EmployeeId == subordinate.Id);
+                    if (completion != null)
+                        res.Add(new LearnedSubordinatesListItem
+                        {
+                            SubordinateName = subordinate.Name,
+                            CompletedOn = completion.CompletedOn,
+                        });
+
+                    /* Check if is learning in future */
+                    else
+                    {
+                        var learningDay = _dayRepository.GetEmployeeFutureDayByTopic(topicId, subordinate.Id);
+                        if (learningDay != null)
+                            res.Add(new LearnedSubordinatesListItem
+                            {
+                                SubordinateName = subordinate.Name,
+                                LearnsAt = learningDay.Date,
+                            });
+                    }
+                }
+            }
+
+            return new ServerResult<List<LearnedSubordinatesListItem>>
+            {
+                Success = true,
+                Data = res,
+            };
         }
     }
 }
