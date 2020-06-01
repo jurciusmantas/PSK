@@ -11,8 +11,8 @@ namespace PSK.Model.DTO
         public int MaxDaysPerYear { set; get; }
         public int MaxDaysPerQuarter { set; get; }
         public int MaxDaysPerMonth { set; get; }
-        public bool Global { set; get; }
         public int CreatorId { set; get; }
         public int UseCount { set; get; }
+        public List<string> UseCountNames { set; get; }
     }
 }

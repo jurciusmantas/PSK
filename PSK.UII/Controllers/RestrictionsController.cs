@@ -19,29 +19,45 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<List<Restriction>> GetCreatedRestrictions()
+        public ServerResult<List<Restriction>> GetCreatedRestrictions([FromQuery(Name = "employeeId")] int employeeId)
         {
-            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
-            return _restrictionService.GetRestrictionsTo(currEmployeeId);
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if(currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
+            
+            return _restrictionService.GetRestrictionsTo(employeeId);
         }
         [HttpGet("active")]
-        public ServerResult<Restriction> GetRestriction()
+        public ServerResult<Restriction> GetRestriction([FromQuery(Name = "employeeId")] int employeeId)
         {
-            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
-            return _restrictionService.GetRestrictionFrom(currEmployeeId);
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
+            return _restrictionService.GetRestrictionFrom(employeeId);
         }
 
         [HttpDelete]
-        public ServerResult DeleteRestriction([FromQuery(Name = "id")]int id)
+        public ServerResult DeleteRestriction([FromQuery(Name = "id")] int id, [FromQuery(Name = "employeeId")] int employeeId)
         {
-            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
-            return _restrictionService.DeleteRestriction(id, currEmployeeId);
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+            }
+            return _restrictionService.DeleteRestriction(id, employeeId);
         }
         [HttpPost]
         public ServerResult CreateRestriction([FromBody] RestrictionArgs restrictionArgs)
         {
-            int currEmployeeId = int.Parse(Request.HttpContext.Items["currentEmployeeId"].ToString());
-            restrictionArgs.CreatorId = currEmployeeId;
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+            {
+                restrictionArgs.CreatorId = int.Parse(currEmployeeIdObject.ToString());
+            }
             return _restrictionService.CreateRestriction(restrictionArgs);
         }
 

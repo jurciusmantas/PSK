@@ -5,7 +5,7 @@ import { post } from '../../helpers/request'
 import { get } from '../../helpers/request'
 import { del } from '../../helpers/request'
 import Select from 'react-select';
-import ReactDOM from "react-dom";
+import Tooltip from 'react-tooltip'
 import { connect } from 'react-redux';
 import { notification } from '../../helpers/notification';
 import '../Topic/TopicPage.css';
@@ -32,7 +32,7 @@ class RestrictionsPage extends React.Component {
     }
 
     componentDidMount() {
-        get(`restrictions/active`)
+        get(`restrictions/active?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -50,10 +50,11 @@ class RestrictionsPage extends React.Component {
             .catch(reason => {
                 console.error(reason);
             })
-        get(`restrictions`)
+        get(`restrictions?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
+                    console.log(res.data);
                     this.setState({
                         restrictions: res.data,
                         loading2: false
@@ -114,7 +115,7 @@ class RestrictionsPage extends React.Component {
         if (this.state.loading2) {
             return <div>Loading...</div>
         }
-        else if (restrictions.length == 0) {
+        else if (restrictions.length === 0) {
             return <div>You do not have any restrictions created</div>
         }
         else {
@@ -137,7 +138,10 @@ class RestrictionsPage extends React.Component {
                                     <td>{restriction.maxDaysPerMonth}</td>
                                     <td>{restriction.maxDaysPerQuarter}</td>
                                     <td>{restriction.maxDaysPerYear}</td>
-                                    <td>{restriction.useCount}</td>
+                                    <td>
+                                        <div data-tip data-for={"ucntt" + index}>{restriction.useCount}</div>
+                                        <Tooltip id={"ucntt" + index} place="right" arrow>{this.showUseCountNames(restriction.useCountNames)}</Tooltip>
+                                    </td>
                                     <td>
                                         <button
                                             value={restriction.id}
@@ -157,8 +161,20 @@ class RestrictionsPage extends React.Component {
         }
     }
 
+    showUseCountNames(useCountNames) {
+        if (useCountNames == null || useCountNames.length === 0) {
+            return (<p>None</p>);
+        }
+        else {
+            return useCountNames.map((name, _) => {
+                return (<p>{name}</p>);
+            })
+        }
+        
+    }
+
     deleteRestriction(e) {
-        del(`restrictions?id=${e.target.value}`)
+        del(`restrictions?id=${e.target.value}&employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -166,7 +182,7 @@ class RestrictionsPage extends React.Component {
                     window.location.reload();
                 }
                 else {
-                    notification('Something went wrong while deleting', 'error');
+                    notification(res.message, 'error');
                 }
             })
             .catch(error => {
@@ -186,6 +202,7 @@ class RestrictionsPage extends React.Component {
             MaxDaysPerMonth: parseInt(this.state.maxDaysPerMonth),
             MaxDaysPerQuarter: parseInt(this.state.maxDaysPerQuarter),
             MaxDaysPerYear: parseInt(this.state.maxDaysPerYear),
+            CreatorId: this.props.currentUser.id,
             ApplyTo: parseInt(this.state.applyTo),
             UserIds: this.state.selectedEmployees.map((selectedEmployee) => {
                 return selectedEmployee.value

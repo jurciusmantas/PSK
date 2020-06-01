@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20200408120809_SeedInitialData.Designer.cs" />
     <Compile Remove="Migrations\20200408123051_SeedInitialData.cs" />
     <Compile Remove="Migrations\20200408123051_SeedInitialData.Designer.cs" />
+    <Compile Remove="Migrations\20200531163648_Global restriction added.cs" />
+    <Compile Remove="Migrations\20200531163648_Global restriction added.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

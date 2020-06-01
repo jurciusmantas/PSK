@@ -1,4 +1,7 @@
-﻿namespace PSK.Model.Helpers
+﻿using System.Collections.Generic;
+using System.Text;
+
+namespace PSK.Model.Helpers
 {
     public static class EntityToDTOHelper
     {
@@ -51,8 +54,21 @@
             };
         }
 
-        public static DTO.Restriction EntityToDTO(this Entities.Restriction restriction, int useCount = 0)
+        public static DTO.Restriction EntityToDTO(this Entities.Restriction restriction, List<string> useCountNames = null)
         {
+            /*string useCountNamesString = null;
+            if(useCountNames != null)
+            {
+                var useCountStringBuilder = new StringBuilder();
+                for(int i = 0; i < useCountNames.Count; i++)
+                {
+                    if (i > 0) {
+                        useCountStringBuilder.Append("\n");
+                    }
+                    useCountStringBuilder.Append(useCountNames[i]);
+                }
+                useCountNamesString = useCountStringBuilder.ToString();
+            }*/
             return new DTO.Restriction
             {
                 Id = restriction.Id,
@@ -60,8 +76,8 @@
                 MaxDaysPerYear = restriction.MaxDaysPerYear,
                 MaxDaysPerQuarter = restriction.MaxDaysPerQuarter,
                 MaxDaysPerMonth = restriction.MaxDaysPerMonth,
-                Global = restriction.Global,
-                UseCount = useCount
+                UseCount = (useCountNames == null) ? 0 : useCountNames.Count,
+                UseCountNames = restriction.Global ? new List<string> { "Global" } : useCountNames
             };
         }
     }

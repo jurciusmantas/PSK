@@ -21,14 +21,10 @@ namespace PSK.Model.Services
             _employeeRepository = employeeRepository;
         }
 
-        public ServerResult CreateGlobalRestriction()
-        {
-            throw new NotImplementedException();
-        }
-
         public ServerResult CreateRestriction(RestrictionArgs restrictionArgs)
         {
-            String msg = ValidateRestrictionArgs(restrictionArgs);
+            var employee = _employeeRepository.Get(restrictionArgs.CreatorId);
+            String msg = ValidateRestrictionArgs(restrictionArgs, employee);
             if (msg != null)
             {
                 return new ServerResult { Message = msg, Success = false };
@@ -41,6 +37,7 @@ namespace PSK.Model.Services
             {
                 case 1:
                     employees = _employeeRepository.GetAllSubordinates(restrictionArgs.CreatorId);
+                    restriction.Global = employee.LeaderId == null;
                     CreateRestrictionForEmployees(restriction, employees);
                     break;
                 case 2:
@@ -59,19 +56,52 @@ namespace PSK.Model.Services
             return new ServerResult { Message = "Success", Success = true };
         }
 
-        private string ValidateRestrictionArgs(RestrictionArgs restrictionArgs)
+        private string ValidateRestrictionArgs(RestrictionArgs restrictionArgs, Entities.Employee employee)
         {
-            int creatorId = restrictionArgs.CreatorId;
-            Entities.Employee employee = _employeeRepository.Get(creatorId);
+            StringBuilder errorStringBuilder = new StringBuilder();
+            bool errorFound = false;
+            errorStringBuilder.Append("There were several errors:");
             if (employee == null)
             {
-                return "Creator was not found";
+                errorFound = true;
+                errorStringBuilder.Append("\nCreator was not found");
+            }
+            if (restrictionArgs.ConsecutiveDays <= 0 || restrictionArgs.ConsecutiveDays > 366)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of consecutive learning days must be from 1 to 366");
+            }
+            if (restrictionArgs.MaxDaysPerMonth <= 0 || restrictionArgs.MaxDaysPerMonth > 31)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of maximum learning days per month must be from 1 to 31");
+            }
+            if (restrictionArgs.MaxDaysPerQuarter <=0 || restrictionArgs.MaxDaysPerQuarter > 93)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of maximum learning days per quarter must be from 1 to 93");
+            }
+            if (restrictionArgs.MaxDaysPerYear <= 0 || restrictionArgs.MaxDaysPerYear > 366)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of maximum learning days per year must be from 1 to 366");
+            }
+            if (restrictionArgs.MaxDaysPerQuarter < restrictionArgs.MaxDaysPerMonth)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of maximum learning days per quarter should not be lower than days per month");
+            }
+            if (restrictionArgs.MaxDaysPerYear < restrictionArgs.MaxDaysPerQuarter)
+            {
+                errorFound = true;
+                errorStringBuilder.Append("\nNumber of maximum learning days per year should not be lower than days per quarter"); ;
             }
             if (restrictionArgs.ApplyTo > 2 && (restrictionArgs.UserIds == null || restrictionArgs.UserIds.Length == 0))
             {
-                return "There was not any specified restriction receiver";
+                errorFound = true;
+                errorStringBuilder.Append("\nThere was not any specified restriction receiver");
             }
-            return null;
+            return errorFound ? errorStringBuilder.ToString() : null;
         }
 
         private void CreateRestrictionForEmployees(Entities.Restriction restriction, List<Entities.Employee> employees)
@@ -93,8 +123,6 @@ namespace PSK.Model.Services
                 Restriction = restriction
             };
         }
-
-        
 
         public ServerResult DeleteRestriction(int id, int employeeId)
         {
@@ -121,11 +149,11 @@ namespace PSK.Model.Services
 
         private List<DTO.Restriction> GetRestrictions(int employeeId)
         {
-            (List<Entities.Restriction> restrictions, List<int> useCounts) = _restrictionRepository.GetRestrictionsTo(employeeId);
+            (List<Entities.Restriction> restrictions, List<List<string>> useCountNames) = _restrictionRepository.GetRestrictionsTo(employeeId);
             List<DTO.Restriction> restrictionsResult = new List<DTO.Restriction>();
             for(int i = 0; i < restrictions.Count; i++)
             {
-                restrictionsResult.Add(restrictions[i].EntityToDTO(useCounts[i]));
+                restrictionsResult.Add(restrictions[i].EntityToDTO(useCountNames[i]));
             }
             return restrictionsResult;
         }
@@ -208,15 +236,11 @@ namespace PSK.Model.Services
             {
                 return "Restriction was not found";
             }
-            List<EmployeeRestriction> employeeRestrictions = employee.EmployeeRestrictions.ToList();
-            foreach(var employeeRestriction in employeeRestrictions)
+            if (employee.Id != restriction.CreatorId)
             {
-                if(employeeRestriction.RestrictionId == restrictionId)
-                {
-                    return null;
-                }
+                return "You do not have permission to delete this restriction";
             }
-            return "You do not have permission to delete restriction with id " + restrictionId;    
+            return null;
         }
 
     }
