@@ -33,6 +33,7 @@ class AddRecommendationPage extends React.Component {
                     if (res.data != null && res.data.length > 0) {
                         this.setState({ topicId: res.data[0].id });
                     }
+                    console.log(res);
                 }
             })
             .catch(error => {
@@ -112,16 +113,6 @@ class AddRecommendationPage extends React.Component {
         )
     }
 
-    showSubTopicOptions() {
-        return this.state.topics.map(topic =>
-            topic.subTopicList.map((subTopic, index) =>
-                <option key={index} value={subTopic.id}>
-                    {subTopic.name}
-                </option>
-            )
-        )
-    }
-
     getSubordinatesOptions() {
         return this.state.subordinates.map(employee =>
             <option key={`subordinate-${employee.id}`} value={employee.id}>
@@ -143,7 +134,6 @@ class AddRecommendationPage extends React.Component {
                         <select
                             onChange={this.handleOnTopicChange}>
                             {this.showTopicOptions()}
-                            {this.showSubTopicOptions()}
                         </select>
                     </div>
                     <div className="row">
