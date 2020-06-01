@@ -54,5 +54,9 @@ namespace PSK.DB.SqlRepository
         {
             return context.IncomingEmployees.ToList();
         }
+        public List<IncomingEmployee> GetAllByEmail(string email)
+        {
+            return context.IncomingEmployees.Where(IncomingEmployee => IncomingEmployee.Email.Equals(email)).ToList();
+        }
     }
 }

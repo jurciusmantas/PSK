@@ -42,6 +42,7 @@ class NewLearningDayPage extends React.Component {
             if (res.success)
                 this.setState({ recommendations: res.data });
             else {
+                notification("Cannot load your recommendations :(", "error")
                 console.warn(`Cannot load recommendations for receiver id=${this.props.currentUser.id}:`)
                 console.warn(res.message)
             }
