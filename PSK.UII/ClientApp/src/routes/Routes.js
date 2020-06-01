@@ -24,6 +24,7 @@ import NewLearningDayPage from '../components/LearningDay/NewLearningDayPage';
 import RestrictionsPage from '../components/Restrictions/RestrictionsPage';
 import UserProfile from '../components/UserProfile/UserProfile';
 import Loader from '../components/Loader/loader';
+import EditUserProfile from '../components/UserProfile/EditUserProfile';
 
 const NotFoundPageWraped = () =>
     <Layout>
@@ -52,6 +53,7 @@ class Routes extends React.Component {
                 { component: NewLearningDayPage, path: "/add-day" },
                 { component: RestrictionsPage, path: "/restrictions" },
                 { component: UserProfile, path: "/user-profile" },
+                { component: EditUserProfile, path: "/edit-user-profile" },
             ],
             loading: true
         }
