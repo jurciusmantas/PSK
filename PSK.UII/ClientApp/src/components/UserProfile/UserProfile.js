@@ -117,7 +117,10 @@ class UserProfile extends React.Component{
                             </Row>
                         }
                         </Form>
-                        <Link className="btn btn-custom" to={{ pathname: "/edit-user-profile" }}>Edit</Link>
+                        <div className="row">
+                            <Link className="btn btn-custom" to={{ pathname: "/edit-user-profile" }}>Edit info</Link>
+                        </div>
+                       
                     </div>                    
                 </div>
                 <div>

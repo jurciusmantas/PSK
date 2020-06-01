@@ -76,42 +76,41 @@ class EditUserProfile extends React.Component {
                     <div className='info'>
                         <div className="row">
                             
-                                 <div>
-                                    <h5>User info:</h5>
-                                    <p><b>Name: </b>{this.props.currentUser.name}</p>
-                                </div>                           
+                            <div>
+                                <h5>User info:</h5>
+                                <p><b>Name: </b>{this.props.currentUser.name}</p>
+                            </div>                           
                         </div>
                     </div>
                     <div className='row'>
                         <div className="newData">
                             
-                                <div>
+                            <div>
                                     <h5>Enter new information:</h5>
-                                    
-                                    <div className='row'>
-                                        <input
-                                            type="text"
-                                            defaultValue={this.props.currentUser.name}
-                                            onChange={e => this.setState({ employeeName: e.target.value })}
-                                            onKeyPress={e => this.handleKeyPress(e)}
-                                            placeholder="Name"
-                                            required />
-                                    </div>
-                                    <div className='row'>
-                                        <input type="password"
-                                            placeholder="Password"
-                                            onChange={e => this.setState({ employeePassword: e.target.value })}
-                                            onKeyPress={e => this.handleKeyPress(e)}
-                                            required />
-                                    </div>
-                                    <div className='row'>
-                                        <input type="password"
-                                            placeholder="Confirm password"
-                                            onChange={e => this.setState({ confirmPassword: e.target.value })}
-                                            onKeyPress={e => this.handleKeyPress(e)}
-                                            required />
-                                    </div>
-                                </div>                           
+                                <div className='row'>
+                                    <input
+                                        type="text"
+                                        defaultValue={this.props.currentUser.name}
+                                        onChange={e => this.setState({ employeeName: e.target.value })}
+                                        onKeyPress={e => this.handleKeyPress(e)}
+                                        placeholder="Name"
+                                        required />
+                                </div>
+                                <div className='row'>
+                                    <input type="password"
+                                        placeholder="Password"
+                                        onChange={e => this.setState({ employeePassword: e.target.value })}
+                                        onKeyPress={e => this.handleKeyPress(e)}
+                                        required />
+                                </div>
+                                <div className='row'>
+                                    <input type="password"
+                                        placeholder="Confirm password"
+                                        onChange={e => this.setState({ confirmPassword: e.target.value })}
+                                        onKeyPress={e => this.handleKeyPress(e)}
+                                        required />
+                                </div>
+                            </div>                           
                         </div>
                     </div>
                     <div className="row">
