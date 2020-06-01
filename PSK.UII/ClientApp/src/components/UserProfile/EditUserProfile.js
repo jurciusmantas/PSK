@@ -1,22 +1,22 @@
 ﻿import React from 'react';
-import { get } from '../../helpers/request'
+import { put, get } from '../../helpers/request'
 import { Link, withRouter } from "react-router-dom";
 import TreeView from 'devextreme-react/tree-view';
 import '../Topic/TopicPage.css';
 import Loader from '../Loader/loader';
 import { notification } from '../../helpers/notification';
 import { connect } from 'react-redux';
+import './UserProfile.css';
 
 
 class EditUserProfile extends React.Component {
     constructor() {
         super()
         this.state = {
-            name: null,
-            password: null,
+            employeeName: null,
+            employeePassword: null,
             confirmPassword: null,
-
-            loadingTopic: false,
+            employeeId: null,
         }
         this.onSubmit = this.handleSubmit.bind(this);
 
@@ -35,15 +35,37 @@ class EditUserProfile extends React.Component {
         e.preventDefault();
 
         const {
-            name,
-            password,
-            confirmPassword,
+            employeeName,
+            employeePassword,
+            confirmPassword
         } = this.state;
 
-        if (password != confirmPassword) {
+        if (employeePassword != confirmPassword) {
             notification("Passwords do not match", "error");
+            return;
         }
-        
+
+        put(`employees`, {
+            id: this.props.currentUser.id,
+            name: employeeName,
+            password: employeePassword          
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    this.props.currentUser.name = employeeName;
+                    notification("Updated!");
+                    this.props.history.push(`user-profile`);
+                }
+                else {
+                    notification(res.message, 'error');
+                    console.warn("Cannot update this user");                   
+                }
+            })
+            .catch(error => {
+                console.error(`PUT employees/${this.props.currentUser.id} failed:`)
+                console.error(error)
+            })        
     }
 
     render() {
@@ -53,28 +75,24 @@ class EditUserProfile extends React.Component {
                     <h2>Edit user information</h2>
                     <div className='info'>
                         <div className="row">
-                            {this.state.loadingTopic
-                                ? <Loader />
-                                : <div>
-                                    <h5>Current data:</h5>
+                            
+                                 <div>
+                                    <h5>User info:</h5>
                                     <p><b>Name: </b>{this.props.currentUser.name}</p>
-                                    <p><b>Email: </b>{this.props.currentUser.email}</p>
-                                </div>
-                            }
+                                </div>                           
                         </div>
                     </div>
                     <div className='row'>
                         <div className="newData">
-                            {this.state.loadingTopic
-                                ? <Loader />
-                                : <div>
+                            
+                                <div>
                                     <h5>Enter new information:</h5>
                                     
                                     <div className='row'>
                                         <input
                                             type="text"
                                             defaultValue={this.props.currentUser.name}
-                                            onChange={e => this.setState({ name: e.target.value })}
+                                            onChange={e => this.setState({ employeeName: e.target.value })}
                                             onKeyPress={e => this.handleKeyPress(e)}
                                             placeholder="Name"
                                             required />
@@ -82,7 +100,7 @@ class EditUserProfile extends React.Component {
                                     <div className='row'>
                                         <input type="password"
                                             placeholder="Password"
-                                            onChange={e => this.setState({ password: e.target.value })}
+                                            onChange={e => this.setState({ employeePassword: e.target.value })}
                                             onKeyPress={e => this.handleKeyPress(e)}
                                             required />
                                     </div>
@@ -93,8 +111,7 @@ class EditUserProfile extends React.Component {
                                             onKeyPress={e => this.handleKeyPress(e)}
                                             required />
                                     </div>
-                                </div>
-                            }
+                                </div>                           
                         </div>
                     </div>
                     <div className="row">

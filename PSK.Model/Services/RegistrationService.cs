@@ -4,6 +4,7 @@ using PSK.Model.DTO;
 using PSK.Model.Entities;
 using PSK.Model.IServices;
 using PSK.Model.Repository;
+using PSK.Model.Helpers;
 
 namespace PSK.Model.Services
 {
@@ -28,7 +29,7 @@ namespace PSK.Model.Services
                 {
                     Name = args.FullName.Trim(),
                     Email = emp.Email,
-                    Password = HashPassword(args.Password),
+                    Password = args.Password.Hash(),
                     LeaderId = emp.LeaderId,
                 });
                 _incomingEmployeeRepository.Delete(emp.Id);
@@ -65,22 +66,6 @@ namespace PSK.Model.Services
                     Success = false,
                     Message = "Token doesn't exist in the database"
                 };
-        }
-
-        private string HashPassword(string password)
-        {
-            var crypto = new RNGCryptoServiceProvider();
-            var salt = new byte[16];
-            crypto.GetBytes(salt);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
-            byte[] hash = pbkdf2.GetBytes(20);
-
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-
-            return Convert.ToBase64String(hashBytes);
         }
     }
 }
