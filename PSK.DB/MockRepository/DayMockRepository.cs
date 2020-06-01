@@ -41,7 +41,7 @@ namespace PSK.DB.MockRepository
             throw new NotImplementedException();
         }
 
-        public Day GetEmployeeFeatureDayByTopic(int topicId, int employeeId)
+        public Day GetEmployeeFutureDayByTopic(int topicId, int employeeId)
         {
             throw new NotImplementedException();
         }

@@ -233,7 +233,7 @@ namespace PSK.Model.Services
                     /* Check if is learning in future */
                     else
                     {
-                        var learningDay = _dayRepository.GetEmployeeFeatureDayByTopic(topicId, subordinate.Id);
+                        var learningDay = _dayRepository.GetEmployeeFutureDayByTopic(topicId, subordinate.Id);
                         if (learningDay != null)
                             res.Add(new LearnedSubordinatesListItem
                             {
