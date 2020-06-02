@@ -38,6 +38,11 @@ textarea:focus {
     border: 2px solid #1B8C84;
 }
 
+.info {
+    
+    min-width: 350px;
+}
+
 @media screen and (max-width: 1110px) {
     .topic-holder {
         width: 100%;
