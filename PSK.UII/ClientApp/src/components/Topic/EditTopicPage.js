@@ -94,19 +94,23 @@ class EditTopicPage extends React.Component {
         return (
             <form className="topic-wrapper" onSubmit={this.onSubmit}>
                 <div className="topic-holder">
+              
                     <h2>Edit topic</h2>
+
                     <div className='info'>
                         <div className="row">
                             {this.state.loadingTopic || !this.state.topic
                                 ? <Loader/>
-                                : <div>
-                                    <h5>Current data:</h5>
+                                : <div >
+                                    <h5>Current info:</h5>
                                     <p><b>Topic: </b>{this.state.topic.name}</p>
                                     <p><b>Description: </b>{this.state.topic.description}</p>
                                 </div>
                             }
                         </div>
                     </div>
+
+                    <div className="row">
                     <div className='newData'>
                         <div className="row">
                             {this.state.loadingTopic || !this.state.topic
@@ -120,6 +124,8 @@ class EditTopicPage extends React.Component {
                                             onChange={e => this.setState({ topicName: e.target.value })}
                                             onKeyPress={e => this.handleKeyPress(e)}
                                             required />
+                                    </div>
+                                    <div className='row'>
                                         <textarea cols="50"
                                             defaultValue={this.state.topicDescription}
                                             onChange={e => this.setState({ topicDescription: e.target.value })}
@@ -129,7 +135,8 @@ class EditTopicPage extends React.Component {
                                 </div>
                             }
                         </div>
-                    </div>
+                        </div>
+                        </div>
                     <div className="row">
                         <button className="btn btn-custom" type="submit">Submit</button>
                         <Link to="/topics" className="btn btn-custom">Return</Link>
