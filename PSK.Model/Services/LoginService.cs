@@ -35,7 +35,7 @@ namespace PSK.Model.Services
                 VerifyPassword(args.Password, employee.Password);
                 DeleteExpiredTokens(employee.Id);
                 string token = GetToken();
-                DateTime expiredAt = DateTime.Now.AddMinutes(15);
+                DateTime expiredAt = DateTime.Now.AddMinutes(60);
                 _employeesTokenRepository.Add(new EmployeesToken
                 {
                     Employee = employee,
