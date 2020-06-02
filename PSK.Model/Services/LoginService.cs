@@ -35,7 +35,7 @@ namespace PSK.Model.Services
                 VerifyPassword(args.Password, employee.Password);
                 DeleteExpiredTokens(employee.Id);
                 string token = GetToken();
-                DateTime expiredAt = DateTime.Now.AddMinutes(15);
+                DateTime expiredAt = DateTime.Now.AddMinutes(60);
                 _employeesTokenRepository.Add(new EmployeesToken
                 {
                     Employee = employee,
@@ -49,7 +49,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Employee = employee.EntityToDTO(),
+                        Employee = employee.ToDTO(),
                         Token = token,
                         ExpiredAt = expiredAt.ToString()
                     }
@@ -74,7 +74,7 @@ namespace PSK.Model.Services
 
                 EmployeesToken employeesToken = _employeesTokenRepository.FindByToken(token);
 
-                if (employeesToken.ExpiredAt < DateTime.Now)
+                if (employeesToken == null || employeesToken.ExpiredAt < DateTime.Now)
                 {
                     return new ServerResult<User>
                     {
@@ -89,7 +89,7 @@ namespace PSK.Model.Services
                     Success = true,
                     Data = new User
                     {
-                        Employee = _employeeRepository.Get(employeesToken.EmployeeId).EntityToDTO(),
+                        Employee = _employeeRepository.Get(employeesToken.EmployeeId).ToDTO(),
                         Token = token,
                         ExpiredAt = employeesToken.ExpiredAt.ToString()
                     },
@@ -105,12 +105,18 @@ namespace PSK.Model.Services
             }
         }
 
-        public void Logout()
+        public void Logout(string token)
         {
-            //TODO:
-            //Once authorization will be implemented (with _sessionData as service
-            //with lifestyle session to have the currently logged in user) -
-            //remove its token (call to DB too!).
+            if (!string.IsNullOrEmpty(token) && token.StartsWith("Token "))
+            {
+                token = token.Substring(6);
+                var tokenInst = _employeesTokenRepository.FindByToken(token);
+                if (tokenInst != null && tokenInst.ExpiredAt > DateTime.Now)
+                {
+                    tokenInst.ExpiredAt = DateTime.Now;
+                    _employeesTokenRepository.Update(tokenInst);
+                }     
+            }
         }
 
         private string GetToken()

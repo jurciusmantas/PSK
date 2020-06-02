@@ -13,14 +13,14 @@
     width: 100%;
 }
 
-    .topic-holder h5 {
-        margin-bottom: 0px;
-    }
+.topic-holder h5 {
+    margin-bottom: 15px;
+}
 
-    .topic-holder input {
-        width: 482px;
-        height: 40px;
-    }
+.topic-holder input {
+    width: 482px;
+    height: 40px;
+}
 
 textarea {
     resize: none;
@@ -36,6 +36,11 @@ textarea {
 
 textarea:focus {
     border: 2px solid #1B8C84;
+}
+
+.info {
+    
+    min-width: 350px;
 }
 
 @media screen and (max-width: 1110px) {

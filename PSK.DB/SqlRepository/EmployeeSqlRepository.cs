@@ -4,7 +4,6 @@ using PSK.Model.Repository;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 namespace PSK.DB.SqlRepository
 {
@@ -41,13 +40,13 @@ namespace PSK.DB.SqlRepository
 
         public Employee Login(Model.DTO.LoginArgs loginArgs)
         {
-            return context.Employees.FirstOrDefault(employee => employee.Name == loginArgs.Login);
+            return context.Employees.FirstOrDefault(employee => employee.Email == loginArgs.Login);
         }
 
         public Employee Update(Employee updatedEmployee)
         {
             var employee = context.Employees.Attach(updatedEmployee);
-            employee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            employee.State = EntityState.Modified;
             context.SaveChanges();
             return updatedEmployee;
         }
@@ -92,6 +91,13 @@ namespace PSK.DB.SqlRepository
                     e.Id = {0} AND tc.id IS NULL
                 GROUP BY t.Id;
             ", employeeId).ToList();
+        }
+
+        public bool CheckIfEmailExists(string email)
+        {
+            if (context.Employees.FirstOrDefault(employee => employee.Email.Equals(email)) != null)
+                return true;
+            return false;
         }
     }
 }

@@ -13,16 +13,25 @@ namespace PSK.Model.Services
     public class InviteService : IInviteService
     {
         private readonly IIncomingEmployeeRepository _db;
+        private readonly IEmployeeRepository _empRep;
 
-        public InviteService(IIncomingEmployeeRepository db)
+        public InviteService(IIncomingEmployeeRepository db, IEmployeeRepository empRep)
         {
             _db = db;
+            _empRep = empRep;
         }
 
         public ServerResult<Invite> Invite(Invite args)
         {
             try
             {
+                if (_empRep.CheckIfEmailExists(args.Email))
+                    return new ServerResult<Invite>
+                    {
+                        Success = false,
+                        Message = "Employee with this email already exists"
+                    };
+
                 var token = GenerateToken();
 
                 _db.Add(new IncomingEmployee {Email = args.Email, Token = token, LeaderId = args.LeaderId });

@@ -22,63 +22,13 @@ class Calendar extends React.Component {
             monthAfter,
             monthDiff: 0,
             userDays: [],
-            userDaysLoaded: false,
             subordinatesDays: [],
             subordinatesDaysLoaded: false,
         };
-
-        this.openCreateDayPage = this.openCreateDayPage.bind(this);
     }
 
     componentDidMount() {
-        console.warn("This thing likes running. If you notice that this message appears twice, this is not good");
-        get(`days?employeeId=${this.props.currentUser.id}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success)
-                    this.setState({ userDays: res.data, userDaysLoaded: true });
-                else {
-                    notification('Could not load your learning days', 'warning');
-                    console.warn('Could not load employee days:');
-                    console.warn(res.message);
-                }
-            })
-            .catch(reason => {
-                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
-                console.error(reason)
-            });
-        get(`employees/${this.props.currentUser.id}/subordinates`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success)
-                    for (let employee of res.data) {
-                        get(`days?employeeId=${employee.id}`)
-                            .then(r => r.json())
-                            .then(r => {
-                                if (res.success)
-                                    this.setState({ subordinatesDays: this.state.subordinatesDays.concat(r.data) });
-                                else {
-                                    console.warn(`Failed to load employee id=${employee.id} name=${employee.name} days:`)
-                                    console.warn(res.message);
-                                }
-                            })
-                            .catch(reason => {
-                                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
-                                console.error(reason)
-                            });
-
-                    }
-                else {
-                    notification('Could not load your subordinates days', 'warning');
-                    console.warn('Could not load subordinates days:')
-                    console.warn(res.message);
-                }
-            })
-            .then(_ => { this.setState({ subordinatesDaysLoaded: true }); })
-            .catch(reason => {
-                console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
-                console.error(reason)
-            });
+        this.getUserDays();
     }
 
     generateCalendar(now) {
@@ -142,12 +92,63 @@ class Calendar extends React.Component {
         })
     }
 
-    selectDay(dayList, dateString) {
-        return dayList.filter(d => d.date === dateString);
+    getUserDays(){
+        get(`days?employeeId=${this.props.currentUser.id}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success)
+                    this.setState({ userDays: res.data });
+                else {
+                    notification('Could not load your learning days', 'warning');
+                    console.warn('Could not load employee days:');
+                    console.warn(res.message);
+                }
+            })
+            .catch(reason => {
+                console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                console.error(reason)
+            });
     }
 
-    openCreateDayPage() {
-        this.props.history.push(`add-day`);
+    showSubordinateDays(){
+        if (!this.state.subordinatesDaysLoaded)    
+            get(`employees/${this.props.currentUser.id}/subordinates`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success)
+                        for (let employee of res.data) {
+                            get(`days?employeeId=${employee.id}`)
+                                .then(r => r.json())
+                                .then(r => {
+                                    if (res.success)
+                                        this.setState({ 
+                                            subordinatesDays: this.state.subordinatesDays.concat(r.data),
+                                            subordinateDaysShown: true, 
+                                        });
+                                    else {
+                                        console.warn(`Failed to load employee id=${employee.id} name=${employee.name} days:`)
+                                        console.warn(res.message);
+                                    }
+                                })
+                                .catch(reason => {
+                                    console.error(`GET days?employeeId=${this.props.currentUser.id} failed`)
+                                    console.error(reason)
+                                });
+
+                        }
+                    else {
+                        notification('Could not load your subordinates days', 'warning');
+                        console.warn('Could not load subordinates days:')
+                        console.warn(res.message);
+                    }
+                })
+                .then(_ => this.setState({ subordinatesDaysLoaded: true }))
+                .catch(reason => {
+                    console.error(`GET employees/${this.props.currentUser.id}/subordinates failed`)
+                    console.error(reason)
+                });
+        else
+            this.setState({ subordinateDaysShown: true })
     }
 
     render() {
@@ -155,7 +156,12 @@ class Calendar extends React.Component {
             calendar,
             monthBefore,
             currentMonth,
-            monthAfter
+            monthAfter,
+            monthDiff,
+            userDays,
+            subordinatesDays,
+            subordinatesDaysLoaded,
+            subordinateDaysShown,
         } = this.state;
 
         return (
@@ -166,18 +172,44 @@ class Calendar extends React.Component {
                             type="button"
                             className="btn btn-custom"
                             onClick={(e) => this.changeMonth()}
-                        >{'<<  ' + monthBefore}</button>
+                        >
+                            {'<<  ' + monthBefore}
+                        </button>
                         <b>{currentMonth}</b>
                         <button
                             type="button"
                             className="btn btn-custom"
                             onClick={() => this.changeMonth(true)}
-                        >{monthAfter + '  >>'}</button>
+                        >
+                            {monthAfter + '  >>'}
+                        </button>
                         <button
                             type="button"
                             className="btn btn-custom"
-                            onClick={this.openCreateDayPage}
-                        >Add learning day</button>
+                            onClick={() => this.props.history.push(`add-day`)}
+                        >
+                            Add learning day
+                        </button>
+                        { (!subordinatesDaysLoaded || !subordinateDaysShown) &&
+                            <button
+                                type="button"
+                                className="btn btn-custom"
+                                style={{float: 'right'}}
+                                onClick={() => this.showSubordinateDays()}
+                            >
+                                Show subordinate days
+                            </button>
+                        }
+                        { subordinatesDaysLoaded && subordinateDaysShown &&
+                            <button
+                                type="button"
+                                className="btn btn-custom hide-subordinate-days"
+                                style={{float: 'right'}}
+                                onClick={() => this.setState({ subordinateDaysShown: false })}
+                            >
+                                Hide subordinate days
+                            </button>
+                        }
                     </div>
                     <div className='calendar-holder'>
                         {[1, 2, 3, 4, 5, 6, 7].map(index => {
@@ -199,10 +231,10 @@ class Calendar extends React.Component {
                                             key={`calendar-day-item-${i.monthDay}`}
                                             monthDay={i.monthDay}
                                             yearMonth={currentMonth}
-                                            userDays={this.state.userDays}
-                                            userDaysLoaded={this.state.userDaysLoaded}
-                                            subordinatesDays={this.state.subordinatesDays}
-                                            subordinatesDaysLoaded={this.state.subordinatesDaysLoaded}
+                                            userDays={userDays}
+                                            subordinatesDays={subordinateDaysShown ? subordinatesDays : []}
+                                            update={() => this.getUserDays()}
+                                            monthDiff={monthDiff}
                                         />
                                     ))}
                                     {calendar.addLasts.includes(items[0].weekDay) &&

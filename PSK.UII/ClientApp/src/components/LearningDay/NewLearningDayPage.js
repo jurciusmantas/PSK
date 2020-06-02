@@ -4,22 +4,31 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { get, post } from '../../helpers/request';
 import { notification } from '../../helpers/notification';
-
+import Loader from '../Loader/loader';
+import * as calendarActions from '../../redux/actions/calendarActions';
 import './NewLearningDayPage.css';
 
 class NewLearningDayPage extends React.Component {
     constructor(props) {
         super(props);
+
+        /* Check for date in redux */
+        let selectedDate = null;
+        if(this.props.date){
+            selectedDate = this.props.date;
+            this.props.clearNewDayDate();
+        }
+
         this.state = {
-            selectedDate: moment().format("YYYY-MM-DD"),
+            selectedDate: selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             topics: [],
             selectedTopicId: 0,
             recommendations: [],
             restriction: null,
             userDays: null,
+            loading: false,
         };
-        this.changeDate = this.changeDate.bind(this);
-        this.changeTopic = this.changeTopic.bind(this);
+        
         this.createDay = this.createDay.bind(this);
         this.makeTopicOptionList = this.makeTopicOptionList.bind(this);
     }
@@ -38,10 +47,11 @@ class NewLearningDayPage extends React.Component {
             console.error(err)
             this.setState({ topics: [] });
         });
-        get(`recommendations?receiverId=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
+        get(`recommendations?to=${this.props.currentUser.id}`).then(res => res.json()).then(res => {
             if (res.success)
                 this.setState({ recommendations: res.data });
             else {
+                notification("Cannot load your recommendations :(", "error")
                 console.warn(`Cannot load recommendations for receiver id=${this.props.currentUser.id}:`)
                 console.warn(res.message)
             }
@@ -49,7 +59,7 @@ class NewLearningDayPage extends React.Component {
             console.error(`GET /api/recommendations failed:`);
             console.error(err)
         })
-        get(`restrictions/${this.props.currentUser.id}`)
+        get(`restrictions/active?employeeId=${this.props.currentUser.id}`)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
@@ -159,35 +169,31 @@ class NewLearningDayPage extends React.Component {
         return true;
     }
 
-    changeDate(newDate) {
-        if (!this.checkIfValidForRestriction(newDate) ||
-            !this.checkConsecutiveDays(newDate)) {
-            notification("Please select another day", "warning")
-            return;
-        }
-
-        this.setState({ selectedDate: newDate.target.value });
-    }
-
-    changeTopic(e) {
-        this.setState({ selectedTopicId: parseInt(e.target.value) });
-    }
-
     createDay() {
         if (!this.checkIfValidForRestriction(this.state.selectedDate) ||
             !this.checkConsecutiveDays(this.state.selectedDate)) {
             return;
         }
 
+        this.setState({ loading: true });
         post('days', {
             date: this.state.selectedDate,
             employeeId: this.props.currentUser.id,
             topicId: this.state.selectedTopicId,
         })
-            .then(() => {
-                this.props.history.push('/home');
+            .then(res => res.json())
+            .then(res => {
+                if (res.success){
+                    notification('Day successfuly added');
+                    this.props.history.push('/home');
+                }
+                else {
+                    notification('Error adding day - ' + res.message, 'error');
+                    this.setState({ loading: false });
+                }        
             })
             .catch(reason => {
+                this.setState({ loading: false });
                 console.error(`POST days failed`);
                 console.error(reason);
             });
@@ -204,53 +210,66 @@ class NewLearningDayPage extends React.Component {
     }
 
     render() {
+        const { 
+            selectedDate,
+            loading
+        } = this.state;
+
         return (
             <div className='day-wrapper'>
                 <div className='day-holder'>
                     <h2>Create new learning day</h2>
-                    <form>
-                        <div className='row'>
-                            <label htmlFor="learn-date">Date:</label>
-                        </div>
-                        <div className='row'>
-                            <input
-                                type="date"
-                                id="learn-date"
-                                defaultValue={this.state.selectedDate}
-                                onChange={this.changeDate}
-                                min={moment().format("YYYY-MM-DD")}
-                                pattern="d{4}-d{2}-d{2}"
-                            />
-                        </div>
-                        <div className='row'>
-                            <label htmlFor="topics">Topic:</label>
-                        </div>
-                        <div className='row'>
-                            <select
-                                id="topics"
-                                onChange={this.changeTopic}
-                            >
-                                {this.makeTopicOptionList()}
-                            </select>
-                        </div>
-                        <div className='row'>
-                            <button type="button" className="btn btn-custom" onClick={this.createDay}>Create</button>
-                        </div>
-                    </form>
+                    { loading &&
+                        <Loader />
+                    }
+                    { !loading &&
+                        <form>
+                            <div className='row'>
+                                <label htmlFor="learn-date">Date:</label>
+                            </div>
+                            <div className='row'>
+                                <input
+                                    type="date"
+                                    id="learn-date"
+                                    defaultValue={selectedDate}
+                                    onChange={e => this.setState({ selectedDate: e.target.value })}
+                                    min={moment().format("YYYY-MM-DD")}
+                                    pattern="d{4}-d{2}-d{2}"
+                                />
+                            </div>
+                            <div className='row'>
+                                <label htmlFor="topics">Topic:</label>
+                            </div>
+                            <div className='row'>
+                                <select
+                                    id="topics"
+                                    onChange={e => this.setState({ selectedTopicId: parseInt(e.target.value) })}
+                                >
+                                    {this.makeTopicOptionList()}
+                                </select>
+                            </div>
+                            <div className='row'>
+                                <button type="button" className="btn btn-custom" onClick={this.createDay}>Create</button>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         )
     }
 }
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
     return {
-        currentUser: state.currentUser
+        currentUser: state.currentUser,
+        date: state.calendarReducer.date,
     };
 }
 
-function mapDispatchToProps() {
-    return {};
+const mapDispatchToProps = (dispatch, _) => {
+    return {
+        clearNewDayDate: () => dispatch(calendarActions.clearDate()),
+    };
 }
 
 export default withRouter(connect(

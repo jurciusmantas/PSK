@@ -36,8 +36,38 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.CreateTopic creating {Topic} failed {NewLine} {Exception}", _decorateeClassName, args.Name);
-                throw;
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
             }
+        }
+
+        public ServerResult<List<Topic>> GetSubtopics(int id)
+        {
+            try
+            {
+                ServerResult<List<Topic>> result = _decoratee.GetSubtopics(id);
+
+                if (!result.Success)
+                {
+                    _logger.Information("{DecorateeClassName}.GetSubtopics unsuccessful", _decorateeClassName);
+                    return result;
+                }
+                _logger.Information("{DecorateeClassName}.GetSubtopics successful", _decorateeClassName);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.GetSubtopics {TopicId} failed {NewLine} {Exception}", _decorateeClassName, id);
+                return new ServerResult<List<Topic>>
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
+            }
+
         }
 
         public ServerResult<Topic> GetTopic(int id)
@@ -57,15 +87,19 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.GetTopic {NewLine} {Exception}", _decorateeClassName);
-                throw;
+                return new ServerResult<Topic>
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
             }
         }
 
-        public ServerResult<List<Topic>> GetTopics()
+        public ServerResult<List<Topic>> GetTopics(bool tree)
         {
             try
             {
-                ServerResult<List<Topic>> result = _decoratee.GetTopics();
+                ServerResult<List<Topic>> result = _decoratee.GetTopics(tree);
 
                 if (!result.Success)
                 {
@@ -78,7 +112,11 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.GetTopics failed {NewLine} {Exception}", _decorateeClassName);
-                throw;
+                return new ServerResult<List<Topic>>
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
             }
         }
 
@@ -99,7 +137,11 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.MarkAsCompleted failed {NewLine} {Exception}", _decorateeClassName);
-                throw;
+                return new ServerResult
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
             }
         }
         
@@ -120,7 +162,36 @@ namespace PSK.Model.Logging
             catch (Exception e)
             {
                 _logger.Error(e, "{DecorateeClassName}.UpdateTopic failed {NewLine} {Exception}", _decorateeClassName);
-                throw;
+                return new ServerResult<Topic>
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
+            }
+        }
+
+        public ServerResult<List<LearnedSubordinatesListItem>> LoadLearnedSubordinates(int? employeeId, int topicId)
+        {
+            try
+            {
+                ServerResult<List<LearnedSubordinatesListItem>> result = _decoratee.LoadLearnedSubordinates(employeeId, topicId);
+
+                if (!result.Success)
+                {
+                    _logger.Information("{DecorateeClassName}.LoadLearnedSubordinates unsuccessful", _decorateeClassName);
+                    return result;
+                }
+                _logger.Information("Load Learned Subordinates for employee {0} topic - {1} successful", employeeId, topicId);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "{DecorateeClassName}.LoadLearnedSubordinates failed {NewLine} {Exception}", _decorateeClassName);
+                return new ServerResult<List<LearnedSubordinatesListItem>>
+                {
+                    Success = false,
+                    Message = "An error occured. Please try again later"
+                };
             }
         }
     }

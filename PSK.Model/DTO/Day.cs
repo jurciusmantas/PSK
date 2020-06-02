@@ -8,5 +8,6 @@
         public string TopicName { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
+        public bool? Completed { get; set; }
     }
 }

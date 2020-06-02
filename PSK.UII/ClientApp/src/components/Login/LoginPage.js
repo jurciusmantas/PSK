@@ -48,9 +48,14 @@ class LoginPage extends React.Component {
                 }
                 else {
                     notification('Wrong username or password', 'error');
+                    console.warn('Wrong username or password');
+                    console.warn(res.message)
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(`POST /api/login failed:`);
+                console.error(error);
+            });
     }
 
     render() {
@@ -61,7 +66,7 @@ class LoginPage extends React.Component {
                     <div className='row'>
                         <input
                             type='text'
-                            placeholder='Login'
+                            placeholder='Email'
                             onChange={e => this.setState({ login: e.target.value })}
                             onKeyPress={e => this.handleKeyPress(e)}
                         />

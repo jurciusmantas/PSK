@@ -12,20 +12,20 @@ namespace PSK.Model.Authorization
             _employeesTokenRepository = employeesTokenRepository;
         }
 
-        public bool Validate(string token)
+        public int Validate(string token)
         {
             try
             {
                 EmployeesToken empToken = _employeesTokenRepository.FindByToken(token);
                 if (empToken == null)
-                    return false;
+                    return -1;
                 int result = DateTime.Compare(empToken.ExpiredAt, DateTime.Now);
 
-                return result >= 1;
+                return (result >= 1) ? empToken.EmployeeId : -1;
             }
             catch
             {
-                return false;
+                return -1;
             }
         }
     }

@@ -26,13 +26,19 @@ class AddRecommendationPage extends React.Component {
     }
 
     componentDidMount() {
-        get('topics').then(res => res.json())
+        get('topics')
+            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     this.setState({ topics: res.data, loadingTopics: false })
                     if (res.data != null && res.data.length > 0) {
                         this.setState({ topicId: res.data[0].id });
                     }
+                }
+                else {
+                    notification("Cannot load topics :(", "error");
+                    console.warn("Cannot load topics")
+                    console.warn(res.message)
                 }
             })
             .catch(error => {
@@ -48,7 +54,11 @@ class AddRecommendationPage extends React.Component {
                     if (res.data != null && res.data.length > 0)
                         this.setState({ subordinateId: res.data[0].id });
                 }
-
+                else {
+                    notification("Cannot load subordinates :(", "error");
+                    console.warn("Cannot load subordinates");
+                    console.warn(res.message);
+                }
             })
             .catch(reason => {
                 console.error(`GET employees/${this.props.currentUser.id}/subordinates failed:`);
@@ -112,16 +122,6 @@ class AddRecommendationPage extends React.Component {
         )
     }
 
-    showSubTopicOptions() {
-        return this.state.topics.map(topic =>
-            topic.subTopicList.map((subTopic, index) =>
-                <option key={index} value={subTopic.id}>
-                    {subTopic.name}
-                </option>
-            )
-        )
-    }
-
     getSubordinatesOptions() {
         return this.state.subordinates.map(employee =>
             <option key={`subordinate-${employee.id}`} value={employee.id}>
@@ -143,7 +143,6 @@ class AddRecommendationPage extends React.Component {
                         <select
                             onChange={this.handleOnTopicChange}>
                             {this.showTopicOptions()}
-                            {this.showSubTopicOptions()}
                         </select>
                     </div>
                     <div className="row">

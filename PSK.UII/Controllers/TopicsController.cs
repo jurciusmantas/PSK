@@ -16,16 +16,21 @@ namespace PSK.UI.Controllers
         }
 
         [HttpGet]
-        public ServerResult<List<Topic>> Topics()
+        public ServerResult<List<Topic>> Topics([FromQuery(Name = "tree")] bool tree = false)
         {
-            return _topicService.GetTopics();
+            return _topicService.GetTopics(tree);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public ServerResult<Topic> GetDetailedTopic([FromRoute]int id)
         {
             return _topicService.GetTopic(id);
+        }
+
+        [HttpGet("{id}/subtopics")]
+        public ServerResult<List<Topic>> GetSubtopics([FromRoute]int id)
+        {
+            return _topicService.GetSubtopics(id);
         }
 
         [HttpPost]
@@ -40,11 +45,21 @@ namespace PSK.UI.Controllers
             return _topicService.UpdateTopic(topic);
         }
 
-        [HttpPost]
-        [Route("completed")]
+        [HttpPost("completed")]
         public ServerResult MarkAsCompleted([FromBody] TopicCompletion args)
         {
             return _topicService.MarkAsCompleted(args);
+        }
+
+        [HttpGet("{id}/learnedsubordinates")]
+        public ServerResult<List<LearnedSubordinatesListItem>> LoadLearnedSubordinates([FromRoute(Name = "id")] int id/*[FromQuery(Name = "employeeId")] int employeeId */)
+        {
+            int? employeeId = null;
+            var currEmployeeIdObject = Request.HttpContext.Items["currentEmployeeId"];
+            if (currEmployeeIdObject != null)
+                employeeId = int.Parse(currEmployeeIdObject.ToString());
+
+            return _topicService.LoadLearnedSubordinates(employeeId, id);
         }
     }
 }

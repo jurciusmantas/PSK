@@ -4,7 +4,7 @@ namespace PSK.Model.Helpers
 {
     public static class DTOToEntityHelper
     {
-        public static Entities.Day DTOToEntity(this DTO.Day day)
+        public static Entities.Day ToEntity(this DTO.Day day)
         {
             DateTime date = DateTime.Parse(day.Date);
             return new Entities.Day()
@@ -16,7 +16,7 @@ namespace PSK.Model.Helpers
             };
         }
 
-        public static Entities.Recommendation DTOToEntity(this DTO.Recommendation dto)
+        public static Entities.Recommendation ToEntity(this DTO.Recommendation dto)
         {
             return new Entities.Recommendation()
             {
@@ -24,6 +24,20 @@ namespace PSK.Model.Helpers
                 CreatorId = dto.CreatorId,
                 ReceiverId = dto.ReceiverId,
                 TopicId = dto.TopicId
+            };
+        }
+
+        public static Entities.Restriction ToEntity(this DTO.RestrictionArgs restrictionArgs)
+        {
+            return new Entities.Restriction
+            {
+                ConsecutiveDays = restrictionArgs.ConsecutiveDays,
+                MaxDaysPerMonth = restrictionArgs.MaxDaysPerMonth,
+                MaxDaysPerQuarter = restrictionArgs.MaxDaysPerQuarter,
+                MaxDaysPerYear = restrictionArgs.MaxDaysPerYear,
+                Global = false,
+                CreatorId = restrictionArgs.CreatorId,
+                CreationDate = DateTime.Now,
             };
         }
     }

@@ -36,5 +36,10 @@ namespace PSK.DB.MockRepository
         {
             throw new NotImplementedException();
         }
+
+        public List<IncomingEmployee> GetAllByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

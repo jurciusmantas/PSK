@@ -1,8 +1,11 @@
-﻿namespace PSK.Model.Helpers
+﻿using System.Collections.Generic;
+using System.Text;
+
+namespace PSK.Model.Helpers
 {
     public static class EntityToDTOHelper
     {
-        public static DTO.Day EntityToDTO(this Entities.Day day)
+        public static DTO.Day ToDTO(this Entities.Day day)
         {
             return new DTO.Day()
             {
@@ -15,7 +18,7 @@
             };
         }
 
-        public static DTO.Recommendation EntityToDTO(this Entities.Recommendation entity)
+        public static DTO.Recommendation ToDTO(this Entities.Recommendation entity)
         {
             return new DTO.Recommendation()
             {
@@ -29,7 +32,7 @@
             };
         }
 
-        public static DTO.Employee EntityToDTO(this Entities.Employee entity)
+        public static DTO.Employee ToDTO(this Entities.Employee entity)
         {
             return new DTO.Employee()
             {
@@ -40,7 +43,7 @@
             };
         }
 
-        public static DTO.Topic EntityToDTO(this Entities.Topic topic)
+        public static DTO.Topic ToDTO(this Entities.Topic topic)
         {
             return new DTO.Topic
             {
@@ -48,6 +51,21 @@
                 Name = topic.Name,
                 Description = topic.Description,
                 ParentId = topic.ParentTopicId,
+                RowVersion = topic.RowVersion
+            };
+        }
+
+        public static DTO.Restriction ToDTO(this Entities.Restriction restriction, List<string> useCountNames = null)
+        {
+            return new DTO.Restriction
+            {
+                Id = restriction.Id,
+                ConsecutiveDays = restriction.ConsecutiveDays,
+                MaxDaysPerYear = restriction.MaxDaysPerYear,
+                MaxDaysPerQuarter = restriction.MaxDaysPerQuarter,
+                MaxDaysPerMonth = restriction.MaxDaysPerMonth,
+                UseCount = (useCountNames == null) ? 0 : useCountNames.Count,
+                UseCountNames = restriction.Global ? new List<string> { "Global" } : useCountNames
             };
         }
     }
