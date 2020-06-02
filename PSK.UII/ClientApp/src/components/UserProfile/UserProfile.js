@@ -19,66 +19,66 @@ class UserProfile extends React.Component{
     constructor(props){
         super(props);
         const queryParams = new URLSearchParams(window.location.search);
+        
         this.state = {
             loading: true,
             profile: null,
             buttons: ['Subordinates', 'Topics'],
             activeButton: 'Subordinates',
             userId: queryParams.get("id"),
-            name: null,
+            name  : null,
             email: null
-
         }
     }
 
     componentDidMount() {
-        if (this.state.userId == null) {
-            this.state.userId = this.props.currentUser.id;
-            this.state.name = this.props.currentUser.name;
-            this.state.email = this.props.currentUser.email;
-        } else {
-            get(`employees/${this.state.userId}`)
-                .then(res => res.json())
-                .then(res => {
+        let userId = this.state.userId;
+        if (!this.state.userId)
+            userId = this.props.currentUser.id;
 
-                    if (res.success) {
-                        this.state.name = res.data.name;
-                        this.state.email = res.data.email;
-                    }
-                    else {
-                        notification("Failed to load profile", "error");
-                        console.warn("Failed to load profile: ");
-                        console.warn(res.message);
-                    }
-
-                })
-                .catch(error => {
-                    console.log(error);
-                    notification('Failed to load profile', 'error', 'bottom-center');
-                    this.setState({ loading: false })
-                })
-        }
-
-        get(`employees/profile/${this.state.userId}`)
+        get(`employees/${userId}`)
             .then(res => res.json())
             .then(res => {
-                if (res.success) {
+
+                if (res.success)
                     this.setState({
-                        profile: res.data,
-                        loading: false
-                    })
-                }
+                        name: res.data.name,
+                        email: res.data.email
+                    });
+                
                 else {
-                    notification("Cannot load employee data :(", "error")
-                    console.warn("Cannot load employee data")
-                    console.warn(res.message)
+                    notification("Failed to load profile", "error");
+                    console.warn("Failed to load profile: ");
+                    console.warn(res.message);
                 }
+
             })
             .catch(error => {
-                console.error(`GET employees/profile/${this.props.currentUser.id} failed:`)
-                console.error(error);
+                console.log(error);
+                notification('Failed to load profile', 'error', 'bottom-center');
                 this.setState({ loading: false })
             })
+
+    get(`employees/profile/${userId}?currentEmployeeId=${this.props.currentUser.id}`)
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                this.setState({
+                    profile: res.data,
+                    loading: false
+                })
+            }
+            else {
+                notification("Cannot load employee data :(", "error")
+                console.warn("Cannot load employee data")
+                console.warn(res.message)
+            }
+        })
+        .catch(error => {
+            console.error(`GET employees/profile/${this.props.currentUser.id} failed:`)
+            console.error(error);
+            this.setState({ loading: false })
+        })
     }
 
     render(){
@@ -151,7 +151,11 @@ class UserProfile extends React.Component{
                                             <Col sm={4}>
                                                 <Row sm={4}>
                                                     <Label sm={2}><b>Name: </b></Label>
-                                                    <Label sm={2}>{subordinate.name}</Label>
+                                                    <Label sm={2}>
+                                                        <Link onClick={() => this.setState({ userId: subordinate.id}, () => this.componentDidMount())}>
+                                                            {subordinate.name}
+                                                        </Link>
+                                                    </Label>
                                                 </Row>
                                             </Col>
                                         </Row>
