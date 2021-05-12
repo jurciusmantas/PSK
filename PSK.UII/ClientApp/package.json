@@ -10,7 +10,7 @@
     "devextreme": "20.1-stable",
     "devextreme-react": "20.1-stable",
     "jquery": "^3.4.1",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "moment": "^2.24.0",
     "oidc-client": "^1.9.0",
     "react": "^16.13.1",
